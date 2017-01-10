@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
+    <GuiElement type="empty" profile="newLayer" />
+    <GuiElement type="bitmap" profile="siloDialogBg" id="dialogElement">
+        <GuiElement type="bitmap" profile="siloDialogMainBg" id="dialogBgElement">
+            <GuiElement type="bitmap" profile="colorDialogHeader">
+                <GuiElement type="text" profile="headerText" text="$l10n_SPECTATOR_MODE_NAME" id="dialogTitleElement" onCreate="onCreateDialogTitle" />
+            </GuiElement>
+
+            <GuiElement type="text" profile="siloDialogText" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_TEXT:"  id="dialogTextElement" onCreate="onCreateDialogText" />
+
+            <GuiElement type="multiTextOption" profile="multiTextOptionSilo" position="25px 80px" onClick="onClickSpectableUsers" id="spectableUsersElement" focusId="1" focusChangeTop="3" focusChangeBottom="2" >
+                <GuiElement type="button" profile="multiTextOptionLeft" />
+                <GuiElement type="button" profile="multiTextOptionRight" />
+                <GuiElement type="text"   profile="multiTextOptionText" id="userName" />
+                <GuiElement type="bitmap" profile="multiTextOptionBg" size="334px 36px" />
+            </GuiElement>
+
+            <GuiElement type="bitmap" profile="siloDialogMessageBg" onCreate="onCreateMessageBackground" id="messageBackground">
+                <GuiElement type="text" profile="siloDialogMessage" text="" onCreate="onCreateMessage" />
+            </GuiElement>
+
+            <GuiElement type="flowLayout" profile="buttonBox" id="buttonsPC" >
+                <GuiElement type="button" profile="buttonBack" size="228px 40px" text="$l10n_button_back"  onClick="onClickBack"     id="noButton"  focusId="2" focusChangeRight="3" focusChangeBottom="3" focusChangeTop="1"/>
+                <GuiElement type="button" profile="buttonOK"   size="229px 40px" text="$l10n_button_start" onClick="onClickActivate" onCreate="onCreateSpectateButton" id="yesButton" focusId="3" focusChangeLeft="2"  focusChangeBottom="1" focusChangeTop="2" focusInit="onOpen"/>
+            </GuiElement>
+            <GuiElement type="flowLayout" profile="buttonBoxConsole" size="458px 40px" id="buttonsConsole" visible="false">
+                <GuiElement type="button" profile="buttonCircle"    size="229px 40px" text="$l10n_button_back"  id="noButtonConsole"/>
+                <GuiElement type="button" profile="buttonRectangle" size="229px 40px" text="$l10n_button_start" id="yesButtonConsole" onCreate="onCreateSpectateButtonConsole" />
+            </GuiElement>
+        </GuiElement>
+    </GuiElement>
+</GUI>
