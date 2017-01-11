@@ -1,3 +1,11 @@
+--
+-- SpectatorMode script
+--
+--
+-- @author TyKonKet
+-- @date 03/01/2017
+
+
 -- Event methods extension
 function Event.send(event, dontSendLocal, ignoreConnection)
     --print(string.format("Event.send(event:%s, dontSendLocal:%s)", event, dontSendLocal));
