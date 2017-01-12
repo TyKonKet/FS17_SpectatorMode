@@ -51,6 +51,16 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.camera.backup.rz = 0;
     self.camera.backup.rw = 0;
     self.actorDataEvent = nil;
+    self.FPS = {};
+    self.FPS.show = true;
+    self.FPS.dt = 0;
+    self.FPS.count = 0;
+    self.FPS.tempCount = 0;
+    self.CPS = {};
+    self.CPS.show = true;
+    self.CPS.dt = 0;
+    self.CPS.count = 0;
+    self.CPS.tempCount = 0;
     --addConsoleCommand("AAAStartActing", "", "startActing", self);
     --addConsoleCommand("AAASetSpectatorModeQuality", "", "setQuality", self);
     self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
@@ -78,7 +88,53 @@ function SpectatorMode:deleteMap()
     self:print("deleteMap()");
 end
 
+function SpectatorMode:afterLoad()
+    self:print("afterLoad()");
+    self.oldPickedUpObjectWidth = g_currentMission.player.pickedUpObjectWidth;
+    self.oldPickedUpObjectHeight = g_currentMission.player.pickedUpObjectHeight;
+end
+
 function SpectatorMode:update(dt)
+    if self.FPS.show then
+        self.FPS.dt = self.FPS.dt + dt;
+        if self.FPS.dt > 1000 then
+            self.FPS.count = self.FPS.tempCount;
+            self.FPS.tempCount = 0;
+            self.FPS.dt = self.FPS.dt - 1000;
+        end
+        self.FPS.tempCount = self.FPS.tempCount + 1;
+    end
+    if self.spectating then
+        local tx, ty, tz = Utils.worldToLocalTranslation(g_currentMission.player.cameraNode, self.actors[self.spectatedPlayer].tx, self.actors[self.spectatedPlayer].ty, self.actors[self.spectatedPlayer].tz);
+        local rx, ry, rz , rw = self.actors[self.spectatedPlayer].rx, self.actors[self.spectatedPlayer].ry, self.actors[self.spectatedPlayer].rz, self.actors[self.spectatedPlayer].rw;
+        setTranslation(g_currentMission.player.cameraNode, tx, ty, tz);
+        setQuaternion(g_currentMission.player.cameraNode, rx, ry, rz, rw);
+    end
+    if g_currentMission.controlledVehicle == nil then
+        if self.spectating then
+            g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
+	        if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+	            self:stopSpectate();
+            end
+        else
+            g_currentMission:addHelpButtonText(g_i18n:getText("START_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
+	        if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+	            self:showGui();
+            end
+	    end
+	end
+end
+
+function SpectatorMode:fixedUpdate(dt)
+    if self.CPS.show then
+        self.CPS.dt = self.CPS.dt + dt;
+        if self.CPS.dt > 1000 then
+            self.CPS.count = self.CPS.tempCount;
+            self.CPS.tempCount = 0;
+            self.CPS.dt = self.CPS.dt - 1000;
+        end
+        self.CPS.tempCount = self.CPS.tempCount + 1;
+    end
     if self.acting or self.alwaysActing then
         local tx, ty, tz = 0;
         local rx, ry, rz, rw = 0;
@@ -107,25 +163,15 @@ function SpectatorMode:update(dt)
             --self:print(string.format("%s -> %s %s %s %s %s %s %s",self.actorDataEvent.actorName, tx, ty, tz, rx, ry, rz, rw));
         end
     end
-    if self.spectating then
-        local tx, ty, tz = Utils.worldToLocalTranslation(g_currentMission.player.cameraNode, self.actors[self.spectatedPlayer].tx, self.actors[self.spectatedPlayer].ty, self.actors[self.spectatedPlayer].tz);
-        local rx, ry, rz , rw = self.actors[self.spectatedPlayer].rx, self.actors[self.spectatedPlayer].ry, self.actors[self.spectatedPlayer].rz, self.actors[self.spectatedPlayer].rw;
-        setTranslation(g_currentMission.player.cameraNode, tx, ty, tz);
-        setQuaternion(g_currentMission.player.cameraNode, rx, ry, rz, rw);
+end
+
+function SpectatorMode:draw()
+    if self.FPS.show then
+        renderText(0.001, 0.61, 0.01, ("FPS:%s"):format(self.FPS.count));
     end
-    if g_currentMission.controlledVehicle == nil then
-        if self.spectating then
-            g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
-	        if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
-	            self:stopSpectate();
-            end
-        else
-            g_currentMission:addHelpButtonText(g_i18n:getText("START_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
-	        if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
-	            self:showGui();
-            end
-	    end
-	end
+    if self.CPS.show then
+        renderText(0.001, 0.6, 0.01, ("CPS:%s"):format(self.CPS.count));
+    end
 end
 
 function SpectatorMode:showGui()
@@ -182,6 +228,7 @@ function SpectatorMode:startSpectate(playerName)
 end
 
 function SpectatorMode:stopSpectate()
+    self:print("stopSpectate()");
     self.spectating = false;
     for k,v in pairs(g_currentMission.players) do
         if v.controllerName == playerName then
@@ -202,6 +249,7 @@ function SpectatorMode:stopSpectate()
 end
 
 function SpectatorMode:showCrosshair(sc)
+    self:print(("showCrosshair(sc:%s)"):format(sc));
     if not sc then
         self.oldPickedUpObjectWidth = g_currentMission.player.pickedUpObjectWidth;
         self.oldPickedUpObjectHeight = g_currentMission.player.pickedUpObjectHeight;
