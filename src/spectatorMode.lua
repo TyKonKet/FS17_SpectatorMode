@@ -50,6 +50,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.camera.backup.ry = 0;
     self.camera.backup.rz = 0;
     self.camera.backup.rw = 0;
+    self.camera.backup.fovy = 0;
     self.actorDataEvent = nil;
     self.FPS = {};
     self.FPS.show = true;
@@ -58,11 +59,19 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.FPS.tempCount = 0;
     self.CPS = {};
     self.CPS.show = true;
-    self.CPS.dt = 0;
     self.CPS.count = 0;
     self.CPS.tempCount = 0;
+    self.ESPS = {};
+    self.ESPS.show = true;
+    self.ESPS.count = 0;
+    self.ESPS.tempCount = 0;
+    self.ERPS = {};
+    self.ERPS.show = true;
+    self.ERPS.count = 0;
+    self.ERPS.tempCount = 0;
     --addConsoleCommand("AAAStartActing", "", "startActing", self);
     --addConsoleCommand("AAASetSpectatorModeQuality", "", "setQuality", self);
+    addConsoleCommand("AAAPrint", "", "printer", self);
     self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
     return self;
 end
@@ -78,10 +87,23 @@ function SpectatorMode:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt
     end
 end
 
+function SpectatorMode:printer()
+    if SpectatorModeRecorder.fixedFPS == 30 then
+        SpectatorModeRecorder.fixedFPS = 45;
+        SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
+    elseif SpectatorModeRecorder.fixedFPS == 45 then
+        SpectatorModeRecorder.fixedFPS = 60;
+        SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
+    else
+        SpectatorModeRecorder.fixedFPS = 30;
+        SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
+    end
+end
+
 function SpectatorMode:loadMap()
     self:print("loadMap()");
     self.guis.spectateGui:setSelectionCallback(self, self.startSpectate);
-    self.actorDataEvent = ActorDataEvent:new(g_currentMission.missionInfo.playerName, 0, 0, 0, 0, 0, 0, 0);
+    self.actorDataEvent = ActorDataEvent:new(g_currentMission.missionInfo.playerName, 0, 0, 0, 0, 0, 0, 0, 0);
 end
 
 function SpectatorMode:deleteMap()
@@ -95,13 +117,19 @@ function SpectatorMode:afterLoad()
 end
 
 function SpectatorMode:update(dt)
+    self.FPS.dt = self.FPS.dt + dt;
+    if self.FPS.dt > 1000 then
+        self.FPS.dt = self.FPS.dt - 1000;
+        self.FPS.count = self.FPS.tempCount;
+        self.FPS.tempCount = 0;
+        self.CPS.count = self.CPS.tempCount;
+        self.CPS.tempCount = 0;
+        self.ESPS.count = self.ESPS.tempCount;
+        self.ESPS.tempCount = 0;
+        self.ERPS.count = self.ERPS.tempCount;
+        self.ERPS.tempCount = 0;
+    end
     if self.FPS.show then
-        self.FPS.dt = self.FPS.dt + dt;
-        if self.FPS.dt > 1000 then
-            self.FPS.count = self.FPS.tempCount;
-            self.FPS.tempCount = 0;
-            self.FPS.dt = self.FPS.dt - 1000;
-        end
         self.FPS.tempCount = self.FPS.tempCount + 1;
     end
     if self.spectating then
@@ -109,6 +137,7 @@ function SpectatorMode:update(dt)
         local rx, ry, rz , rw = self.actors[self.spectatedPlayer].rx, self.actors[self.spectatedPlayer].ry, self.actors[self.spectatedPlayer].rz, self.actors[self.spectatedPlayer].rw;
         setTranslation(g_currentMission.player.cameraNode, tx, ty, tz);
         setQuaternion(g_currentMission.player.cameraNode, rx, ry, rz, rw);
+        setFovy(g_currentMission.player.cameraNode, self.actors[self.spectatedPlayer].fovy);
     end
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
@@ -127,30 +156,28 @@ end
 
 function SpectatorMode:fixedUpdate(dt)
     if self.CPS.show then
-        self.CPS.dt = self.CPS.dt + dt;
-        if self.CPS.dt > 1000 then
-            self.CPS.count = self.CPS.tempCount;
-            self.CPS.tempCount = 0;
-            self.CPS.dt = self.CPS.dt - 1000;
-        end
         self.CPS.tempCount = self.CPS.tempCount + 1;
     end
     if self.acting or self.alwaysActing then
         local tx, ty, tz = 0;
         local rx, ry, rz, rw = 0;
+        local fovy = 0;
         if g_currentMission.controlledVehicle == nil then
             tx, ty, tz = Utils.localToWorldTranslation(g_currentMission.player.cameraNode);
             rx, ry, rz, rw = getWorldQuaternion(g_currentMission.player.cameraNode);
+            fovy = getFovy(g_currentMission.player.cameraNode);
         else
             tx, ty, tz = Utils.localToWorldTranslation(g_currentMission.controlledVehicle.activeCamera.cameraNode);
             rx, ry, rz, rw = getWorldQuaternion(g_currentMission.controlledVehicle.activeCamera.cameraNode);
+            fovy = getFovy(g_currentMission.controlledVehicle.activeCamera.cameraNode);
         end
-        --tx = math.roundDecimals(tx, self.actingQuality);
-        --ty = math.roundDecimals(ty, self.actingQuality);
-        --tz = math.roundDecimals(tz, self.actingQuality);
-        --rx = math.roundDecimals(rx, self.actingQuality + 1);
-        --ry = math.roundDecimals(ry, self.actingQuality + 1);
-        --rz = math.roundDecimals(rz, self.actingQuality + 1);
+        tx = math.roundDecimals(tx, 1);
+        ty = math.roundDecimals(ty, 1);
+        tz = math.roundDecimals(tz, 1);
+        rx = math.roundDecimals(rx, 2);
+        ry = math.roundDecimals(ry, 2);
+        rz = math.roundDecimals(rz, 2);
+        rw = math.roundDecimals(rw, 2);
         if self.actorDataEvent.tx ~= tx or self.actorDataEvent.rx ~= rx or self.actorDataEvent.ty ~= ty or self.actorDataEvent.ry ~= ry or self.actorDataEvent.tz ~= tz or self.actorDataEvent.rz ~= rz or self.actorDataEvent.rw ~= rw then           
             self.actorDataEvent.tx = tx;
             self.actorDataEvent.ty = ty;
@@ -159,18 +186,28 @@ function SpectatorMode:fixedUpdate(dt)
             self.actorDataEvent.ry = ry;
             self.actorDataEvent.rz = rz;
             self.actorDataEvent.rw = rw;
+            self.actorDataEvent.fovy = fovy;
             Event.sendLight(self.actorDataEvent, true);
             --self:print(string.format("%s -> %s %s %s %s %s %s %s",self.actorDataEvent.actorName, tx, ty, tz, rx, ry, rz, rw));
+            if self.ESPS.show then
+                self.ESPS.tempCount = self.ESPS.tempCount + 1;
+            end
         end
     end
 end
 
 function SpectatorMode:draw()
     if self.FPS.show then
-        renderText(0.001, 0.61, 0.01, ("FPS:%s"):format(self.FPS.count));
+        renderText(0.001, 0.63, 0.01, ("FPS:%s"):format(self.FPS.count));
     end
     if self.CPS.show then
-        renderText(0.001, 0.6, 0.01, ("CPS:%s"):format(self.CPS.count));
+        renderText(0.001, 0.62, 0.01, ("CPS:%s"):format(self.CPS.count));
+    end
+    if self.ESPS.show then
+        renderText(0.001, 0.61, 0.01, ("ESPS:%s"):format(self.ESPS.count));
+    end
+    if self.ERPS.show then
+        renderText(0.001, 0.6, 0.01, ("ERPS:%s"):format(self.ERPS.count));
     end
 end
 
@@ -211,8 +248,10 @@ function SpectatorMode:startSpectate(playerName)
     self.root.backup.rx, self.root.backup.ry, self.root.backup.rz, self.root.backup.rw = getQuaternion(g_currentMission.player.rootNode);
     self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz = getTranslation(g_currentMission.player.cameraNode);
     self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw = getQuaternion(g_currentMission.player.cameraNode);
+    self.camera.backup.fovy = getFovy(g_currentMission.player.cameraNode);
     for k,v in pairs(g_currentMission.players) do
         if v.controllerName == playerName then
+            self:print("Hided player " .. v.controllerName);
             setVisibility(v.graphicsRootNode, false);
             setVisibility(v.meshThirdPerson, false);
         end
@@ -246,6 +285,7 @@ function SpectatorMode:stopSpectate()
     setQuaternion(g_currentMission.player.rootNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
     setTranslation(g_currentMission.player.cameraNode, self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz);
     setQuaternion(g_currentMission.player.cameraNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
+    setFovy(g_currentMission.player.cameraNode, self.camera.backup.fovy);
 end
 
 function SpectatorMode:showCrosshair(sc)
@@ -276,8 +316,8 @@ function SpectatorMode:actorStartStopEvent(start, actorName)
     end
 end
 
-function SpectatorMode:actorDataEventF(actorName, tx, ty, tz, rx, ry, rz, rw)
-    --self:print(string.format("actorDataEvent(actorName:%s, tx:%s, ty:%s, tz:%s, rx:%s, ry:%s, rz:%s)", actorName, tx, ty, tz, rx, ry, rz));
+function SpectatorMode:actorDataEventF(actorName, tx, ty, tz, rx, ry, rz, rw, fovy)
+    --self:print(string.format("actorDataEvent(actorName:%s, tx:%s, ty:%s, tz:%s, rx:%s, ry:%s, rz:%s, fovy:%s)", actorName, tx, ty, tz, rx, ry, rz, fovy));
     if self.actors[actorName] == nil then
         self.actors[actorName] = {};
         self.actors[actorName].name = actorName;
@@ -290,6 +330,12 @@ function SpectatorMode:actorDataEventF(actorName, tx, ty, tz, rx, ry, rz, rw)
     self.actors[actorName].ry = ry;
     self.actors[actorName].rz = rz;
     self.actors[actorName].rw = rw;
+    self.actors[actorName].fovy = fovy;
+    local dt = self.actorDataEventDt;
+    self.actorDataEventDt = 0;
+    if self.ERPS.show then
+        self.ERPS.tempCount = self.ERPS.tempCount + 1;
+    end
 end
 
 function SpectatorMode:setQualityEvent(quality)
