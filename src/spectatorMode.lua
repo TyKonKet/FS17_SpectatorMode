@@ -19,7 +19,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     local self = {};
     setmetatable(self, mt);
     self.name = "SpectatorMode";
-    self.debug = false;
+    self.debug = true;
     self.actors = {};
     --self.actors["Mattew"] = {};
     --self.actors["Mattew"].name = "Mattew";
@@ -68,14 +68,14 @@ function SpectatorMode:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt
     end
 end
 
-function SpectatorMode:load()
-    self:print("load()");
+function SpectatorMode:loadMap()
+    self:print("loadMap()");
     self.guis.spectateGui:setSelectionCallback(self, self.startSpectate);
     self.actorDataEvent = ActorDataEvent:new(g_currentMission.missionInfo.playerName, 0, 0, 0, 0, 0, 0, 0);
 end
 
-function SpectatorMode:delete()
-    self:print("delete()");
+function SpectatorMode:deleteMap()
+    self:print("deleteMap()");
 end
 
 function SpectatorMode:update(dt)

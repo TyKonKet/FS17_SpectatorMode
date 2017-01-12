@@ -7,38 +7,74 @@
 
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
---NetworkNode.PACKET_SPECTATOR_MODE = 6;
+SpectatorModeRecorder.name = "SpectatorModeRecorder";
+SpectatorModeRecorder.debug = true;
 
-addModEventListener(SpectatorModeRecorder);
+function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
+    if self.debug then
+        local args = {txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9};
+        for i, v in ipairs(args) do
+            if v then
+                print("[" .. self.name .. "] -> " .. tostring(v));
+            end
+        end
+    end
+end
 
-function SpectatorModeRecorder:loadMap(savegame)
+function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadingScreen)
+    self = SpectatorModeRecorder;
+    self:print("initialize()");
     g_spectatorMode = SpectatorMode:new(g_server ~= nil, g_client ~= nil);
     self.spectatorMode = g_spectatorMode;
     self.spectatorMode.dir = self.dir;
     self.spectatorMode.guis = {};
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new();
-    g_gui:loadGui(self.dir .. "spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);    
-    --if g_server ~= nil then
-    --    g_server.graphColors[NetworkNode.PACKET_SPECTATOR_MODE] = { 1, 1, 1, 1 };
-    --    g_server.packetGraphs[NetworkNode.PACKET_SPECTATOR_MODE] = Graph:new(80, 0.2, 0.2, 0.6, 0.6, 0, 500, false, "bytes");
-	--	g_server.packetGraphs[NetworkNode.PACKET_SPECTATOR_MODE]:setColor(g_server.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][1], g_server.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][2], g_server.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][3], g_server.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][4]);
-    --    g_server.packetBytes[NetworkNode.PACKET_SPECTATOR_MODE] = 0;
-    --end
-    --if g_client ~= nil then
-    --    g_client.graphColors[NetworkNode.PACKET_SPECTATOR_MODE] = { 1, 1, 1, 1 };
-    --    g_client.packetGraphs[NetworkNode.PACKET_SPECTATOR_MODE] = Graph:new(80, 0.2, 0.2, 0.6, 0.6, 0, 500, false, "bytes");
-	--	g_client.packetGraphs[NetworkNode.PACKET_SPECTATOR_MODE]:setColor(g_client.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][1], g_client.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][2], g_client.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][3], g_client.graphColors[NetworkNode.PACKET_SPECTATOR_MODE][4]);
-    --    g_client.packetBytes[NetworkNode.PACKET_SPECTATOR_MODE] = 0;
-    --end
-    NetworkNode.NUM_PACKETS = 6;
-    if self.spectatorMode ~= nil then
-        self.spectatorMode:load();
+    g_gui:loadGui(self.dir .. "spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
+end
+g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
+
+function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScreen)
+    self = SpectatorModeRecorder;
+    self:print("load()");
+    g_currentMission.loadMapFinished = Utils.appendedFunction(g_currentMission.loadMapFinished, self.loadMapFinished);
+    g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad);
+    g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame);
+end
+g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.load);
+
+function SpectatorModeRecorder:loadMap(name)
+    self:print(("loadMap(name:%s)"):format(name));
+    if self.debug then
     end
+    if self.spectatorMode ~= nil then
+        self.spectatorMode:loadMap();
+    end
+    self:loadSavegame();
+end
+
+function SpectatorModeRecorder:loadMapFinished()
+    self = SpectatorModeRecorder;
+    self:print("loadMapFinished()");
+end
+
+function SpectatorModeRecorder:afterLoad()
+    self = SpectatorModeRecorder;
+    self:print("afterLoad");
+end
+
+function SpectatorModeRecorder:loadSavegame()
+    self:print("loadSavegame()");
+end
+
+function SpectatorModeRecorder:saveSavegame()
+    self = SpectatorModeRecorder;
+    self:print("saveSavegame()");
 end
 
 function SpectatorModeRecorder:deleteMap()
+    self:print("deleteMap()");
     if self.spectatorMode ~= nil then
-        self.spectatorMode:delete();
+        self.spectatorMode:deleteMap();
     end
     g_spectatorMode = nil;
 end
@@ -57,3 +93,5 @@ end
 
 function SpectatorModeRecorder:draw()
 end
+
+addModEventListener(SpectatorModeRecorder);
