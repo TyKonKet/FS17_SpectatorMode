@@ -4,6 +4,7 @@
 --
 -- @author TyKonKet
 -- @date 23/12/2016
+
 SpectatorMode = {};
 SpectatorMode_mt = Class(SpectatorMode);
 
@@ -27,7 +28,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     --self.actors["Luke"].name = "Luke";
     --self.actors["Luke"].acting = true;
     self.acting = false;
-    self.actingQuality = self:setQuality("medium");
+    --self.actingQuality = self:setQuality("medium");
     self.alwaysActing = true;
     self.spectating = false;
     self.spectatedPlayer = "";
@@ -50,38 +51,10 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.camera.backup.rz = 0;
     self.camera.backup.rw = 0;
     self.actorDataEvent = nil;
-    --self.player = {};
-    --self.player.backup = {};
-    --self.player.backup.update = nil;
-    addConsoleCommand("AAAPrint", "", "printer", self);
     --addConsoleCommand("AAAStartActing", "", "startActing", self);
     --addConsoleCommand("AAASetSpectatorModeQuality", "", "setQuality", self);
     self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
     return self;
-end
-
-function SpectatorMode:printer()
-    --self:print(g_currentMission.controlledVehicle.activeCamera.cameraPositionNode, g_currentMission.controlledVehicle.activeCamera.cameraNode);
-    --self:print(getParent(g_currentMission.controlledVehicle.activeCamera.cameraPositionNode), getParent(g_currentMission.controlledVehicle.activeCamera.cameraNode));
-    --self:print(g_currentMission.player.rootNode, g_currentMission.player.cameraNode);
-    --self:print(getParent(g_currentMission.player.rootNode), getParent(g_currentMission.player.cameraNode));
-    --self:print(Utils.localToWorldRotation(g_currentMission.player.cameraNode));
-    --self:print(getWorldRotation(g_currentMission.player.cameraNode));
-    --local lpx, lpy, lpz = getRotation(g_currentMission.player.cameraNode);
-    --self:print(string.format("Local         x:%s        y:%s        z:%s", lpx, lpy, lpz));
-    --local wpx, wpy, wpz = Utils.localToWorldRotation(g_currentMission.player.cameraNode);
-    --self:print(string.format("World         x:%s        y:%s        z:%s", wpx, wpy, wpz));
-    --wpx, wpy, wpz = getWorldRotation(g_currentMission.player.cameraNode);
-    --self:print(string.format("World         x:%s        y:%s        z:%s", wpx, wpy, wpz));
-    --lpx, lpy, lpz = Utils.worldToLocalRotation(g_currentMission.player.cameraNode, wpx, wpy, wpz);
-    --self:print(string.format("New local     x:%s        y:%s        z:%s", lpx, lpy, lpz));
-    --local lpx, lpy, lpz, lpw = getQuaternion(g_currentMission.controlledVehicle.activeCamera.cameraNode);
-    --self:print(string.format("Local         x:%s        y:%s        z:%s        w:%s", lpx, lpy, lpz, lpw));
-    --local wpx, wpy, wpz, wpw = getWorldQuaternion(g_currentMission.controlledVehicle.activeCamera.cameraNode);
-    --self:print(string.format("World         x:%s        y:%s        z:%s        w:%s", wpx, wpy, wpz, wpw));
-    self:print(string.format("rootNode:%s", getParent(g_currentMission.player.rootNode)));
-    self:print(string.format("graphicsRootNode:%s", getParent(g_currentMission.player.graphicsRootNode)));
-    self:print(string.format("meshThirdPerson:%s", getParent(g_currentMission.player.meshThirdPerson)));
 end
 
 function SpectatorMode:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
@@ -103,17 +76,6 @@ end
 
 function SpectatorMode:delete()
     self:print("delete()");
-    --self:print("deleteMap");
-    --if self.acting then
-    --    g_client:getServerConnection():sendEvent(ActorStopEvent:new(self.playerName));
-    --    self:print("ActorStopEvent");
-    --end
-end
-
-function SpectatorMode:keyEvent(unicode, sym, modifier, isDown)
-end
-
-function SpectatorMode:mouseEvent(posX, posY, isDown, isUp, button)
 end
 
 function SpectatorMode:update(dt)
@@ -199,8 +161,6 @@ end
 
 function SpectatorMode:startSpectate(playerName)
     self:print(string.format("startSpectate(playerName:%s)", playerName));
-    --self.player.backup.update = Player.update;
-    --Player.update = SpectatorMode.voidUpdate;
     self.root.backup.tx, self.root.backup.ty, self.root.backup.tz = getTranslation(g_currentMission.player.rootNode);
     self.root.backup.rx, self.root.backup.ry, self.root.backup.rz, self.root.backup.rw = getQuaternion(g_currentMission.player.rootNode);
     self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz = getTranslation(g_currentMission.player.cameraNode);
@@ -215,7 +175,7 @@ function SpectatorMode:startSpectate(playerName)
     --    setVisibility(v.vehicleCharacter.graphicsRootNode, false);
     --    setVisibility(v.vehicleCharacter.meshThirdPerson, false);
     --end
-    g_flightAndNoHUDKeysEnabled = true;
+    self:showCrosshair(false);
     setTranslation(g_currentMission.player.rootNode, 0, -200, 0);
     self.spectatedPlayer = playerName;
     self.spectating = true;
@@ -233,13 +193,24 @@ function SpectatorMode:stopSpectate()
     --    setVisibility(v.vehicleCharacter.graphicsRootNode, true);
     --    setVisibility(v.vehicleCharacter.meshThirdPerson, true);
     --end
-    g_flightAndNoHUDKeysEnabled = false;
+    self:showCrosshair(true);
     self.spectatedPlayer = "";
     setTranslation(g_currentMission.player.rootNode, self.root.backup.tx, self.root.backup.ty, self.root.backup.tz);
     setQuaternion(g_currentMission.player.rootNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
     setTranslation(g_currentMission.player.cameraNode, self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz);
     setQuaternion(g_currentMission.player.cameraNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
-    --Player.update = self.player.backup.update;
+end
+
+function SpectatorMode:showCrosshair(sc)
+    if not sc then
+        self.oldPickedUpObjectWidth = g_currentMission.player.pickedUpObjectWidth;
+        self.oldPickedUpObjectHeight = g_currentMission.player.pickedUpObjectHeight;
+        g_currentMission.player.pickedUpObjectWidth = 0;
+        g_currentMission.player.pickedUpObjectHeight = 0;
+    else
+        g_currentMission.player.pickedUpObjectWidth = self.oldPickedUpObjectWidth;
+        g_currentMission.player.pickedUpObjectHeight = self.oldPickedUpObjectHeight;
+    end
 end
 
 function SpectatorMode:actorStartStopEvent(start, actorName)
@@ -276,7 +247,4 @@ end
 function SpectatorMode:setQualityEvent(quality)
     self:print(string.format("setQualityEvent(quality:%s)", quality));
     self.actingQuality = quality;
-end
-
-function SpectatorMode.voidUpdate(self, dt)
 end
