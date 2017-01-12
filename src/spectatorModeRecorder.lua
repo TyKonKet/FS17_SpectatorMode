@@ -9,6 +9,8 @@ SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
 SpectatorModeRecorder.name = "SpectatorModeRecorder";
 SpectatorModeRecorder.debug = true;
+SpectatorModeRecorder.fixedFPS = 30;
+SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
 
 function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
     if self.debug then
@@ -30,6 +32,8 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self.spectatorMode.guis = {};
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new();
     g_gui:loadGui(self.dir .. "spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
+    self.fixedUpdateDt = 0;
+    self.fixedUpdateRealDt = 0;
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 
@@ -60,6 +64,9 @@ end
 function SpectatorModeRecorder:afterLoad()
     self = SpectatorModeRecorder;
     self:print("afterLoad");
+    if self.spectatorMode ~= nil then
+        self.spectatorMode:afterLoad();
+    end
 end
 
 function SpectatorModeRecorder:loadSavegame()
@@ -88,10 +95,20 @@ end
 function SpectatorModeRecorder:update(dt)
     if self.spectatorMode ~= nil then
         self.spectatorMode:update(dt);
+        self.fixedUpdateDt = self.fixedUpdateDt + dt;
+        self.fixedUpdateRealDt = self.fixedUpdateRealDt +dt;
+        if self.fixedUpdateDt >= self.fixedDt then
+            self.spectatorMode:fixedUpdate(self.fixedUpdateRealDt);
+            self.fixedUpdateDt = self.fixedUpdateDt - self.fixedDt;
+            self.fixedUpdateRealDt = 0;
+        end
     end
 end
 
 function SpectatorModeRecorder:draw()
+    if self.spectatorMode ~= nil then
+        self.spectatorMode:draw();
+    end
 end
 
 addModEventListener(SpectatorModeRecorder);
