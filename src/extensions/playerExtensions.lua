@@ -5,6 +5,8 @@
 -- @author TyKonKet
 -- @date 20/01/2017
 
+PlayerExtensions = {};
+
 function PlayerExtensions:playerWriteStream(streamId, connection)
     --local sm = g_spectatorMode;
     if self.isOwner or (not connection:getIsServer() and connection ~= self.creatorConnection) then

@@ -266,7 +266,7 @@ function SpectatorMode:startSpectate(playerName)
     local p = self:getPlayerByName(playerName);
     if p ~= nil then
         setCamera(p.cameraNode);
-        setNearClip(getCamera, 1);
+        p:setVisibility(false);
     else
         self:print("player is nil");
     end
@@ -292,7 +292,7 @@ function SpectatorMode:stopSpectate()
     --setTranslation(g_currentMission.player.cameraNode, self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz);
     --setQuaternion(g_currentMission.player.cameraNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
     --setFovy(g_currentMission.player.cameraNode, self.camera.backup.fovy);
-    setNearClip(getCamera, 0.15);
+    p:setVisibility(true);
     setCamera(g_currentMission.player.cameraNode);
     g_currentMission.hasSpecialCamera = false;
 end
