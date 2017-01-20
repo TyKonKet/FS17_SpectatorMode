@@ -34,6 +34,11 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     g_gui:loadGui(self.dir .. "spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
     self.fixedUpdateDt = 0;
     self.fixedUpdateRealDt = 0;
+    -- extending player functions
+    Player.writeStream = Utils.appendedFunction(Player.writeStream, PlayerExtensions.playerWriteStream);
+    Player.readStream = Utils.appendedFunction(Player.readStream, PlayerExtensions.playerReadStream);
+    Player.writeUpdateStream = Utils.appendedFunction(Player.writeUpdateStream, PlayerExtensions.playerWriteUpdateStream);
+    Player.readUpdateStream = Utils.appendedFunction(Player.readUpdateStream, PlayerExtensions.playerReadUpdateStream);
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 
