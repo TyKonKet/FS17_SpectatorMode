@@ -31,7 +31,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     --self.actingQuality = self:setQuality("medium");
     self.alwaysActing = true;
     self.spectating = false;
-    self.spectatedPlayer = "";
+    self.spectatedPlayer = nil;
     self.root = {};
     self.root.backup = {};
     self.root.backup.tx = 0;
@@ -262,19 +262,13 @@ function SpectatorMode:startSpectate(playerName)
     --setTranslation(g_currentMission.player.rootNode, 0, -200, 0);
     --self.spectatedPlayer = playerName;
     g_currentMission.hasSpecialCamera = true;
-    self.spectating = true;
-    local p = self:getPlayerByName(playerName);
-    if p ~= nil then
-        setCamera(p.cameraNode);
-        p:setVisibility(false);
-    else
-        self:print("player is nil");
-    end
+    self.spectatedPlayer = self:getPlayerByName(playerName);
+    setCamera(self.spectatedPlayer.cameraNode);
+    self.spectatedPlayer:setVisibility(false);
 end
 
 function SpectatorMode:stopSpectate()
     --self:print("stopSpectate()");
-    self.spectating = false;
     --for k,v in pairs(g_currentMission.players) do
     --    if v.controllerName == playerName then
     --        setVisibility(v.graphicsRootNode, true);
@@ -292,7 +286,8 @@ function SpectatorMode:stopSpectate()
     --setTranslation(g_currentMission.player.cameraNode, self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz);
     --setQuaternion(g_currentMission.player.cameraNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
     --setFovy(g_currentMission.player.cameraNode, self.camera.backup.fovy);
-    p:setVisibility(true);
+    self.spectatedPlayer:setVisibility(true);
+    self.spectatedPlayer = nil;
     setCamera(g_currentMission.player.cameraNode);
     g_currentMission.hasSpecialCamera = false;
 end
