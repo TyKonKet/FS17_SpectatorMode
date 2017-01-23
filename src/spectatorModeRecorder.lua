@@ -1,6 +1,5 @@
 --
--- SpectatorMode script
---
+-- SpectatorMode
 --
 -- @author TyKonKet
 -- @date 04/01/2017
@@ -26,8 +25,15 @@ end
 function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadingScreen)
     self = SpectatorModeRecorder;
     self:print("initialize()");
+    SpectatorMode.debug = self.debug;
+    SpectatorModeServer.debug = self.debug;
     g_spectatorMode = SpectatorMode:new(g_server ~= nil, g_client ~= nil);
     self.spectatorMode = g_spectatorMode;
+    self.spectatorMode.debug = self.debug;
+    if g_server ~= nil then
+        self.spectatorMode.server = SpectatorModeServer:new(g_server ~= nil, g_client ~= nil);
+        self.spectatorMode.server.debug = self.debug;
+    end
     self.spectatorMode.dir = self.dir;
     self.spectatorMode.guis = {};
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new();
@@ -35,10 +41,15 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self.fixedUpdateDt = 0;
     self.fixedUpdateRealDt = 0;
     -- extending player functions
-    Player.writeStream = Utils.appendedFunction(Player.writeStream, PlayerExtensions.playerWriteStream);
-    Player.readStream = Utils.appendedFunction(Player.readStream, PlayerExtensions.playerReadStream);
-    Player.writeUpdateStream = Utils.appendedFunction(Player.writeUpdateStream, PlayerExtensions.playerWriteUpdateStream);
-    Player.readUpdateStream = Utils.appendedFunction(Player.readUpdateStream, PlayerExtensions.playerReadUpdateStream);
+    Player.writeStream = Utils.appendedFunction(Player.writeStream, PlayerExtensions.writeStream);
+    Player.readStream = Utils.appendedFunction(Player.readStream, PlayerExtensions.readStream);
+    Player.writeUpdateStream = Utils.appendedFunction(Player.writeUpdateStream, PlayerExtensions.writeUpdateStream);
+    Player.readUpdateStream = Utils.appendedFunction(Player.readUpdateStream, PlayerExtensions.readUpdateStream);
+    Player.update = Utils.appendedFunction(Player.update, PlayerExtensions.update);
+    Player.onEnter = Utils.appendedFunction(Player.onEnter, PlayerExtensions.onEnter);
+    -- extending steerable
+    Steerable.setActiveCameraIndex = Utils.appendedFunction(Steerable.setActiveCameraIndex, SteerableExtensions.setActiveCameraIndex);
+    --Steerable.enterVehicle = Utils.appendedFunction(Steerable.enterVehicle, SteerableExtensions.enterVehicle);
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 

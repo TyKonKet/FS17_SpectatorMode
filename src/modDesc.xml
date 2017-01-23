@@ -11,15 +11,16 @@
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
+        <sourceFile filename="steerableExtensions.lua" />
         <sourceFile filename="playerExtensions.lua" />
         <sourceFile filename="extensions.lua" />
         <sourceFile filename="spectateGui.lua" />
-        <sourceFile filename="actorStart.lua" />
-        <sourceFile filename="actorStop.lua" />
-        <sourceFile filename="actorData.lua" />
-        <sourceFile filename="setQuality.lua" />
+        <sourceFile filename="spectateEvent.lua" />
+        <sourceFile filename="cameraChangeEvent.lua" />
+        <sourceFile filename="spectateRejectedEvent.lua" />
         <sourceFile filename="spectatorModeRecorder.lua" />
         <sourceFile filename="spectatorMode.lua" />
+        <sourceFile filename="spectatorModeServer.lua" />
     </extraSourceFiles>
     <inputBindings>
         <input name="TOGGLE_SPECTATOR_MODE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />

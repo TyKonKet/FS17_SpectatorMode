@@ -1,10 +1,8 @@
 --
--- SpectatorMode script
---
+-- SpectatorMode
 --
 -- @author TyKonKet
 -- @date 03/01/2017
-
 
 -- Event methods extension
 function Event.send(event, dontSendLocal, ignoreConnection)

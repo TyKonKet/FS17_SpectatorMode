@@ -19,7 +19,6 @@ function SpectatorMode:new(isServer, isClient, customMt)
     local self = {};
     setmetatable(self, mt);
     self.name = "SpectatorMode";
-    self.debug = true;
     self.actors = {};
     --self.actors["Mattew"] = {};
     --self.actors["Mattew"].name = "Mattew";
@@ -98,12 +97,13 @@ function SpectatorMode:printer()
     --    SpectatorModeRecorder.fixedFPS = 30;
     --    SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
     --end
+    --DebugUtil.printTableRecursively(g_currentMission.steerables, self.name .. " -> ", 0, 2);
 end
 
 function SpectatorMode:loadMap()
     self:print("loadMap()");
     self.guis.spectateGui:setSelectionCallback(self, self.startSpectate);
-    self.actorDataEvent = ActorDataEvent:new(g_currentMission.missionInfo.playerName, 0, 0, 0, 0, 0, 0, 0, 0);
+    --self.actorDataEvent = ActorDataEvent:new(g_currentMission.missionInfo.playerName, 0, 0, 0, 0, 0, 0, 0, 0);
 end
 
 function SpectatorMode:deleteMap()
@@ -117,6 +117,10 @@ function SpectatorMode:afterLoad()
 end
 
 function SpectatorMode:update(dt)
+    if self.lastCamera ~= getCamera() then
+        self:print(("Camera:%s"):format(getCamera()));
+        self.lastCamera = getCamera();
+    end
     --self.FPS.dt = self.FPS.dt + dt;
     --if self.FPS.dt > 1000 then
     --    self.FPS.dt = self.FPS.dt - 1000;
@@ -260,11 +264,13 @@ function SpectatorMode:startSpectate(playerName)
     --end
     --self:showCrosshair(false);
     --setTranslation(g_currentMission.player.rootNode, 0, -200, 0);
-    --self.spectatedPlayer = playerName;
+    --self.spectatedPlayer = self:getPlayerByName(playerName);
+    --setCamera(self.spectatedPlayer.cameraNode);
+    --self.spectatedPlayer:setVisibility(false);
+    self.spectating = true;
+    self.spectatedPlayer = playerName;
     g_currentMission.hasSpecialCamera = true;
-    self.spectatedPlayer = self:getPlayerByName(playerName);
-    setCamera(self.spectatedPlayer.cameraNode);
-    self.spectatedPlayer:setVisibility(false);
+    Event.send(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName));
 end
 
 function SpectatorMode:stopSpectate()
@@ -286,10 +292,11 @@ function SpectatorMode:stopSpectate()
     --setTranslation(g_currentMission.player.cameraNode, self.camera.backup.tx, self.camera.backup.ty, self.camera.backup.tz);
     --setQuaternion(g_currentMission.player.cameraNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
     --setFovy(g_currentMission.player.cameraNode, self.camera.backup.fovy);
-    self.spectatedPlayer:setVisibility(true);
-    self.spectatedPlayer = nil;
-    setCamera(g_currentMission.player.cameraNode);
+    --self.spectatedPlayer:setVisibility(true);
+    self.spectating = false;
     g_currentMission.hasSpecialCamera = false;
+    Event.send(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer));
+    self.spectatedPlayer = nil;
 end
 
 function SpectatorMode:showCrosshair(sc)
@@ -348,10 +355,42 @@ function SpectatorMode:setQualityEvent(quality)
 end--
 
 function SpectatorMode:getPlayerByName(name)
-    for k,v in pairs(g_currentMission.players) do
+    for _,v in pairs(g_currentMission.players) do
         if v.controllerName == name then
             return v;
         end
     end
     return nil;
+end
+
+function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
+    self:print(("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)"):format(actorName, cameraId, cameraIndex, cameraType));
+    --TODO: hide meshes based on cameraType
+    if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
+        setCamera(self:getPlayerByName(actorName).cameraNode);
+    elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
+        for _,v in pairs(g_currentMission.steerables) do
+            if v.controllerName == actorName then               
+                setCamera(v.cameras[cameraIndex].cameraNode);
+            end
+        end
+    elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
+        for _,v in pairs(g_currentMission.steerables) do
+            if v.controllerName == actorName then
+                self:print(actorName .. " == " .. v.controllerName);
+                setCamera(v.cameras[cameraIndex].cameraNode);
+            end
+        end
+    end
+end
+
+function SpectatorMode:spectateRejected(reason)
+    self:print(("spectateRejected(reason:%s)"):format(reason));
+    self.spectating = false;
+    --TODO: Add warning message via g18n
+    if reason == SpectateRejectedEvent.REASON_DEDICATED_SERVER then
+        g_currentMission:showBlinkingWarning("You can't spectate a dedicated server's player", 3000);
+    elseif reason == SpectateRejectedEvent.REASON_YOURSELF then
+        g_currentMission:showBlinkingWarning("You can't spectate yourself", 3000);
+    end
 end
