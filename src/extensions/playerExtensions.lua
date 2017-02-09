@@ -1,6 +1,5 @@
 --
--- SpectatorMode script
---
+-- SpectatorMode
 --
 -- @author TyKonKet
 -- @date 20/01/2017
@@ -94,7 +93,11 @@ function PlayerExtensions:update(dt)
 end
 
 function PlayerExtensions:onEnter(isOwner)
-     if isOwner then
+    if isOwner then
         Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
-     end
+    elseif g_spectatorMode ~= nil then
+        if self.controllerName == g_spectatorMode.spectatedPlayer then
+            self:setVisibility(false);
+        end
+    end
 end

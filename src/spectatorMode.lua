@@ -1,6 +1,5 @@
 --
--- SpectatorMode script
---
+-- SpectatorMode
 --
 -- @author TyKonKet
 -- @date 23/12/2016
@@ -68,6 +67,8 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.ERPS.show = true;
     self.ERPS.count = 0;
     self.ERPS.tempCount = 0;
+    self.printWUS = true;
+    self.printRUS = true;
     --addConsoleCommand("AAAStartActing", "", "startActing", self);
     --addConsoleCommand("AAASetSpectatorModeQuality", "", "setQuality", self);
     addConsoleCommand("AAAPrint", "", "printer", self);
@@ -98,6 +99,20 @@ function SpectatorMode:printer()
     --    SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
     --end
     --DebugUtil.printTableRecursively(g_currentMission.steerables, self.name .. " -> ", 0, 2);
+    --self.printWUS = true;
+    --self.printRUS = true;
+    for _,v in pairs(g_currentMission.steerables) do
+        if v.configFileName == "data/vehicles/steerable/newHolland/newHolland8340.xml" then
+            if v.cameras ~= nil then
+                for _,c in pairs(v.cameras) do
+                    self:print(string.format("camera:%s -> isInside:%s", c.cameraNode, c.isInside));
+                    self:print(string.format("getParent(c.cameraNode):%s -> c.cameraNode:%s", getParent(c.cameraNode), c.cameraNode));
+                    self:print(string.format("getParent(c.rotateNode):%s -> c.rotateNode:%s", getParent(c.rotateNode), c.rotateNode));
+                    self:print(string.format("getParent(c.cameraPositionNode):%s -> c.cameraPositionNode:%s", getParent(c.cameraPositionNode), c.cameraPositionNode));
+                end
+            end
+        end
+    end
 end
 
 function SpectatorMode:loadMap()
@@ -258,17 +273,25 @@ function SpectatorMode:startSpectate(playerName)
     --        setVisibility(v.meshThirdPerson, false);
     --    end
     --end
-    --for k,v in paris(g_currentMission.steerables) then
-    --    setVisibility(v.vehicleCharacter.graphicsRootNode, false);
-    --    setVisibility(v.vehicleCharacter.meshThirdPerson, false);
+    --for _,v in pairs(g_currentMission.steerables) do
+    --    if v.cameras ~= nil then
+    --        for _,c in pairs(v.cameras) do
+    --            link(getParent(c.cameraPositionNode), c.cameraNode);
+    --            local x, y, z = getTranslation(c.cameraPositionNode);
+    --            setTranslation(c.cameraNode, x, y, z);
+    --            x, y, z = getRotation(c.rotateNode);
+    --            setRotation(c.cameraNode, x, y, z);
+    --        end
+    --    end
     --end
-    --self:showCrosshair(false);
+    self:showCrosshair(false);
     --setTranslation(g_currentMission.player.rootNode, 0, -200, 0);
     --self.spectatedPlayer = self:getPlayerByName(playerName);
     --setCamera(self.spectatedPlayer.cameraNode);
     --self.spectatedPlayer:setVisibility(false);
     self.spectating = true;
     self.spectatedPlayer = playerName;
+    self:getPlayerByName(self.spectatedPlayer):setVisibility(false);
     g_currentMission.hasSpecialCamera = true;
     Event.send(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName));
 end
@@ -285,7 +308,6 @@ function SpectatorMode:stopSpectate()
     ----    setVisibility(v.vehicleCharacter.graphicsRootNode, true);
     ----    setVisibility(v.vehicleCharacter.meshThirdPerson, true);
     ----end
-    --self:showCrosshair(true);
     --self.spectatedPlayer = "";
     --setTranslation(g_currentMission.player.rootNode, self.root.backup.tx, self.root.backup.ty, self.root.backup.tz);
     --setQuaternion(g_currentMission.player.rootNode, self.camera.backup.rx, self.camera.backup.ry, self.camera.backup.rz, self.camera.backup.rw);
@@ -296,20 +318,26 @@ function SpectatorMode:stopSpectate()
     self.spectating = false;
     g_currentMission.hasSpecialCamera = false;
     Event.send(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer));
+    self:getPlayerByName(self.spectatedPlayer):setVisibility(true);
     self.spectatedPlayer = nil;
+    self:showCrosshair(true);
+    --for _,v in pairs(g_currentMission.steerables) do
+    --    if v.cameras ~= nil then
+    --        for _,c in pairs(v.cameras) do
+    --            unlink(c.cameraNode);
+    --        end
+    --    end
+    --end
 end
 
 function SpectatorMode:showCrosshair(sc)
-    --self:print(("showCrosshair(sc:%s)"):format(sc));
-    --if not sc then
-    --    self.oldPickedUpObjectWidth = g_currentMission.player.pickedUpObjectWidth;
-    --    self.oldPickedUpObjectHeight = g_currentMission.player.pickedUpObjectHeight;
-    --    g_currentMission.player.pickedUpObjectWidth = 0;
-    --    g_currentMission.player.pickedUpObjectHeight = 0;
-    --else
-    --    g_currentMission.player.pickedUpObjectWidth = self.oldPickedUpObjectWidth;
-    --    g_currentMission.player.pickedUpObjectHeight = self.oldPickedUpObjectHeight;
-    --end
+    if not sc then
+        g_currentMission.player.pickedUpObjectWidth = 0;
+        g_currentMission.player.pickedUpObjectHeight = 0;
+    else
+        g_currentMission.player.pickedUpObjectWidth = self.oldPickedUpObjectWidth;
+        g_currentMission.player.pickedUpObjectHeight = self.oldPickedUpObjectHeight;
+    end
 end
 
 function SpectatorMode:actorStartStopEvent(start, actorName)
@@ -365,20 +393,21 @@ end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)"):format(actorName, cameraId, cameraIndex, cameraType));
-    --TODO: hide meshes based on cameraType
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
-        setCamera(self:getPlayerByName(actorName).cameraNode);
+        local p = self:getPlayerByName(actorName);
+        setCamera(p.cameraNode);
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
         for _,v in pairs(g_currentMission.steerables) do
             if v.controllerName == actorName then               
                 setCamera(v.cameras[cameraIndex].cameraNode);
+                v.vehicleCharacter:setCharacterVisibility(true);
             end
         end
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
         for _,v in pairs(g_currentMission.steerables) do
             if v.controllerName == actorName then
-                self:print(actorName .. " == " .. v.controllerName);
                 setCamera(v.cameras[cameraIndex].cameraNode);
+                v.vehicleCharacter:setCharacterVisibility(false);
             end
         end
     end

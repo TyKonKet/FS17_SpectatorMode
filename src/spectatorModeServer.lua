@@ -74,7 +74,7 @@ function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraTy
     self.clients[aName].cameraId = cameraId;
     self.clients[aName].cameraIndex = cameraIndex;
     self.clients[aName].cameraType = cameraType;
-    local event = CameraChangeEvent:new(aName, cameraId, cameraType, cameraIndex);
+    local event = CameraChangeEvent:new(aName, cameraId, cameraIndex, cameraType);
     for k,v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
         v.connection:sendEvent(event);

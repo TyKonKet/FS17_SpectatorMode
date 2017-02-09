@@ -108,42 +108,32 @@ function math.roundDecimals(floatNumber, digits)
     return math.floor(floatNumber * shift) / shift;
 end
 
-function Steerable:enterVehicle(isControlling, playerIndex, playerColorIndex)
-    --print(string.format("Steerable:enterVehicle(isControlling:%s, playerIndex:%s, playerColorIndex:%s)", isControlling, playerIndex, playerColorIndex));
-    self.isControlled = true;
-    if isControlling then
-        self.isEntered = true;
-
-        -- if head tracking is available we want to use the first indoor camera
-        if g_gameSettings:getValue("isHeadTrackingEnabled") and isHeadTrackingAvailable() then
-            for i,camera in pairs(self.cameras) do
-                if camera.isInside then
-                    self.camIndex = i;
-                    break;
-                end
-            end
-        end
-        if g_gameSettings:getValue("resetCamera") then
-            self.camIndex = 1;
-        end
-        self:setActiveCameraIndex(self.camIndex);
+function Utils.getLocalTransaltion(parentId, childId)
+    local px, py, pz = getTranslation(parentId);
+    local cx, cy, cz = getTranslation(childId);
+    if g_spectatorMode.printWUS then
+        print(string.format("t parent: x:%s, y:%s, z:%s", px, py, pz));
+        print(string.format("t child : x:%s, y:%s, z:%s", cx, cy, cz));
     end
+    return cx - px, cy - py, cz - pz;
+end
 
-    if self.vehicleCharacter ~= nil and not self:getIsHired() and (not g_spectatorMode.spectating or self.controllerName ~= g_spectatorMode.spectatedPlayer) then
-        self.vehicleCharacter:loadCharacter(PlayerUtil.playerIndexToDesc[playerIndex].xmlFilename, playerColorIndex);
+function Utils.getLocalQuaternion(parentId, childId)
+    local px, py, pz, pw = getQuaternion(parentId);
+    local cx, cy, cz, cw = getQuaternion(childId);
+    if g_spectatorMode.printWUS then
+        print(string.format("r parent: x:%s, y:%s, z:%s, w:%s", px, py, pz, pw));
+        print(string.format("r child : x:%s, y:%s, z:%s, w:%s", cx, cy, cz, cw));
     end
+    return cx - px, cy - py, cz - pz, (pw + cw) / 2;
+end
 
-    if self.enterAnimation ~= nil and self.playAnimation ~= nil then
-        self:playAnimation(self.enterAnimation, 1, nil, true);
+function Utils.getLocalRotation(parentId, childId)
+    local px, py, pz = getRotation(parentId);
+    local cx, cy, cz = getRotation(childId);
+    if g_spectatorMode.printWUS then
+        print(string.format("r parent: x:%s, y:%s, z:%s", px, py, pz));
+        print(string.format("r child : x:%s, y:%s, z:%s", cx, cy, cz));
     end
-
-    self.playerIndex = playerIndex;
-    self.playerColorIndex = playerColorIndex;
-
-    g_currentMission.controlledVehicles[self] = self;
-    self:onEnter(isControlling);
-
-    if self.isServer and not isControlling and g_currentMission.trafficSystem ~= nil and g_currentMission.trafficSystem.trafficSystemId ~= 0 then
-        addTrafficSystemPlayer(g_currentMission.trafficSystem.trafficSystemId, self.components[1].node);
-    end
+    return cx - px, cy - py, cz - pz;
 end

@@ -47,9 +47,13 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Player.readUpdateStream = Utils.appendedFunction(Player.readUpdateStream, PlayerExtensions.readUpdateStream);
     Player.update = Utils.appendedFunction(Player.update, PlayerExtensions.update);
     Player.onEnter = Utils.appendedFunction(Player.onEnter, PlayerExtensions.onEnter);
-    -- extending steerable
+    -- extending steerable functions
+    Steerable.postLoad = Utils.appendedFunction(Steerable.postLoad, SteerableExtensions.postLoad);
     Steerable.setActiveCameraIndex = Utils.appendedFunction(Steerable.setActiveCameraIndex, SteerableExtensions.setActiveCameraIndex);
-    --Steerable.enterVehicle = Utils.appendedFunction(Steerable.enterVehicle, SteerableExtensions.enterVehicle);
+    Steerable.writeUpdateStream = Utils.appendedFunction(Steerable.writeUpdateStream, SteerableExtensions.writeUpdateStream);
+    Steerable.readUpdateStream = Utils.appendedFunction(Steerable.readUpdateStream, SteerableExtensions.readUpdateStream);
+    Steerable.update = Utils.appendedFunction(Steerable.update, SteerableExtensions.update);
+    --g_gameSettings:setValue("useWorldCamera", false);
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 
