@@ -8,8 +8,6 @@ SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
 SpectatorModeRecorder.name = "SpectatorModeRecorder";
 SpectatorModeRecorder.debug = true;
-SpectatorModeRecorder.fixedFPS = 30;
-SpectatorModeRecorder.fixedDt = 1000 / SpectatorModeRecorder.fixedFPS;
 
 function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
     if self.debug then
@@ -53,7 +51,6 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Steerable.writeUpdateStream = Utils.appendedFunction(Steerable.writeUpdateStream, SteerableExtensions.writeUpdateStream);
     Steerable.readUpdateStream = Utils.appendedFunction(Steerable.readUpdateStream, SteerableExtensions.readUpdateStream);
     Steerable.update = Utils.appendedFunction(Steerable.update, SteerableExtensions.update);
-    --g_gameSettings:setValue("useWorldCamera", false);
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 
@@ -115,20 +112,10 @@ end
 function SpectatorModeRecorder:update(dt)
     if self.spectatorMode ~= nil then
         self.spectatorMode:update(dt);
-        self.fixedUpdateDt = self.fixedUpdateDt + dt;
-        self.fixedUpdateRealDt = self.fixedUpdateRealDt +dt;
-        if self.fixedUpdateDt >= self.fixedDt then
-            self.spectatorMode:fixedUpdate(self.fixedUpdateRealDt);
-            self.fixedUpdateDt = self.fixedUpdateDt - self.fixedDt;
-            self.fixedUpdateRealDt = 0;
-        end
     end
 end
 
 function SpectatorModeRecorder:draw()
-    if self.spectatorMode ~= nil then
-        self.spectatorMode:draw();
-    end
 end
 
 addModEventListener(SpectatorModeRecorder);

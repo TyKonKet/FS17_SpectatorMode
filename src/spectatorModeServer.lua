@@ -64,7 +64,6 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
 end
 
 function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraType)
-    self:print(("cameraChange(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)"):format(aName, cameraId, cameraIndex, cameraType));
     if self.clients[aName] == nil then
         self.clients[aName] = {};
     end
