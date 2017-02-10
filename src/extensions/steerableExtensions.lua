@@ -105,3 +105,24 @@ function SteerableExtensions:update(dt)
         end
     end
 end
+
+function SteerableExtensions:drawUIInfo(superFunc)
+     if superFunc ~= nil then
+	    superFunc(self);
+	end
+    local spectated = self.isSpectated ~= nil;
+    if spectated then
+        spectated = self:isSpectated();
+    end
+    if (not self.isEntered and not spectated) and self.isClient and self:getIsActive() and self.isControlled and not g_gui:getIsGuiVisible() and g_currentMission.showHudEnv then
+        local x, y, z = getWorldTranslation(self.nicknameRenderNode);
+        local x1, y1, z1 = getWorldTranslation(getCamera());
+        local distSq = Utils.vector3LengthSq(x - x1, y - y1, z - z1);
+        if distSq <= 100 * 100 then
+            x = x + self.nicknameRenderNodeOffset[1];
+            y = y + self.nicknameRenderNodeOffset[2];
+            z = z + self.nicknameRenderNodeOffset[3];
+            Utils.renderTextAtWorldPosition(x, y, z, self.controllerName, getCorrectTextSize(0.02), 0);
+        end
+    end
+end
