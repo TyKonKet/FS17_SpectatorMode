@@ -72,8 +72,8 @@ function SpectatorMode:update(dt)
 end
 
 function SpectatorMode:draw()
-    if self.spectatedVehicle ~= nil and self.calldraw then
-        self.spectatedVehicle:draw();
+    if self.spectatedVehicle ~= nil then
+         g_currentMission:drawVehicleHud(self.spectatedVehicle);
     end
 end
 
