@@ -79,9 +79,13 @@ function SteerableExtensions:update(dt)
             end
 
             local rx, ry, rz, rw = Utils.nlerpQuaternionShortestPath(self.camerasLerp[v.cameraNode].lastQuaternion[1], self.camerasLerp[v.cameraNode].lastQuaternion[2], self.camerasLerp[v.cameraNode].lastQuaternion[3], self.camerasLerp[v.cameraNode].lastQuaternion[4], self.camerasLerp[v.cameraNode].targetQuaternion[1], self.camerasLerp[v.cameraNode].targetQuaternion[2], self.camerasLerp[v.cameraNode].targetQuaternion[3], self.camerasLerp[v.cameraNode].targetQuaternion[4], self.camerasLerp[v.cameraNode].interpolationAlphaRot);
-            setQuaternion(v.rotateNode, rx, ry, rz, rw);
+            if rx == rx and ry == ry and rz == rz and rw == rw then
+                setQuaternion(v.rotateNode, rx, ry, rz, rw);
+            end
             local tx, ty, tz = Utils.vector3Lerp(self.camerasLerp[v.cameraNode].lastTranslation[1], self.camerasLerp[v.cameraNode].lastTranslation[2], self.camerasLerp[v.cameraNode].lastTranslation[3], self.camerasLerp[v.cameraNode].targetTranslation[1], self.camerasLerp[v.cameraNode].targetTranslation[2], self.camerasLerp[v.cameraNode].targetTranslation[3], self.camerasLerp[v.cameraNode].interpolationAlphaRot);
-            setTranslation(v.cameraPositionNode, tx, ty, tz);
+            if tx == tx and ty == ty and tz == tz then
+                setTranslation(v.cameraPositionNode, tx, ty, tz);
+            end
             if v.rotateNode ~= v.cameraPositionNode then
                 local wtx, wty, wtz = getWorldTranslation(v.cameraPositionNode);
                 local dx = wtx;
