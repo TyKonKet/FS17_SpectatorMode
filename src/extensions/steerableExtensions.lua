@@ -98,8 +98,10 @@ function SteerableExtensions:update(dt)
                 local upx, upy, upz = 0, 1, 0;
                 if math.abs(dx) < 0.001 and math.abs(dz) < 0.001 then
                     upx = 0.1;
-                end       
-                setDirection(v.cameraNode, dx, dy, dz, upx, upy, upz);
+                end
+                if math.abs(dx) > 0.0001 and math.abs(dy) > 0.0001 and math.abs(dz) > 0.0001 then
+                    setDirection(v.cameraNode, dx, dy, dz, upx, upy, upz);
+                end
             else
                 local wrx, wry, wrz, wrw = getWorldQuaternion(v.rotateNode);
                 setQuaternion(v.cameraNode, wrx, wry, wrz, wrw);
