@@ -86,6 +86,7 @@ function SteerableExtensions:update(dt)
             if tx == tx and ty == ty and tz == tz then
                 setTranslation(v.cameraPositionNode, tx, ty, tz);
             end
+            
             if v.rotateNode ~= v.cameraPositionNode then
                 local wtx, wty, wtz = getWorldTranslation(v.cameraPositionNode);
                 local dx = wtx;
