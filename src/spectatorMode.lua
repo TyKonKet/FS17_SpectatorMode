@@ -103,6 +103,7 @@ function SpectatorMode:stopSpectate()
     self:getPlayerByName(self.spectatedPlayer):setVisibility(true);
     self.spectatedPlayer = nil;
     self:showCrosshair(true);
+    self.spectating = false;
 end
 
 function SpectatorMode:showCrosshair(sc)
