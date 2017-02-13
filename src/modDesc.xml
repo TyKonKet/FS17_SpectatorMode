@@ -11,6 +11,7 @@
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
+        <sourceFile filename="vehicleExtensions.lua" />
         <sourceFile filename="steerableExtensions.lua" />
         <sourceFile filename="playerExtensions.lua" />
         <sourceFile filename="extensions.lua" />

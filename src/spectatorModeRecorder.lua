@@ -51,6 +51,9 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Steerable.writeUpdateStream = Utils.appendedFunction(Steerable.writeUpdateStream, SteerableExtensions.writeUpdateStream);
     Steerable.readUpdateStream = Utils.appendedFunction(Steerable.readUpdateStream, SteerableExtensions.readUpdateStream);
     Steerable.update = Utils.appendedFunction(Steerable.update, SteerableExtensions.update);
+    Steerable.drawUIInfo = SteerableExtensions.drawUIInfo;
+    -- extending vehicle
+    Vehicle.isSpectated = VehicleExtensions.isSpectated;
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize);
 
@@ -116,6 +119,9 @@ function SpectatorModeRecorder:update(dt)
 end
 
 function SpectatorModeRecorder:draw()
+    if self.spectatorMode ~= nil then
+        self.spectatorMode:draw();
+    end
 end
 
 addModEventListener(SpectatorModeRecorder);

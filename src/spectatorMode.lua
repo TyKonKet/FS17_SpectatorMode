@@ -20,6 +20,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.name = "SpectatorMode";
     self.spectating = false;
     self.spectatedPlayer = nil;
+    self.spectatedVehicle = nil;
     addConsoleCommand("AAAPrint", "", "printer", self);
     self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
     return self;
@@ -70,6 +71,12 @@ function SpectatorMode:update(dt)
 	end
 end
 
+function SpectatorMode:draw()
+    if self.spectatedVehicle ~= nil and self.calldraw then
+        self.spectatedVehicle:draw();
+    end
+end
+
 function SpectatorMode:showGui()
     local spectableUsers = {};
     for k,p in pairs(g_currentMission.players) do
@@ -90,6 +97,8 @@ end
 
 function SpectatorMode:stopSpectate()
     g_currentMission.hasSpecialCamera = false;
+    self:setVehicleActiveCamera(nil);
+    self.spectatedVehicle = nil;
     Event.send(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer));
     self:getPlayerByName(self.spectatedPlayer):setVisibility(true);
     self.spectatedPlayer = nil;
@@ -119,11 +128,15 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         local p = self:getPlayerByName(actorName);
         setCamera(p.cameraNode);
+        self:setVehicleActiveCamera(nil);
+        self.spectatedVehicle = nil;
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
         for _,v in pairs(g_currentMission.steerables) do
             if v.controllerName == actorName then               
                 setCamera(v.cameras[cameraIndex].cameraNode);
                 v.vehicleCharacter:setCharacterVisibility(true);
+                self.spectatedVehicle = v;
+                self:setVehicleActiveCamera(cameraIndex);
             end
         end
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
@@ -131,6 +144,8 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode);
                 v.vehicleCharacter:setCharacterVisibility(false);
+                self.spectatedVehicle = v;
+                self:setVehicleActiveCamera(cameraIndex);
             end
         end
     end
@@ -144,5 +159,18 @@ function SpectatorMode:spectateRejected(reason)
         g_currentMission:showBlinkingWarning("You can't spectate a dedicated server's player", 3000);
     elseif reason == SpectateRejectedEvent.REASON_YOURSELF then
         g_currentMission:showBlinkingWarning("You can't spectate yourself", 3000);
+    end
+end
+
+function SpectatorMode:setVehicleActiveCamera(cameraIndex)
+    if self.spectatedVehicle ~= nil then
+        local useMirror = false;
+        if cameraIndex ~= nil then
+            self.spectatedVehicle:setActiveCameraIndex(cameraIndex);
+            useMirror = self.spectatedVehicle.activeCamera.useMirror;
+        end
+        if self.spectatedVehicle.setMirrorVisible ~= nil then
+            self.spectatedVehicle:setMirrorVisible(useMirror);
+        end
     end
 end
