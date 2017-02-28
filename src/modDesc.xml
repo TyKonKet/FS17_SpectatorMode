@@ -4,9 +4,11 @@
     <version>1.0.0.0</version>
     <title>
         <en>Spectator Mode</en>
+        <nl>Toeschouwer Modus</nl>
     </title>
     <description>
         <en>Spectator Mode</en>
+        <nl>Met deze mod kun je een andere speler volgen en bekijken</nl>
     </description>
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
