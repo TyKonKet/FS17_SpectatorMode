@@ -3,7 +3,6 @@
 --
 -- @author TyKonKet
 -- @date 20/01/2017
-
 PlayerExtensions = {};
 
 function PlayerExtensions:writeStream(streamId, connection)
@@ -37,22 +36,22 @@ function PlayerExtensions:writeUpdateStream(streamId, connection, dirtyMask)
         streamWriteFloat32(streamId, x);
         streamWriteFloat32(streamId, y);
         streamWriteFloat32(streamId, z);
-        streamWriteFloat32(streamId, w);    
+        streamWriteFloat32(streamId, w);
     end
 end
 
 function PlayerExtensions:readUpdateStream(streamId, timestamp, connection)
     if not self.isOwner and connection:getIsServer() then
         self.lastQuaternion = {
-			getQuaternion(self.cameraNode)
-		};
-		self.targetQuaternion = {
-			streamReadFloat32(streamId),
-			streamReadFloat32(streamId),
-			streamReadFloat32(streamId),
-			streamReadFloat32(streamId)
-		};
-		self.interpolationAlphaRot = 0;
+            getQuaternion(self.cameraNode)
+        };
+        self.targetQuaternion = {
+            streamReadFloat32(streamId),
+            streamReadFloat32(streamId),
+            streamReadFloat32(streamId),
+            streamReadFloat32(streamId)
+        };
+        self.interpolationAlphaRot = 0;
     end
 end
 
@@ -70,6 +69,7 @@ end
 function PlayerExtensions:onEnter(isOwner)
     if isOwner then
         Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
+        g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
     elseif g_spectatorMode ~= nil then
         if self.controllerName == g_spectatorMode.spectatedPlayer then
             self:setVisibility(false);

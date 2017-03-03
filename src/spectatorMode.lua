@@ -3,7 +3,6 @@
 --
 -- @author TyKonKet
 -- @date 23/12/2016
-
 SpectatorMode = {};
 SpectatorMode_mt = Class(SpectatorMode);
 
@@ -22,7 +21,6 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.spectatedPlayer = nil;
     self.spectatedVehicle = nil;
     addConsoleCommand("AAAPrint", "", "printer", self);
-    self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
     return self;
 end
 
@@ -59,27 +57,27 @@ function SpectatorMode:update(dt)
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
             g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
-	        if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
-	            self:stopSpectate();
+            if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+                self:stopSpectate();
             end
         else
             g_currentMission:addHelpButtonText(g_i18n:getText("START_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
-	        if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
-	            self:showGui();
+            if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+                self:showGui();
             end
-	    end
-	end
+        end
+    end
 end
 
 function SpectatorMode:draw()
     if self.spectatedVehicle ~= nil then
-         g_currentMission:drawVehicleHud(self.spectatedVehicle);
+        g_currentMission:drawVehicleHud(self.spectatedVehicle);
     end
 end
 
 function SpectatorMode:showGui()
     local spectableUsers = {};
-    for k,p in pairs(g_currentMission.players) do
+    for k, p in pairs(g_currentMission.players) do
         table.insert(spectableUsers, p.controllerName);
     end
     self.guis.spectateGui:setSpectableUsers(spectableUsers);
@@ -117,7 +115,7 @@ function SpectatorMode:showCrosshair(sc)
 end
 
 function SpectatorMode:getPlayerByName(name)
-    for _,v in pairs(g_currentMission.players) do
+    for _, v in pairs(g_currentMission.players) do
         if v.controllerName == name then
             return v;
         end
@@ -126,14 +124,15 @@ function SpectatorMode:getPlayerByName(name)
 end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
+    self:print(string.format("SpectatorMode:cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType));
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         local p = self:getPlayerByName(actorName);
         setCamera(p.cameraNode);
         self:setVehicleActiveCamera(nil);
         self.spectatedVehicle = nil;
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
-        for _,v in pairs(g_currentMission.steerables) do
-            if v.controllerName == actorName then               
+        for _, v in pairs(g_currentMission.steerables) do
+            if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode);
                 v.vehicleCharacter:setCharacterVisibility(true);
                 self.spectatedVehicle = v;
@@ -141,7 +140,7 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
             end
         end
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
-        for _,v in pairs(g_currentMission.steerables) do
+        for _, v in pairs(g_currentMission.steerables) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode);
                 v.vehicleCharacter:setCharacterVisibility(false);
@@ -164,6 +163,7 @@ function SpectatorMode:spectateRejected(reason)
 end
 
 function SpectatorMode:setVehicleActiveCamera(cameraIndex)
+    self:print(string.format("SpectatorMode:setVehicleActiveCamera(cameraIndex:%s)", cameraIndex));
     if self.spectatedVehicle ~= nil then
         local useMirror = false;
         if cameraIndex ~= nil then

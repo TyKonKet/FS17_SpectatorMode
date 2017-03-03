@@ -3,7 +3,6 @@
 --
 -- @author TyKonKet
 -- @date 20/01/2017
-
 SteerableExtensions = {};
 
 function SteerableExtensions:postLoad(savegame)
@@ -24,6 +23,7 @@ function SteerableExtensions:setActiveCameraIndex(index)
         cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR;
     end
     Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
+    g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
 end
 
 function SteerableExtensions:writeUpdateStream(streamId, connection, dirtyMask)
@@ -77,7 +77,7 @@ function SteerableExtensions:update(dt)
             if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1 then
                 self.camerasLerp[v.cameraNode].interpolationAlphaRot = 1;
             end
-
+            
             local rx, ry, rz, rw = Utils.nlerpQuaternionShortestPath(self.camerasLerp[v.cameraNode].lastQuaternion[1], self.camerasLerp[v.cameraNode].lastQuaternion[2], self.camerasLerp[v.cameraNode].lastQuaternion[3], self.camerasLerp[v.cameraNode].lastQuaternion[4], self.camerasLerp[v.cameraNode].targetQuaternion[1], self.camerasLerp[v.cameraNode].targetQuaternion[2], self.camerasLerp[v.cameraNode].targetQuaternion[3], self.camerasLerp[v.cameraNode].targetQuaternion[4], self.camerasLerp[v.cameraNode].interpolationAlphaRot);
             if rx == rx and ry == ry and rz == rz and rw == rw then
                 setQuaternion(v.rotateNode, rx, ry, rz, rw);
@@ -114,9 +114,9 @@ function SteerableExtensions:update(dt)
 end
 
 function SteerableExtensions:drawUIInfo(superFunc)
-     if superFunc ~= nil then
-	    superFunc(self);
-	end
+    if superFunc ~= nil then
+        superFunc(self);
+    end
     local spectated = self.isSpectated ~= nil;
     if spectated then
         spectated = self:isSpectated();

@@ -3,11 +3,10 @@
 --
 -- @author TyKonKet
 -- @date 04/01/2017
-
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
 SpectatorModeRecorder.name = "SpectatorModeRecorder";
-SpectatorModeRecorder.debug = false;
+SpectatorModeRecorder.debug = true;
 
 function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
     if self.debug then
@@ -69,7 +68,7 @@ g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFu
 function SpectatorModeRecorder:loadMap(name)
     self:print(("loadMap(name:%s)"):format(name));
     if self.debug then
-    end
+        end
     if self.spectatorMode ~= nil then
         self.spectatorMode:loadMap();
     end

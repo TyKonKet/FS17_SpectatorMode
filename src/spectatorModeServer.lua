@@ -3,7 +3,6 @@
 --
 -- @author TyKonKet
 -- @date 23/01/2017
-
 SpectatorModeServer = {};
 SpectatorModeServer_mt = Class(SpectatorModeServer);
 
@@ -19,7 +18,6 @@ function SpectatorModeServer:new(isServer, isClient, customMt)
     setmetatable(self, mt);
     self.name = "SpectatorModeServer";
     self.clients = {};
-    self:print(string.format("new(isServer:%s, isClient:%s, customMt:%s)", isServer, isClient, customMt));
     return self;
 end
 
@@ -64,6 +62,7 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
 end
 
 function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraType)
+    self:print(string.format("SpectatorMode:cameraChanged(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType));
     if self.clients[aName] == nil then
         self.clients[aName] = {};
     end
@@ -74,7 +73,7 @@ function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraTy
     self.clients[aName].cameraIndex = cameraIndex;
     self.clients[aName].cameraType = cameraType;
     local event = CameraChangeEvent:new(aName, cameraId, cameraIndex, cameraType);
-    for k,v in pairs(self.clients[aName].subscribers) do
+    for k, v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
         v.connection:sendEvent(event);
     end
