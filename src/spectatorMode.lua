@@ -26,10 +26,14 @@ end
 
 function SpectatorMode:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
     if self.debug then
+        local suf = "[A]";
+        if self.spectating then
+            suf = "[S]";
+        end
         local args = {txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9};
         for i, v in ipairs(args) do
             if v then
-                print("[" .. self.name .. "] -> " .. tostring(v));
+                print("[" .. self.name .. "] " .. suf .. " -> " .. tostring(v));
             end
         end
     end
@@ -54,6 +58,10 @@ function SpectatorMode:afterLoad()
 end
 
 function SpectatorMode:update(dt)
+    if self.lastCamera ~= getCamera() then
+        self:print(("Camera setted to:%s"):format(getCamera()));
+        self.lastCamera = getCamera();
+    end
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
             g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE);
@@ -131,18 +139,20 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
         self:setVehicleActiveCamera(nil);
         self.spectatedVehicle = nil;
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
-        for _, v in pairs(g_currentMission.steerables) do
+        for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode);
+                self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode));
                 v.vehicleCharacter:setCharacterVisibility(true);
                 self.spectatedVehicle = v;
                 self:setVehicleActiveCamera(cameraIndex);
             end
         end
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
-        for _, v in pairs(g_currentMission.steerables) do
+        for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode);
+                self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode));
                 v.vehicleCharacter:setCharacterVisibility(false);
                 self.spectatedVehicle = v;
                 self:setVehicleActiveCamera(cameraIndex);

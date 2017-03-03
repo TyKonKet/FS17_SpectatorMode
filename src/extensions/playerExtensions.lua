@@ -12,6 +12,8 @@ function PlayerExtensions:writeStream(streamId, connection)
         streamWriteFloat32(streamId, y);
         streamWriteFloat32(streamId, z);
         streamWriteFloat32(streamId, w);
+        streamWriteFloat32(streamId, self.camY);
+        streamWriteFloat32(streamId, getFovy(self.cameraNode));
     end
 end
 
@@ -27,6 +29,8 @@ function PlayerExtensions:readStream(streamId, connection)
             streamReadFloat32(streamId)
         };
         self.interpolationAlphaRot = 0;
+        self.camY = streamReadFloat32(streamId);
+        setFovy(self.cameraNode, streamReadFloat32(streamId));
     end
 end
 
@@ -37,6 +41,11 @@ function PlayerExtensions:writeUpdateStream(streamId, connection, dirtyMask)
         streamWriteFloat32(streamId, y);
         streamWriteFloat32(streamId, z);
         streamWriteFloat32(streamId, w);
+        streamWriteFloat32(streamId, self.camY);
+        streamWriteFloat32(streamId, getFovy(self.cameraNode));
+    elseif self.isOwner and connection:getIsServer() then
+        streamWriteFloat32(streamId, self.camY);
+        streamWriteFloat32(streamId, getFovy(self.cameraNode));
     end
 end
 
@@ -52,6 +61,12 @@ function PlayerExtensions:readUpdateStream(streamId, timestamp, connection)
             streamReadFloat32(streamId)
         };
         self.interpolationAlphaRot = 0;
+        local cx, _, cz = getTranslation(self.cameraNode);
+        setTranslation(self.cameraNode, cx, streamReadFloat32(streamId), cz);
+        setFovy(self.cameraNode, streamReadFloat32(streamId));
+    elseif not self.isOwner and not connection:getIsServer() then
+        self.camY = streamReadFloat32(streamId);
+        setFovy(self.cameraNode, streamReadFloat32(streamId));
     end
 end
 
@@ -68,8 +83,10 @@ end
 
 function PlayerExtensions:onEnter(isOwner)
     if isOwner then
-        Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
-        g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
+        if not g_spectatorMode.spectating then
+            Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
+            g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER));
+        end
     elseif g_spectatorMode ~= nil then
         if self.controllerName == g_spectatorMode.spectatedPlayer then
             self:setVisibility(false);

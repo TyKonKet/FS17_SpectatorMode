@@ -18,12 +18,14 @@ function SteerableExtensions:postLoad(savegame)
 end
 
 function SteerableExtensions:setActiveCameraIndex(index)
-    local cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE;
-    if self.activeCamera.isInside then
-        cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR;
+    if not g_spectatorMode.spectating then
+        local cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE;
+        if self.activeCamera.isInside then
+            cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR;
+        end
+        Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
+        g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
     end
-    Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
-    g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType));
 end
 
 function SteerableExtensions:writeUpdateStream(streamId, connection, dirtyMask)
