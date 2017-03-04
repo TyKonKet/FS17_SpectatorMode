@@ -6,7 +6,7 @@
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
 SpectatorModeRecorder.name = "SpectatorModeRecorder";
-SpectatorModeRecorder.debug = true;
+SpectatorModeRecorder.debug = false;
 
 function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
     if self.debug then
@@ -62,6 +62,7 @@ function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScre
     g_currentMission.loadMapFinished = Utils.appendedFunction(g_currentMission.loadMapFinished, self.loadMapFinished);
     g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad);
     g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame);
+    g_currentMission.ingameMap.updatePlayerPosition = self.spectatorMode.updatePlayerPosition;
 end
 g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.load);
 
