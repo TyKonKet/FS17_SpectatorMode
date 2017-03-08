@@ -10,7 +10,7 @@
     <description>
         <en>Spectator Mode</en>
         <nl>Met deze mod kun je een andere speler volgen en bekijken</nl>
-        <fr>Ce mod vous permet de suivre d'autres joureurs.</fr>
+        <fr>Ce mode vous permet de suivre d'autres joureurs.</fr>
     </description>
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
