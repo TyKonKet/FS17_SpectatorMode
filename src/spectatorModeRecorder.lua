@@ -24,6 +24,7 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     if not self.isMultiplayer then
         return;
     end
+    margeI18N();
     SpectatorMode.debug = self.debug;
     SpectatorModeServer.debug = self.debug;
     g_spectatorMode = SpectatorMode:new(g_server ~= nil, g_client ~= nil);
@@ -37,6 +38,8 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self.spectatorMode.guis = {};
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new();
     g_gui:loadGui(self.dir .. "gui/spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
+    -- FocusManager restore
+    FocusManager:setGui("MPLoadingScreen");
     self.fixedUpdateDt = 0;
     self.fixedUpdateRealDt = 0;
     -- extending player functions

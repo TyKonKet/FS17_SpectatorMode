@@ -82,7 +82,7 @@ end
 
 function SpectatorMode:showGui()
     local spectableUsers = {};
-    DebugUtil.printTableRecursively(g_currentMission.players, "--------", 0, 2);
+    --DebugUtil.printTableRecursively(g_currentMission.players, "--------", 0, 2);
     for k, p in pairs(g_currentMission.players) do
         if not p.isDedicatedServer and g_currentMission.player.controllerName ~= p.controllerName then
             table.insert(spectableUsers, p.controllerName);
