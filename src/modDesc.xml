@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="36">
+<modDesc descVersion="39">
     <author>TyKonKet</author>
-    <version>1.2.0</version>
+    <version>1.2.0.0</version>
     <title>
         <en>Spectator Mode</en>
         <nl>Toeschouwer Modus</nl>
@@ -15,14 +15,14 @@
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
-        <sourceFile filename="vehicleExtensions.lua" />
-        <sourceFile filename="steerableExtensions.lua" />
-        <sourceFile filename="playerExtensions.lua" />
-        <sourceFile filename="extensions.lua" />
-        <sourceFile filename="spectateGui.lua" />
-        <sourceFile filename="spectateEvent.lua" />
-        <sourceFile filename="cameraChangeEvent.lua" />
-        <sourceFile filename="spectateRejectedEvent.lua" />
+        <sourceFile filename="extensions/vehicleExtensions.lua" />
+        <sourceFile filename="extensions/steerableExtensions.lua" />
+        <sourceFile filename="extensions/playerExtensions.lua" />
+        <sourceFile filename="extensions/extensions.lua" />
+        <sourceFile filename="gui/spectateGui.lua" />
+        <sourceFile filename="events/spectateEvent.lua" />
+        <sourceFile filename="events/cameraChangeEvent.lua" />
+        <sourceFile filename="events/spectateRejectedEvent.lua" />
         <sourceFile filename="spectatorModeRecorder.lua" />
         <sourceFile filename="spectatorMode.lua" />
         <sourceFile filename="spectatorModeServer.lua" />
@@ -67,9 +67,4 @@
             <fr>Il n'y a pas de joueur à suivre</fr>
         </text>
     </l10n>
-    <git>
-        <host>GitHub</host>
-        <url></url>
-    </git>
-    <website></website>
 </modDesc>

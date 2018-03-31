@@ -34,7 +34,7 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self.spectatorMode.dir = self.dir;
     self.spectatorMode.guis = {};
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new();
-    g_gui:loadGui(self.dir .. "spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
+    g_gui:loadGui(self.dir .. "gui/spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui);
     self.fixedUpdateDt = 0;
     self.fixedUpdateRealDt = 0;
     -- extending player functions
