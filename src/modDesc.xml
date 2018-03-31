@@ -26,6 +26,7 @@
         <sourceFile filename="spectatorModeRecorder.lua" />
         <sourceFile filename="spectatorMode.lua" />
         <sourceFile filename="spectatorModeServer.lua" />
+        <sourceFile filename="utils/i18nUtils.lua" />
     </extraSourceFiles>
     <inputBindings>
         <input name="TOGGLE_SPECTATOR_MODE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />

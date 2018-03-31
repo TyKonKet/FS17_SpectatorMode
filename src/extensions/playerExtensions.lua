@@ -14,6 +14,7 @@ function PlayerExtensions:writeStream(streamId, connection)
         streamWriteFloat32(streamId, w);
         streamWriteFloat32(streamId, self.camY);
         streamWriteFloat32(streamId, getFovy(self.cameraNode));
+        streamWriteBool(streamId, g_dedicatedServerInfo and g_currentMission.player.controllerName == self.controllerName);
     end
 end
 
@@ -31,6 +32,7 @@ function PlayerExtensions:readStream(streamId, connection)
         self.interpolationAlphaRot = 0;
         self.camY = streamReadFloat32(streamId);
         setFovy(self.cameraNode, streamReadFloat32(streamId));
+        self.isDedicatedServer = streamReadBool(streamId);
     end
 end
 

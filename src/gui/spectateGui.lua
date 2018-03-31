@@ -15,11 +15,9 @@ function SpectateGui:new(target, custom_mt)
 end
 
 function SpectateGui:onCreateDialogTitle(element)
-	element:setText(g_i18n:getText("SPECTATOR_MODE_NAME"));
 end
 
 function SpectateGui:onCreateDialogText(element)
-	element:setText(g_i18n:getText("SPECTATOR_MODE_GUI_DIALOG_TEXT") .. ":");
 end
 
 function SpectateGui:onCreateMessageBackground(element)
@@ -27,7 +25,6 @@ function SpectateGui:onCreateMessageBackground(element)
 end
 
 function SpectateGui:onCreateMessage(element)
-	element:setText(g_i18n:getText("SPECTATOR_MODE_GUI_DIALOG_MESSAGE"));
 end
 
 function SpectateGui:onCreateSpectateButtonConsole(element)

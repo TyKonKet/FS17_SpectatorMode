@@ -24,18 +24,15 @@ function SpectatorMode:new(isServer, isClient, customMt)
     return self;
 end
 
-function SpectatorMode:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
+function SpectatorMode:print(text, ...)
     if self.debug then
-        local suf = "[A]";
+        local pre = "[A]";
         if self.spectating then
-            suf = "[S]";
+            pre = "[S]";
         end
-        local args = {txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9};
-        for i, v in ipairs(args) do
-            if v then
-                print("[" .. self.name .. "] " .. suf .. " -> " .. tostring(v));
-            end
-        end
+        local start = string.format("%s[%s(%s)] -> ", self.name, getDate("%H:%M:%S"), pre);
+        local ptext = string.format(text, ...);
+        print(string.format("%s%s", start, ptext));
     end
 end
 
@@ -85,8 +82,11 @@ end
 
 function SpectatorMode:showGui()
     local spectableUsers = {};
+    DebugUtil.printTableRecursively(g_currentMission.players, "--------", 0, 2);
     for k, p in pairs(g_currentMission.players) do
-        table.insert(spectableUsers, p.controllerName);
+        if not p.isDedicatedServer and g_currentMission.player.controllerName ~= p.controllerName then
+            table.insert(spectableUsers, p.controllerName);
+        end
     end
     self.guis.spectateGui:setSpectableUsers(spectableUsers);
     g_gui:showGui("SpectateGui");

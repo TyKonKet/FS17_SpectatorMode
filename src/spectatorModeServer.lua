@@ -21,14 +21,11 @@ function SpectatorModeServer:new(isServer, isClient, customMt)
     return self;
 end
 
-function SpectatorModeServer:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
+function SpectatorModeServer:print(text, ...)
     if self.debug then
-        local args = {txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9};
-        for i, v in ipairs(args) do
-            if v then
-                print("[" .. self.name .. "] -> " .. tostring(v));
-            end
-        end
+        local start = string.format("[%s(%s)] -> ", self.name, getDate("%H:%M:%S"));
+        local ptext = string.format(text, ...);
+        print(string.format("%s%s", start, ptext));
     end
 end
 
@@ -53,6 +50,8 @@ function SpectatorModeServer:addSubscriber(sName, connection, aName)
     --send event to new subscriber
     connection:sendEvent(CameraChangeEvent:new(aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType));
 end
+
+
 
 function SpectatorModeServer:removeSubscriber(sName, aName)
     self:print(("removeSubscriber(sName:%s, aName:%s)"):format(sName, aName));
