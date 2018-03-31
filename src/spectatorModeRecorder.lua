@@ -6,22 +6,24 @@
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory;
 SpectatorModeRecorder.name = "SpectatorModeRecorder";
-SpectatorModeRecorder.debug = false;
+SpectatorModeRecorder.debug = true;
 
-function SpectatorModeRecorder:print(txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9)
+function SpectatorModeRecorder:print(text, ...)
     if self.debug then
-        local args = {txt1, txt2, txt3, txt4, txt5, txt6, txt7, txt8, txt9};
-        for i, v in ipairs(args) do
-            if v then
-                print("[" .. self.name .. "] -> " .. tostring(v));
-            end
-        end
+        local start = string.format("[%s(%s)] -> ", self.name, getDate("%H:%M:%S"));
+        local ptext = string.format(text, ...);
+        print(string.format("%s%s", start, ptext));
     end
 end
 
 function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadingScreen)
     self = SpectatorModeRecorder;
     self:print("initialize()");
+    self.isMultiplayer = missionDynamicInfo.missionDynamicInfo.isMultiplayer;
+    self:print("Is Multiplayer : %s", self.isMultiplayer);
+    if not self.isMultiplayer then
+        return;
+    end
     SpectatorMode.debug = self.debug;
     SpectatorModeServer.debug = self.debug;
     g_spectatorMode = SpectatorMode:new(g_server ~= nil, g_client ~= nil);
@@ -59,6 +61,9 @@ g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadF
 function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScreen)
     self = SpectatorModeRecorder;
     self:print("load()");
+    if not self.isMultiplayer then
+        return;
+    end
     g_currentMission.loadMapFinished = Utils.appendedFunction(g_currentMission.loadMapFinished, self.loadMapFinished);
     g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad);
     g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame);
@@ -68,8 +73,9 @@ g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFu
 
 function SpectatorModeRecorder:loadMap(name)
     self:print(("loadMap(name:%s)"):format(name));
-    if self.debug then
-        end
+    if not self.isMultiplayer then
+        return;
+    end
     if self.spectatorMode ~= nil then
         self.spectatorMode:loadMap();
     end
@@ -84,6 +90,9 @@ end
 function SpectatorModeRecorder:afterLoad()
     self = SpectatorModeRecorder;
     self:print("afterLoad");
+    if not self.isMultiplayer then
+        return;
+    end
     if self.spectatorMode ~= nil then
         self.spectatorMode:afterLoad();
     end
@@ -100,6 +109,9 @@ end
 
 function SpectatorModeRecorder:deleteMap()
     self:print("deleteMap()");
+    if not self.isMultiplayer then
+        return;
+    end
     if self.spectatorMode ~= nil then
         self.spectatorMode:deleteMap();
     end
@@ -113,12 +125,18 @@ function SpectatorModeRecorder:mouseEvent(posX, posY, isDown, isUp, button)
 end
 
 function SpectatorModeRecorder:update(dt)
+    if not self.isMultiplayer then
+        return;
+    end
     if self.spectatorMode ~= nil then
         self.spectatorMode:update(dt);
     end
 end
 
 function SpectatorModeRecorder:draw()
+    if not self.isMultiplayer then
+        return;
+    end
     if self.spectatorMode ~= nil then
         self.spectatorMode:draw();
     end
