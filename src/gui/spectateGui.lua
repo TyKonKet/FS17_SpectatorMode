@@ -1,4 +1,4 @@
-SpectateGui = {}
+SpectateGui = {};
 local SpectateGui_mt = Class(SpectateGui, ScreenElement);
 
 function SpectateGui:new(target, custom_mt)
@@ -6,75 +6,55 @@ function SpectateGui:new(target, custom_mt)
 		custom_mt = SpectateGui_mt;
 	end
 
-	local self = ScreenElement:new(target, custom_mt)
-    self.returnScreenName = ""
+	local self = ScreenElement:new(target, custom_mt);
+	self.returnScreenName = "";
 	self.selectedUser = nil;
 	self.selectedState = 1;
 	self.areButtonsDisabled = false;
 	return self;
 end
 
-function SpectateGui:onCreateDialogTitle(element)
-end
-
-function SpectateGui:onCreateDialogText(element)
-end
-
-function SpectateGui:onCreateMessageBackground(element)
-	self.messageBackground = element;
-end
-
-function SpectateGui:onCreateMessage(element)
-end
-
-function SpectateGui:onCreateSpectateButtonConsole(element)
-	self.spectateButtonConsole = element;
-end
-
-function SpectateGui:onCreateSpectateButton(element)
-	self.spectateButton = element;
+function AnimalScreen:onOpen()
+	FocusManager:setFocus(self.yesButton);
 end
 
 function SpectateGui:onClickActivate()
 	SpectateGui:superClass():onClickActivate();
-
 	if self.areButtonsDisabled then
 		return;
 	end
-
 	if self.onSelectCallback ~= nil then
-        if self.target ~= nil then
-		    self.onSelectCallback(self.target, self.selectedUser);
-        else
-            self.onSelectCallback(self.selectedUser);
-        end
+		if self.target ~= nil then
+			self.onSelectCallback(self.target, self.selectedUser);
+		else
+			self.onSelectCallback(self.selectedUser);
+		end
 	end
-
 	self.onClickBack(self);
 end
 
 function SpectateGui:setSelectionCallback(target, onSelectCallback)
 	self.onSelectCallback = onSelectCallback;
-    self.target = target;
+	self.target = target;
 end
 
 function SpectateGui:onClickSpectableUsers(state)
-  	local i = 1;
-  	for k, v in pairs(self.users) do
-  		if i == state then
-  			self.selectedUser = v;
-  			break;
-  		end
-  		i = i + 1;
-  	end
-  
-  	self.selectedState = state;
+	local i = 1;
+	for k, v in pairs(self.users) do
+		if i == state then
+			self.selectedUser = v;
+			break
+		end
+		i = i + 1;
+	end
+	self.selectedState = state;
 end
 
 function SpectateGui:setSpectableUsers(users)
 	if #users == 0 then
 		self:setDisabled(true);
 		self.messageBackground:setVisible(true);
+		self.users = {};
 	else
 		self:setDisabled(false);
 		self.messageBackground:setVisible(false);
@@ -87,8 +67,6 @@ end
 
 function SpectateGui:setDisabled(disabled)
 	self.areButtonsDisabled = disabled;
-
 	self.spectateButton:setDisabled(disabled);
-	self.spectateButtonConsole:setDisabled(disabled);
 	self.spectableUsersElement:setDisabled(disabled);
 end

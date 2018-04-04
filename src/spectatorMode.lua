@@ -20,7 +20,8 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.spectating = false;
     self.spectatedPlayer = nil;
     self.spectatedVehicle = nil;
-    addConsoleCommand("AAAPrint", "", "printer", self);
+    self.delayedCameraChangedDCB = DelayedCallBack:new(SpectatorMode.delayedCameraChanged, self);
+    self.delayedCameraChangedDCB.skipOneFrame = true;
     return self;
 end
 
@@ -34,9 +35,6 @@ function SpectatorMode:print(text, ...)
         local ptext = string.format(text, ...);
         print(string.format("%s%s", start, ptext));
     end
-end
-
-function SpectatorMode:printer()
 end
 
 function SpectatorMode:loadMap()
@@ -55,6 +53,7 @@ function SpectatorMode:afterLoad()
 end
 
 function SpectatorMode:update(dt)
+    self.delayedCameraChangedDCB:update(dt);
     if self.lastCamera ~= getCamera() then
         self:print(("Camera setted to:%s"):format(getCamera()));
         self.lastCamera = getCamera();
@@ -82,7 +81,6 @@ end
 
 function SpectatorMode:showGui()
     local spectableUsers = {};
-    --DebugUtil.printTableRecursively(g_currentMission.players, "--------", 0, 2);
     for k, p in pairs(g_currentMission.players) do
         if not p.isDedicatedServer and g_currentMission.player.controllerName ~= p.controllerName then
             table.insert(spectableUsers, p.controllerName);
@@ -100,6 +98,16 @@ function SpectatorMode:startSpectate(playerName)
     self.spectatedPlayerObject:setVisibility(false);
     g_currentMission.hasSpecialCamera = true;
     Event.send(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName));
+end
+
+function SpectatorMode:spectateRejected(reason)
+    self:print(("spectateRejected(reason:%s)"):format(reason));
+    self:stopSpectate();
+    if reason == SpectateRejectedEvent.REASON_DEDICATED_SERVER then
+        g_currentMission:showBlinkingWarning(g18n:getText("ERROR_SPCTATE_DEDICATED_SERVER"), 3000);
+    elseif reason == SpectateRejectedEvent.REASON_YOURSELF then
+        g_currentMission:showBlinkingWarning(g18n:getText("ERROR_SPCTATE_YOURSELF"), 3000);
+    end
 end
 
 function SpectatorMode:stopSpectate()
@@ -135,6 +143,11 @@ end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(string.format("SpectatorMode:cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType));
+    self.delayedCameraChangedDCB:call(1, actorName, cameraId, cameraIndex, cameraType);
+end
+
+function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
+    self:print(string.format("SpectatorMode:cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType));
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         setCamera(self.spectatedPlayerObject.cameraNode);
         self:setVehicleActiveCamera(nil);
@@ -159,17 +172,6 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
                 self:setVehicleActiveCamera(cameraIndex);
             end
         end
-    end
-end
-
-function SpectatorMode:spectateRejected(reason)
-    self:print(("spectateRejected(reason:%s)"):format(reason));
-    self:stopSpectate();
-    --TODO: Add warning message via g18n
-    if reason == SpectateRejectedEvent.REASON_DEDICATED_SERVER then
-        g_currentMission:showBlinkingWarning("You can't spectate a dedicated server's player", 3000);
-    elseif reason == SpectateRejectedEvent.REASON_YOURSELF then
-        g_currentMission:showBlinkingWarning("You can't spectate yourself", 3000);
     end
 end
 

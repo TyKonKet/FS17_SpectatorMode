@@ -27,11 +27,18 @@
         <sourceFile filename="spectatorMode.lua" />
         <sourceFile filename="spectatorModeServer.lua" />
         <sourceFile filename="utils/i18nUtils.lua" />
+        <sourceFile filename="utils/delayedCallBack.lua" />
     </extraSourceFiles>
     <inputBindings>
         <input name="TOGGLE_SPECTATOR_MODE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
     </inputBindings>
     <l10n>   
+        <text name="ERROR_SPCTATE_DEDICATED_SERVER">
+            <en>You can't spectate the dedicated server's player</en>
+        </text>
+        <text name="ERROR_SPCTATE_YOURSELF">
+            <en>You can't spectate yourself</en>
+        </text>
         <text name="input_TOGGLE_SPECTATOR_MODE">
             <en>Start/Stop Spectator Mode</en>
             <it>Avvia/Interrompi la Spectator Mode</it>
