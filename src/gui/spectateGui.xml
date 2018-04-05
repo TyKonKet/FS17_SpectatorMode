@@ -1,29 +1,25 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <GUI onOpen="onOpen" onClose="onClose" onCreate="onCreate">
-    <GuiElement type="empty" profile="newLayer" />
-    <GuiElement type="bitmap" profile="siloDialogBg" id="dialogElement">
-        <GuiElement type="bitmap" profile="siloDialogMainBg" id="dialogBgElement">
-            <GuiElement type="bitmap" profile="colorDialogHeader">
-                <GuiElement type="text" profile="headerText" text="$l10n_SPECTATOR_MODE_NAME" id="dialogTitleElement" />
-            </GuiElement>
-
-            <GuiElement type="text" profile="siloDialogText" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_TEXT:"  id="dialogTextElement" />
-
-            <GuiElement type="multiTextOption" profile="multiTextOptionSilo" position="25px 80px" onClick="onClickSpectableUsers" id="spectableUsersElement" focusId="1" focusChangeTop="3" focusChangeBottom="2" >
-                <GuiElement type="button" profile="multiTextOptionLeft" />
-                <GuiElement type="button" profile="multiTextOptionRight" />
-                <GuiElement type="text"   profile="multiTextOptionText" id="userName" />
-                <GuiElement type="bitmap" profile="multiTextOptionBg" size="334px 36px" />
-            </GuiElement>
-
-            <GuiElement type="bitmap" profile="siloDialogMessageBg" id="messageBackground">
-                <GuiElement type="text" profile="siloDialogMessage" text="" />
-            </GuiElement>
-
-            <GuiElement type="flowLayout" profile="buttonBox" id="buttonsPC" >
-                <GuiElement type="button" profile="buttonBack" size="228px 40px" text="$l10n_button_back"  onClick="onClickBack"     id="noButton"  focusId="2" focusChangeRight="3" focusChangeBottom="3" focusChangeTop="1"/>
-                <GuiElement type="button" profile="buttonOK"   size="229px 40px" text="$l10n_button_start" onClick="onClickActivate" id="yesButton" focusId="3" focusChangeLeft="2"  focusChangeBottom="1" focusChangeTop="2" focusInit="onOpen"/>
-            </GuiElement>
-        </GuiElement>
-    </GuiElement>
+   <GuiElement type="empty" profile="newLayer" />
+   <GuiElement type="bitmap" profile="siloDialogBg" id="dialogElement">
+      <GuiElement type="bitmap" profile="siloDialogMainBg" id="dialogBgElement">
+         <GuiElement type="bitmap" profile="colorDialogHeader">
+            <GuiElement type="text" profile="headerText" text="$l10n_SPECTATOR_MODE_NAME" id="dialogTitleElement" />
+         </GuiElement>
+         <GuiElement type="text" profile="siloDialogText" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_TEXT:" id="dialogTextElement" />
+         <GuiElement type="multiTextOption" profile="multiTextOptionSilo" position="25px 80px" onClick="onClickSpectableUsers" id="spectableUsersElement" focusId="3" focusChangeTop="1" focusChangeBottom="1">
+            <GuiElement type="button" profile="multiTextOptionLeft" />
+            <GuiElement type="button" profile="multiTextOptionRight" />
+            <GuiElement type="text" profile="multiTextOptionText" id="userName" />
+            <GuiElement type="bitmap" profile="multiTextOptionBg" size="334px 36px" />
+         </GuiElement>
+         <GuiElement type="bitmap" profile="siloDialogMessageBg" id="messageBackground">
+            <GuiElement type="text" profile="siloDialogMessage" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_MESSAGE" />
+         </GuiElement>
+         <GuiElement type="flowLayout" profile="buttonBox" id="buttonsPC">
+            <GuiElement type="button" profile="buttonBack" size="228px 40px" text="$l10n_button_back" onClick="onClickBack" id="noButton" focusId="2" focusChangeRight="1" focusChangeTop="3" />
+            <GuiElement type="button" profile="buttonOK" size="229px 40px" text="$l10n_button_start" onClick="onClickActivate" id="spectateButton" focusId="1" focusChangeLeft="2" focusChangeTop="3" focusInit="onOpen" />
+         </GuiElement>
+      </GuiElement>
+   </GuiElement>
 </GUI>

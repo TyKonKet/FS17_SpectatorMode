@@ -14,12 +14,13 @@ function SpectateGui:new(target, custom_mt)
 	return self;
 end
 
-function AnimalScreen:onOpen()
-	FocusManager:setFocus(self.yesButton);
+function SpectateGui:onOpen()
+	SpectateGui:superClass().onOpen(self);
+	FocusManager:setFocus(self.spectateButton);
 end
 
 function SpectateGui:onClickActivate()
-	SpectateGui:superClass():onClickActivate();
+	SpectateGui:superClass().onClickActivate(self);
 	if self.areButtonsDisabled then
 		return;
 	end
@@ -54,7 +55,8 @@ function SpectateGui:setSpectableUsers(users)
 	if #users == 0 then
 		self:setDisabled(true);
 		self.messageBackground:setVisible(true);
-		self.users = {};
+		self.spectableUsersElement:setTexts({});
+		self.spectableUsersElement:setState(0);
 	else
 		self:setDisabled(false);
 		self.messageBackground:setVisible(false);
