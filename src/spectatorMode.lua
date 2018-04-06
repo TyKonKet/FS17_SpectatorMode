@@ -214,7 +214,7 @@ end
 function SpectatorMode:requestToEnterVehicle(superFunc, vehicle)
     if not g_spectatorMode.spectating then
         if superFunc ~= nil then
-            superFunc()
+            superFunc(self, vehicle)
         end
     end
 end
