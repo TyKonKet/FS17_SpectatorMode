@@ -71,6 +71,9 @@ end
 function SpectatorMode:draw()
     if self.spectatedVehicle ~= nil then
         g_currentMission:drawVehicleHud(self.spectatedVehicle)
+        --TODO: Not Working
+        g_currentMission:drawHudIcon()
+        g_currentMission:drawVehicleSchemaOverlay(self.spectatedVehicle)
     end
 end
 
