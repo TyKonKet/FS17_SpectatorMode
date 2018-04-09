@@ -1,0 +1,1 @@
+curl -X POST -b server\.cookies --data "stop_server=Stop" -H "Origin: %1" %1index.html

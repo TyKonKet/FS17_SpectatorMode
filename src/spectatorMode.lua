@@ -24,9 +24,6 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.delayedCameraChangedDCB.skipOneFrame = true
 
     self.lastPlayer = {}
-    self.lastPlayer.x = 0
-    self.lastPlayer.y = 0
-    self.lastPlayer.z = 0
     self.lastPlayer.mmState = 0
     return self
 end

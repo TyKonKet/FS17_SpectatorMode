@@ -1,0 +1,1 @@
+curl -X POST -b server\.cookies --data "game_name=%1&admin_password=%2&game_password=%3&savegame=%4&map_start=default_Map01&difficulty=1&dirt_interval=2&matchmaking_server=2&mp_language=en&auto_save_interval=180&stats_interval=360&pause_game_if_empty=on&start_server=Start" -H "Origin: %5" %5index.html

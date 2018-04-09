@@ -1,0 +1,1 @@
+curl -X POST -c server\.cookies --data "username=%1&password=%2&login=Login" -H "Origin: %3" %3index.html
