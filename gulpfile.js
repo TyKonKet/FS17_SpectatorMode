@@ -81,7 +81,7 @@ gulp.task("server:stop", ["server:login"], serverStop);
 
 gulp.task("server:start", ["server:login"], serverStart);
 
-gulp.task("server:install:1", ["install"], serverStop);
+gulp.task("server:install:1", ["install", "server:login"], serverStop);
 
 gulp.task("server:install:2", ["server:install:1"], () => {
   const conn = new ftp({
@@ -108,19 +108,19 @@ gulp.task("server:build", ["server:install", "clean:log", "startMode"], () => {
 gulp.task("server:default", ["server:build"]);
 
 function serverLogin() {
-  const command = `server\\login.cmd ${mod.server.username} ${mod.server.password} ${serverUrl}`;//`curl -X POST -c .cookies --data "username=${mod.server.username}&password=${mod.server.password}&login=Login" -H "Origin: ${serverUrl}" ${serverUrl}index.html`;
+  const command = `server\\login.cmd ${mod.server.username} ${mod.server.password} ${serverUrl}`;//*/`curl -X POST -c .cookies --data "username=${mod.server.username}&password=${mod.server.password}&login=Login" -H "Origin: ${serverUrl}" ${serverUrl}index.html > NUL`;
   return run(command, { silent: true }).exec()
     .pipe(gutil.noop());
 }
 
 function serverStop() {
-  const command = `server\\stop.cmd ${serverUrl}`;//`curl -X POST -b .cookies --data "stop_server=Stop" -H "Origin: ${serverUrl}" ${serverUrl}index.html`;
+  const command = `server\\stop.cmd ${serverUrl}`;//*/`curl -X POST -b .cookies --data "stop_server=Stop" -H "Origin: ${serverUrl}" ${serverUrl}index.html > NUL`;
   return run(command, { silent: true }).exec()
     .pipe(gutil.noop());
 }
 
 function serverStart() {
-  const command = `server\\start.cmd ${mod.server.game.name} ${mod.server.game.adminPassword} ${mod.server.game.gamePassword} ${mod.server.game.savegame} ${serverUrl}`;//`curl -X POST -b .cookies --data "game_name=${mod.server.game.name}&admin_password=${mod.server.game.adminPassword}&game_password=${mod.server.game.gamePassword}&savegame=${mod.server.game.savegame}&map_start=default_Map01&difficulty=1&dirt_interval=2&matchmaking_server=2&mp_language=en&auto_save_interval=180&stats_interval=360&pause_game_if_empty=on&start_server=Start" -H "Origin: ${serverUrl}" ${serverUrl}index.html`;
+  const command = `server\\start.cmd ${mod.server.game.name} ${mod.server.game.adminPassword} ${mod.server.game.gamePassword} ${mod.server.game.savegame} ${serverUrl}`;//*/`curl -X POST -b .cookies --data "game_name=${mod.server.game.name}&admin_password=${mod.server.game.adminPassword}&game_password=${mod.server.game.gamePassword}&savegame=${mod.server.game.savegame}&map_start=default_Map01&difficulty=1&dirt_interval=2&matchmaking_server=2&mp_language=en&auto_save_interval=180&stats_interval=360&pause_game_if_empty=on&start_server=Start" -H "Origin: ${serverUrl}" ${serverUrl}index.html > NUL`;
   return run(command, { silent: true }).exec()
     .pipe(gutil.noop());
 }

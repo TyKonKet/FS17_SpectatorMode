@@ -55,7 +55,7 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
 end
 
 function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraType)
-    self:print("SpectatorMode:cameraChanged(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType)
+    --self:print("SpectatorMode:cameraChanged(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType)
     self:ensureAName(aName)
     self.clients[aName].cameraId = cameraId
     self.clients[aName].cameraIndex = cameraIndex
@@ -69,7 +69,7 @@ function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraTy
 end
 
 function SpectatorModeServer:minimapChange(aName, mmState)
-    self:print("SpectatorMode:cameraChanged(aName:%s, state:%s)", aName, mmState)
+    --self:print("SpectatorMode:minimapChange(aName:%s, state:%s)", aName, mmState)
     self:ensureAName(aName)
     self.clients[aName].mmState = mmState
     local event = MinimapChangeEvent:new(aName, mmState)

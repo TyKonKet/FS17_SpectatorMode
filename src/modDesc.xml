@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="39">
     <author>TyKonKet</author>
-    <version>1.3.0.0</version>
+    <version>1.2.0.0</version>
     <title>
         <en>Spectator Mode</en>
         <nl>Toeschouwer Modus</nl>
@@ -22,6 +22,7 @@
         <sourceFile filename="gui/spectateGui.lua" />
         <sourceFile filename="events/spectateEvent.lua" />
         <sourceFile filename="events/cameraChangeEvent.lua" />
+        <sourceFile filename="events/minimapChangeEvent.lua" />
         <sourceFile filename="events/spectateRejectedEvent.lua" />
         <sourceFile filename="spectatorModeRecorder.lua" />
         <sourceFile filename="spectatorMode.lua" />
