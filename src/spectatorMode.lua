@@ -27,6 +27,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.lastPlayer.x = 0
     self.lastPlayer.y = 0
     self.lastPlayer.z = 0
+    self.lastPlayer.mmState = 0
     return self
 end
 
@@ -98,6 +99,7 @@ function SpectatorMode:startSpectate(playerName)
     self.spectatedPlayerObject:setVisibility(false)
     g_currentMission.hasSpecialCamera = true
     Event.send(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName))
+    self.lastPlayer.mmState = g_currentMission.ingameMap.state
 end
 
 function SpectatorMode:spectateRejected(reason)
@@ -111,6 +113,7 @@ function SpectatorMode:spectateRejected(reason)
 end
 
 function SpectatorMode:stopSpectate()
+    g_currentMission.ingameMap.state = self.lastPlayer.mmState
     g_currentMission.hasSpecialCamera = false
     self:setVehicleActiveCamera(nil)
     self.spectatedVehicle = nil
@@ -181,12 +184,16 @@ function SpectatorMode:setVehicleActiveCamera(cameraIndex)
     end
 end
 
-function SpectatorMode:determinePlayerPosition(player)
-    if not g_spectatorMode.spectating or player ~= g_currentMission.player then
-        return player:getPositionData()
-    else
-        return g_spectatorMode.spectatedPlayerObject:getPositionData()
+function SpectatorMode:toggleSize(superFunc, state, force)
+    if superFunc ~= nil then
+        superFunc(self, state, force)
     end
+    Event.send(MinimapChangeEvent:new(g_currentMission.player.controllerName, self.state))
+end
+
+function SpectatorMode:minimapChange(aName, mmState)
+    self:print("SpectatorMode:cameraChanged(aName:%s, state:%s)", aName, mmState)
+    g_currentMission.ingameMap.state = mmState
 end
 
 function SpectatorMode:updatePlayerPosition()
@@ -213,6 +220,15 @@ function SpectatorMode:updatePlayerPosition()
     self.normalizedPlayerPosX = Utils.clamp((math.floor(playerPosX) + self.worldCenterOffsetX) / self.worldSizeX, 0, 1)
     self.normalizedPlayerPosZ = Utils.clamp((math.floor(playerPosZ) + self.worldCenterOffsetZ) / self.worldSizeZ, 0, 1)
 end
+
+--TODO: Most probably useless
+--function SpectatorMode:determinePlayerPosition(player)
+--    if not g_spectatorMode.spectating or player ~= g_currentMission.player then
+--        return player:getPositionData()
+--    else
+--        return g_spectatorMode.spectatedPlayerObject:getPositionData()
+--    end
+--end
 
 function SpectatorMode:requestToEnterVehicle(superFunc, vehicle)
     if not g_spectatorMode.spectating then

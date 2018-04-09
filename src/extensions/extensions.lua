@@ -137,3 +137,7 @@ function Utils.getLocalRotation(parentId, childId)
     end
     return cx - px, cy - py, cz - pz
 end
+
+function Utils.getNumBits(range)
+    return math.min(math.max(math.ceil(math.log(range, 2)), 1), 31)
+end
