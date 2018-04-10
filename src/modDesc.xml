@@ -8,7 +8,8 @@
         <fr>Mode spectateur</fr>
     </title>
     <description>
-        <en>Spectator Mode</en>
+        <en>With this mod you can spectate other players, it's suitable for video and stream making but also for players who want take a break on multiplayer by taking a look at teammates work</en>
+        <it>Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni</it>
         <nl>Met deze mod kun je een andere speler volgen en bekijken</nl>
         <fr>Ce mode vous permet de suivre d'autres joureurs.</fr>
     </description>
@@ -41,19 +42,19 @@
             <en>You can't spectate yourself</en>
         </text>
         <text name="input_TOGGLE_SPECTATOR_MODE">
-            <en>Start/Stop Spectator Mode</en>
+            <en>Start and Stop spectating</en>
             <it>Avvia/Interrompi la Spectator Mode</it>
             <nl>Start/Stop Kijkers Modus</nl>
             <fr>Mode spectateur : Activé / Désactivé</fr>
         </text>
         <text name="START_SPECTATOR_MODE">
-            <en>Start Spectator Mode</en>
+            <en>Start spectating</en>
             <it>Avvia la Spectator Mode</it>
             <nl>Start Kijkers Modus</nl>
             <fr>Activer mode spectateur</fr>
         </text>
         <text name="STOP_SPECTATOR_MODE">
-            <en>Stop Spectator Mode</en>
+            <en>Stop spectating</en>
             <it>Interrompi la Spectator Mode</it>
             <nl>Stop Kijkers Modus</nl>
             <fr>Désactiver mode spectateur</fr>
@@ -70,8 +71,8 @@
             <fr>Choix du joueur à suivre</fr>
         </text>
         <text name="SPECTATOR_MODE_GUI_DIALOG_MESSAGE">
-            <en>There aren't players you can spectate!</en>
-            <it>Non ci sono giocatori da poter guardare!</it>
+            <en>There aren't players you can spectate</en>
+            <it>Non ci sono giocatori da poter guardare</it>
             <nl>Er zijn geen spelers om te volgen</nl>
             <fr>Il n'y a pas de joueur à suivre</fr>
         </text>
