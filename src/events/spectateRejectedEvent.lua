@@ -5,9 +5,10 @@
 -- @date 23/01/2017
 
 SpectateRejectedEvent = {}
-SpectateRejectedEvent.REASON_DEDICATED_SERVER = 1
-SpectateRejectedEvent.REASON_YOURSELF = 2
+SpectateRejectedEvent.REASON_DEDICATED_SERVER = 0
+SpectateRejectedEvent.REASON_YOURSELF = 1
 SpectateRejectedEvent.REASONS = 2
+SpectateRejectedEvent.sendNumBits = Utils.getNumBits(SpectateRejectedEvent.REASONS)
 SpectateRejectedEvent_mt = Class(SpectateRejectedEvent, Event)
 
 InitEventClass(SpectateRejectedEvent, "SpectateRejectedEvent")
@@ -24,11 +25,11 @@ function SpectateRejectedEvent:new(reason)
 end
 
 function SpectateRejectedEvent:writeStream(streamId, connection)
-    streamWriteInt8(streamId, self.reason)
+    streamWriteUIntN(streamId, self.reason, SpectateRejectedEvent.sendNumBits)
 end
 
 function SpectateRejectedEvent:readStream(streamId, connection)
-    self.reason = streamReadInt8(streamId)
+    self.reason = streamReadUIntN(streamId), SpectateRejectedEvent.sendNumBits
     self:run(connection)
 end
 

@@ -6,7 +6,6 @@
 
 -- Event methods extension
 function Event.send(event, dontSendLocal, ignoreConnection)
-    --print(string.format("Event.send(event:%s, dontSendLocal:%s)", event, dontSendLocal));
     if g_server ~= nil then
         g_server:broadcastEvent(event, (not dontSendLocal), ignoreConnection)
     else
@@ -15,7 +14,6 @@ function Event.send(event, dontSendLocal, ignoreConnection)
 end
 
 function Event.sendLight(event, dontSendLocal, ignoreConnection)
-    --print(string.format("Event.sendLight(event:%s, dontSendLocal:%s)", event, dontSendLocal));
     if g_server ~= nil then
         Event.broadcastEvent(event, dontSendLocal, ignoreConnection)
     else
