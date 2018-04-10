@@ -36,12 +36,13 @@ function SpectateEvent:readStream(streamId, connection)
 end
 
 function SpectateEvent:run(connection)
-    if not connection:getIsServer() and g_spectatorMode.server ~= nil then
-        --add or delete client subscription
-        if self.start then
-            g_spectatorMode.server:addSubscriber(self.spectatorName, connection, self.actorName)
-        else
-            g_spectatorMode.server:removeSubscriber(self.spectatorName, self.actorName)
+    if (not connection:getIsServer() or connection:getIsLocal()) then
+        if g_spectatorMode ~= nil and g_spectatorMode.server ~= nil then
+            if self.start then
+                g_spectatorMode.server:addSubscriber(self.spectatorName, connection, self.actorName)
+            else
+                g_spectatorMode.server:removeSubscriber(self.spectatorName, self.actorName)
+            end
         end
     end
 end

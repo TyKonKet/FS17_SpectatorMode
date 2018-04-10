@@ -33,6 +33,7 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     if g_server ~= nil then
         self.spectatorMode.server = SpectatorModeServer:new(g_server ~= nil, g_client ~= nil)
         self.spectatorMode.server.debug = self.debug
+        self:print("SpectatorModeServer:new(g_server:%s, g_client:%s)", g_server ~= nil, g_client ~= nil)
     end
     self.spectatorMode.dir = self.dir
     self.spectatorMode.guis = {}
@@ -74,7 +75,7 @@ function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScre
     g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad)
     g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame)
     g_currentMission.requestToEnterVehicle = Utils.overwrittenFunction(g_currentMission.requestToEnterVehicle, self.spectatorMode.requestToEnterVehicle)
-    g_currentMission.ingameMap.toggleSize =  Utils.overwrittenFunction(g_currentMission.ingameMap.toggleSize, self.spectatorMode.toggleSize)
+    g_currentMission.ingameMap.toggleSize = Utils.overwrittenFunction(g_currentMission.ingameMap.toggleSize, self.spectatorMode.toggleSize)
     g_currentMission.ingameMap.updatePlayerPosition = self.spectatorMode.updatePlayerPosition
 end
 g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.load)

@@ -23,8 +23,8 @@ function SteerableExtensions:setActiveCameraIndex(index)
         if self.activeCamera.isInside then
             cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR
         end
-        Event.send(CameraChangeEvent:new(g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType))
-        g_spectatorMode:print(string.format("Event.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType))
+        Event.sendToServer(CameraChangeEvent:new(g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType))
+        g_spectatorMode:print(string.format("Event.sendToServer(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.activeCamera.cameraNode, self.camIndex, cameraType))
     end
 end
 

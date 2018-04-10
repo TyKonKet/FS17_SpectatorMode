@@ -38,9 +38,10 @@ function MinimapChangeEvent:readStream(streamId, connection)
 end
 
 function MinimapChangeEvent:run(connection)
-    if not connection:getIsServer() and g_spectatorMode.server ~= nil then
-        --send event to all subscribers
-        g_spectatorMode.server:minimapChange(self.actorName, self.mmState)
+    if (not connection:getIsServer() or connection:getIsLocal()) then
+        if g_spectatorMode ~= nil and g_spectatorMode.server ~= nil then
+            g_spectatorMode.server:minimapChange(self.actorName, self.mmState)
+        end
     else
         if g_spectatorMode ~= nil then
             g_spectatorMode:minimapChange(self.actorName, self.mmState)

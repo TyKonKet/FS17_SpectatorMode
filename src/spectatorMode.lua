@@ -95,7 +95,7 @@ function SpectatorMode:startSpectate(playerName)
     self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
     self.spectatedPlayerObject:setVisibility(false)
     g_currentMission.hasSpecialCamera = true
-    Event.send(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName))
+    Event.sendToServer(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName))
     self.lastPlayer.mmState = g_currentMission.ingameMap.state
 end
 
@@ -114,7 +114,7 @@ function SpectatorMode:stopSpectate()
     g_currentMission.hasSpecialCamera = false
     self:setVehicleActiveCamera(nil)
     self.spectatedVehicle = nil
-    Event.send(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer))
+    Event.sendToServer(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer))
     self.spectatedPlayerObject:setVisibility(true)
     self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
     self.spectatedPlayerObject = nil
@@ -187,7 +187,7 @@ function SpectatorMode:toggleSize(superFunc, state, force, noEventSend)
         superFunc(self, state, force)
     end
     if not noEventSend then
-        Event.send(MinimapChangeEvent:new(g_currentMission.player.controllerName, self.state))
+        Event.sendToServer(MinimapChangeEvent:new(g_currentMission.player.controllerName, self.state))
     end
 end
 
