@@ -29,7 +29,7 @@ function SpectateRejectedEvent:writeStream(streamId, connection)
 end
 
 function SpectateRejectedEvent:readStream(streamId, connection)
-    self.reason = streamReadUIntN(streamId), SpectateRejectedEvent.sendNumBits
+    self.reason = streamReadUIntN(streamId, SpectateRejectedEvent.sendNumBits)
     self:run(connection)
 end
 
