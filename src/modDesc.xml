@@ -3,15 +3,16 @@
     <author>TyKonKet</author>
     <version>1.2.0.0</version>
     <title>
+        <de>Spectator Mode</de>
         <en>Spectator Mode</en>
-        <nl>Toeschouwer Modus</nl>
-        <fr>Mode spectateur</fr>
+        <fr>Spectator Mode</fr>
     </title>
     <description>
+        <de>Mit diesem Mod kannst du andere Spieler sehen, es eignet sich für Video und Stream-Erstellung, aber auch für Spieler, die im Multiplayer eine Pause machen wollen, indem sie sich die Arbeit von Teamkollegen ansehen</de>
         <en>With this mod you can spectate other players, it's suitable for video and stream making but also for players who want take a break on multiplayer by taking a look at teammates work</en>
-        <it>Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni</it>
-        <nl>Met deze mod kun je een andere speler volgen en bekijken</nl>
         <fr>Ce mode vous permet de suivre d'autres joureurs.</fr>
+        <it>Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni</it>
+        <nl>Toeschouwer Modus: Met deze mod kun je een andere speler volgen en bekijken</nl>
     </description>
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
@@ -42,39 +43,46 @@
             <en>You can't spectate yourself</en>
         </text>
         <text name="input_TOGGLE_SPECTATOR_MODE">
-            <en>Start and Stop spectating</en>
-            <it>Avvia/Interrompi la Spectator Mode</it>
-            <nl>Start/Stop Kijkers Modus</nl>
+            <de>Starten/Stoppen Sie den Zuschauermodus</de>
+            <en>Start/Stop spectating</en>
             <fr>Mode spectateur : Activé / Désactivé</fr>
+            <it>Avvia/Interrompi modalità spettatore</it>
+            <nl>Start/Stop Kijkers Modus</nl>
         </text>
         <text name="START_SPECTATOR_MODE">
+            <de>Starten Zuschauermodus</de>
             <en>Start spectating</en>
-            <it>Avvia la Spectator Mode</it>
-            <nl>Start Kijkers Modus</nl>
             <fr>Activer mode spectateur</fr>
+            <it>Avvia modalità spettatore</it>
+            <nl>Start Kijkers Modus</nl>
         </text>
         <text name="STOP_SPECTATOR_MODE">
+            <de>Stoppen Zuschauermodus</de>
             <en>Stop spectating</en>
+            <fr>Désactiver mode spectateur</fr>
             <it>Interrompi la Spectator Mode</it>
             <nl>Stop Kijkers Modus</nl>
-            <fr>Désactiver mode spectateur</fr>
         </text>
         <text name="SPECTATOR_MODE_NAME">
+            <de>Spectator Mode</de>
             <en>Spectator Mode</en>
-            <nl>Kijkers Modus</nl>
-            <fr>Mode spectateur</fr>
+            <fr>Spectator Mode</fr>
+            <it>Spectator Mode</it>
+            <nl>Spectator Mode</nl>
         </text>
         <text name="SPECTATOR_MODE_GUI_DIALOG_TEXT">
+            <de>Wählen der Spieler zu sehen</de>
             <en>Select the player you want spectate</en>
+            <fr>Choix du joueur à suivre</fr>
             <it>Scegli il giocatore che vuoi guardare</it>
             <nl>Selecteer een speler die je wilt volgen</nl>
-            <fr>Choix du joueur à suivre</fr>
         </text>
         <text name="SPECTATOR_MODE_GUI_DIALOG_MESSAGE">
+            <de>Es gibt keine Spieler die du sehen kannst</de>
             <en>There aren't players you can spectate</en>
+            <fr>Il n'y a pas de joueur à suivre</fr>
             <it>Non ci sono giocatori da poter guardare</it>
             <nl>Er zijn geen spelers om te volgen</nl>
-            <fr>Il n'y a pas de joueur à suivre</fr>
         </text>
     </l10n>
 </modDesc>
