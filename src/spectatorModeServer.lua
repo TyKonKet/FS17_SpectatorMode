@@ -43,8 +43,10 @@ function SpectatorModeServer:addSubscriber(sName, connection, aName)
     self.clients[aName].subscribers[sName] = {}
     self.clients[aName].subscribers[sName].connection = connection
     --send event to new subscriber
-    connection:sendEvent(CameraChangeEvent:new(aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType))
-    connection:sendEvent(MinimapChangeEvent:new(aName, self.clients[aName].mmState))
+    self:print("\t\tCameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s, toServer:false)", aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType)
+    connection:sendEvent(CameraChangeEvent:new(aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType, false))
+    self:print("\t\tMinimapChangeEvent:new(aName:%s, mmState:%s, toServer:false)", aName, self.clients[aName].mmState)
+    connection:sendEvent(MinimapChangeEvent:new(aName, self.clients[aName].mmState, false))
 end
 
 function SpectatorModeServer:removeSubscriber(sName, aName)
@@ -60,8 +62,8 @@ function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraTy
     self.clients[aName].cameraId = cameraId
     self.clients[aName].cameraIndex = cameraIndex
     self.clients[aName].cameraType = cameraType
-    local event = CameraChangeEvent:new(aName, cameraId, cameraIndex, cameraType)
-    self:print("CameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType)
+    self:print("CameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s, toServer:false)", aName, cameraId, cameraIndex, cameraType)
+    local event = CameraChangeEvent:new(aName, cameraId, cameraIndex, cameraType, false)
     for k, v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
         v.connection:sendEvent(event)
@@ -72,8 +74,8 @@ function SpectatorModeServer:minimapChange(aName, mmState)
     --self:print("SpectatorMode:minimapChange(aName:%s, state:%s)", aName, mmState)
     self:ensureAName(aName)
     self.clients[aName].mmState = mmState
-    local event = MinimapChangeEvent:new(aName, mmState)
-    self:print("MinimapChangeEvent:new(aName:%s, mmState:%s)", aName, mmState)
+    self:print("MinimapChangeEvent:new(aName:%s, mmState:%s, toServer:true)", aName, mmState)
+    local event = MinimapChangeEvent:new(aName, mmState, false)
     for k, v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
         v.connection:sendEvent(event)

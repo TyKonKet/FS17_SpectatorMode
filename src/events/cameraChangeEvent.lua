@@ -20,12 +20,13 @@ function CameraChangeEvent:emptyNew()
     return self
 end
 
-function CameraChangeEvent:new(actorName, cameraId, cameraIndex, cameraType)
+function CameraChangeEvent:new(actorName, cameraId, cameraIndex, cameraType, toServer)
     local self = CameraChangeEvent:emptyNew()
     self.actorName = actorName
     self.cameraId = cameraId
     self.cameraIndex = cameraIndex
     self.cameraType = cameraType
+    self.toServer = toServer == true
     return self
 end
 
@@ -34,6 +35,7 @@ function CameraChangeEvent:writeStream(streamId, connection)
     streamWriteUIntN(streamId, self.cameraIndex, CameraChangeEvent.cameraIndexSendNumBits)
     streamWriteUIntN(streamId, self.cameraType, CameraChangeEvent.cameraTypeSendNumBits)
     streamWriteString(streamId, self.actorName)
+    streamWriteBool(streamId, self.toServer)
 end
 
 function CameraChangeEvent:readStream(streamId, connection)
@@ -41,11 +43,12 @@ function CameraChangeEvent:readStream(streamId, connection)
     self.cameraIndex = streamReadUIntN(streamId, CameraChangeEvent.cameraIndexSendNumBits)
     self.cameraType = streamReadUIntN(streamId, CameraChangeEvent.cameraTypeSendNumBits)
     self.actorName = streamReadString(streamId)
+    self.toServer = streamReadBool(streamId)
     self:run(connection)
 end
 
 function CameraChangeEvent:run(connection)
-    if (not connection:getIsServer() or connection:getIsLocal()) then
+    if self.toServer then
         if g_spectatorMode ~= nil and g_spectatorMode.server ~= nil then
             g_spectatorMode.server:cameraChange(self.actorName, self.cameraId, self.cameraIndex, self.cameraType)
         end

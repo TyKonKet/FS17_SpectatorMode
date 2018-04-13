@@ -14,7 +14,8 @@ function PlayerExtensions:writeStream(streamId, connection)
         streamWriteFloat32(streamId, w)
         streamWriteFloat32(streamId, self.camY)
         streamWriteUInt8(streamId, getFovy(self.cameraNode))
-        streamWriteBool(streamId, g_dedicatedServerInfo and g_currentMission.player.controllerName == self.controllerName)
+        local isDedicatedServer = g_dedicatedServerInfo and g_currentMission.player.controllerName == self.controllerName
+        streamWriteBool(streamId, isDedicatedServer == true)
     end
 end
 
@@ -86,8 +87,8 @@ end
 function PlayerExtensions:onEnter(isOwner)
     if isOwner then
         if not g_spectatorMode.spectating then
-            Event.sendToServer(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER))
-            g_spectatorMode:print("Event.sendToServer(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s))", g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER)
+            g_spectatorMode:print("Player.send(CameraChangeEvent:new(controllerName:%s, cameraNode:%s, camIndex:%s, cameraType:%s, toServer:true))", g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER)
+            Event.sendToServer(CameraChangeEvent:new(g_currentMission.player.controllerName, self.cameraNode, 0, CameraChangeEvent.CAMERA_TYPE_PLAYER, true))
         end
     elseif g_spectatorMode ~= nil then
         if self.controllerName == g_spectatorMode.spectatedPlayer then

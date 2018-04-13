@@ -47,8 +47,8 @@ end
 
 function SpectatorMode:update(dt)
     self.delayedCameraChangedDCB:update(dt)
-    if self.lastCamera ~= getCamera() then
-        self:print(("Camera setted to:%s"):format(getCamera()))
+    if self.debug and self.lastCamera ~= getCamera() then
+        self:print("updateCameraChanged(from:%s to:%s)", lastCamera, getCamera())
         self.lastCamera = getCamera()
     end
     if g_currentMission.controlledVehicle == nil then
@@ -95,6 +95,7 @@ function SpectatorMode:startSpectate(playerName)
     self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
     self.spectatedPlayerObject:setVisibility(false)
     g_currentMission.hasSpecialCamera = true
+    self:print("Event.send(SpectateEvent:new(start:true, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, playerName)
     Event.sendToServer(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName))
     self.lastPlayer.mmState = g_currentMission.ingameMap.state
 end
@@ -114,6 +115,7 @@ function SpectatorMode:stopSpectate()
     g_currentMission.hasSpecialCamera = false
     self:setVehicleActiveCamera(nil)
     self.spectatedVehicle = nil
+    self:print("Event.send(SpectateEvent:new(start:false, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, self.spectatedPlayer)
     Event.sendToServer(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer))
     self.spectatedPlayerObject:setVisibility(true)
     self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
@@ -134,12 +136,12 @@ function SpectatorMode:getPlayerByName(name)
 end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
-    self:print(string.format("SpectatorMode:cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
+    self:print(string.format("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
     self.delayedCameraChangedDCB:call(1, actorName, cameraId, cameraIndex, cameraType)
 end
 
 function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
-    self:print(string.format("SpectatorMode:cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
+    self:print(string.format("delayedCameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         setCamera(self.spectatedPlayerObject.cameraNode)
         self:setVehicleActiveCamera(nil)
@@ -148,7 +150,7 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
-                self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
+                --self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
                 v.vehicleCharacter:setCharacterVisibility(true)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
@@ -158,7 +160,7 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
-                self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
+                --self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
                 v.vehicleCharacter:setCharacterVisibility(false)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
@@ -168,7 +170,7 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
 end
 
 function SpectatorMode:setVehicleActiveCamera(cameraIndex)
-    self:print(string.format("SpectatorMode:setVehicleActiveCamera(cameraIndex:%s)", cameraIndex))
+    --self:print(string.format("setVehicleActiveCamera(cameraIndex:%s)", cameraIndex))
     if self.spectatedVehicle ~= nil then
         local useMirror = false
         if cameraIndex ~= nil then
@@ -182,17 +184,18 @@ function SpectatorMode:setVehicleActiveCamera(cameraIndex)
 end
 
 function SpectatorMode:toggleSize(superFunc, state, force, noEventSend)
-    g_spectatorMode:print("SpectatorMode:toggleSize(state:%s, force:%s, noEventSend:%s)", state, force, noEventSend)
+    --g_spectatorMode:print("toggleSize(state:%s, force:%s, noEventSend:%s)", state, force, noEventSend)
     if superFunc ~= nil then
         superFunc(self, state, force)
     end
     if not noEventSend then
-        Event.sendToServer(MinimapChangeEvent:new(g_currentMission.player.controllerName, self.state))
+        g_spectatorMode:print("Event.send(MinimapChangeEvent:new(controllerName:%s, state:%s, toServer:true))", g_currentMission.player.controllerName, self.state)
+        Event.sendToServer(MinimapChangeEvent:new(g_currentMission.player.controllerName, self.state, true))
     end
 end
 
 function SpectatorMode:minimapChange(aName, mmState)
-    self:print("SpectatorMode:minimapChange(aName:%s, state:%s)", aName, mmState)
+    self:print("minimapChange(aName:%s, state:%s)", aName, mmState)
     g_currentMission.ingameMap:toggleSize(mmState, true, true)
 end
 

@@ -20,7 +20,6 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self = SpectatorModeRecorder
     self:print("initialize()")
     self.isMultiplayer = missionDynamicInfo.missionDynamicInfo.isMultiplayer
-    self:print("Is Multiplayer : %s", self.isMultiplayer)
     if not self.isMultiplayer then
         return
     end
@@ -98,7 +97,7 @@ end
 
 function SpectatorModeRecorder:afterLoad()
     self = SpectatorModeRecorder
-    self:print("afterLoad")
+    self:print("afterLoad()")
     if not self.isMultiplayer then
         return
     end

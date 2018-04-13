@@ -34,9 +34,7 @@ function SpectateRejectedEvent:readStream(streamId, connection)
 end
 
 function SpectateRejectedEvent:run(connection)
-    if connection:getIsServer() then
-        if g_spectatorMode ~= nil then
-            g_spectatorMode:spectateRejected(self.reason)
-        end
+    if g_spectatorMode ~= nil then
+        g_spectatorMode:spectateRejected(self.reason)
     end
 end
