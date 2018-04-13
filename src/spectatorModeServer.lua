@@ -42,6 +42,8 @@ function SpectatorModeServer:addSubscriber(sName, connection, aName)
     self:ensureAName(aName)
     self.clients[aName].subscribers[sName] = {}
     self.clients[aName].subscribers[sName].connection = connection
+    self.clients[aName].subscribers[sName].acatorName = aName
+    self.clients[aName].subscribers[sName].spectatorName = sName
     --send event to new subscriber
     self:print("\t\tCameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s, toServer:false)", aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType)
     connection:sendEvent(CameraChangeEvent:new(aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType, false))
@@ -57,27 +59,27 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
 end
 
 function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraType)
-    --self:print("SpectatorMode:cameraChanged(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType)
+    self:print("cameraChange(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", aName, cameraId, cameraIndex, cameraType)
     self:ensureAName(aName)
     self.clients[aName].cameraId = cameraId
     self.clients[aName].cameraIndex = cameraIndex
     self.clients[aName].cameraType = cameraType
-    self:print("CameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s, toServer:false)", aName, cameraId, cameraIndex, cameraType)
     local event = CameraChangeEvent:new(aName, cameraId, cameraIndex, cameraType, false)
     for k, v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
+        self:print("\t\tto %s", v.spectatorName)
         v.connection:sendEvent(event)
     end
 end
 
 function SpectatorModeServer:minimapChange(aName, mmState)
-    --self:print("SpectatorMode:minimapChange(aName:%s, state:%s)", aName, mmState)
+    self:print("minimapChange(aName:%s, state:%s)", aName, mmState)
     self:ensureAName(aName)
     self.clients[aName].mmState = mmState
-    self:print("MinimapChangeEvent:new(aName:%s, mmState:%s, toServer:true)", aName, mmState)
     local event = MinimapChangeEvent:new(aName, mmState, false)
     for k, v in pairs(self.clients[aName].subscribers) do
         --send evet to subscribers
+        self:print("\t\tto %s", v.spectatorName)
         v.connection:sendEvent(event)
     end
 end
@@ -88,5 +90,8 @@ function SpectatorModeServer:ensureAName(aName)
     end
     if self.clients[aName].subscribers == nil then
         self.clients[aName].subscribers = {}
+    end
+    if self.clients[aName].mmState == nil then
+        self.clients[aName].mmState = 0
     end
 end

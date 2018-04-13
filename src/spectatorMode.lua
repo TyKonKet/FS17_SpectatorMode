@@ -48,7 +48,7 @@ end
 function SpectatorMode:update(dt)
     self.delayedCameraChangedDCB:update(dt)
     if self.debug and self.lastCamera ~= getCamera() then
-        self:print("updateCameraChanged(from:%s to:%s)", lastCamera, getCamera())
+        self:print("updateCameraChanged(from:%s to:%s)", self.lastCamera, getCamera())
         self.lastCamera = getCamera()
     end
     if g_currentMission.controlledVehicle == nil then
