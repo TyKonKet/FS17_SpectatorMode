@@ -3,6 +3,7 @@
 --
 -- @author TyKonKet
 -- @date 20/01/2017
+-- TODO: rewrite this, improve smoothing following Player.lua
 PlayerExtensions = {}
 
 function PlayerExtensions:writeStream(streamId, connection)
