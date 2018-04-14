@@ -74,7 +74,7 @@ function SteerableExtensions:readUpdateStream(streamId, timestamp, connection)
 end
 
 function SteerableExtensions:update(dt)
-    if (not self.isServer or self.isSpectated()) and self.isControlled and not self.isEntered then
+    if (not self.isServer or self.isSpectated) and self.isControlled and not self.isEntered then
         for _, v in pairs(self.cameras) do
             self.camerasLerp[v.cameraNode].interpolationAlphaRot = self.camerasLerp[v.cameraNode].interpolationAlphaRot + g_physicsDtUnclamped / 75
             if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1 then
