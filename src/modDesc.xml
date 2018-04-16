@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="39">
-    <author>TyKonKet, fcelsa</author>
-    <version>1.2.0.0</version>
+    <author>{package_author}</author>
+    <version>{package_version}</version>
     <title>
         <de>Spectator Mode</de>
         <en>Spectator Mode</en>
         <fr>Spectator Mode</fr>
     </title>
     <description>
-        <de>Mit diesem Mod kannst du andere Spieler sehen, es eignet sich für Video und Stream-Erstellung, aber auch für Spieler, die im Multiplayer eine Pause machen wollen, indem sie sich die Arbeit von Teamkollegen ansehen</de>
-        <en>With this mod you can spectate other players, it's suitable for video and stream making but also for players who want take a break on multiplayer by taking a look at teammates work</en>
-        <fr>Ce mode vous permet de suivre d'autres joureurs.</fr>
-        <it>Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni</it>
-        <nl>Toeschouwer Modus: Met deze mod kun je een andere speler volgen en bekijken</nl>
+        <de><![CDATA[Mit diesem Mod kannst du andere Spieler sehen, es eignet sich für Video und Stream-Erstellung, aber auch für Spieler, die im Multiplayer eine Pause machen wollen, indem sie sich die Arbeit von Teamkollegen ansehen]]></de>
+        <en><![CDATA[With this mod you can spectate other players, it's suitable for video and stream making but also for players who want take a break on multiplayer by taking a look at teammates work]]></en>
+        <fr><![CDATA[Ce mode vous permet de suivre d'autres joureurs.]]></fr>
+        <it><![CDATA[Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni]]></it>
+        <nl><![CDATA[Toeschouwer Modus: Met deze mod kun je een andere speler volgen en bekijken]]></nl>
     </description>
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
     <extraSourceFiles>
-        <sourceFile filename="extensions/vehicleExtensions.lua" />
         <sourceFile filename="extensions/steerableExtensions.lua" />
         <sourceFile filename="extensions/playerExtensions.lua" />
         <sourceFile filename="extensions/extensions.lua" />

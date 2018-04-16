@@ -6,7 +6,7 @@
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory
 SpectatorModeRecorder.name = "SpectatorModeRecorder"
-SpectatorModeRecorder.debug = true
+SpectatorModeRecorder.debug = false
 
 function SpectatorModeRecorder:print(text, ...)
     if self.debug then
@@ -60,7 +60,7 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Steerable.drawUIInfo = SteerableExtensions.drawUIInfo
 
     -- extending vehicle
-    Vehicle.isSpectated = VehicleExtensions.isSpectated
+    Vehicle.isSpectated = SteerableExtensions.isSpectated
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize)
 

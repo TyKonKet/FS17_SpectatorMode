@@ -74,7 +74,7 @@ function SteerableExtensions:readUpdateStream(streamId, timestamp, connection)
 end
 
 function SteerableExtensions:update(dt)
-    if (not self.isServer or self.isSpectated) and self.isControlled and not self.isEntered then
+    if self.isControlled and not self.isEntered then
         for _, v in pairs(self.cameras) do
             self.camerasLerp[v.cameraNode].interpolationAlphaRot = self.camerasLerp[v.cameraNode].interpolationAlphaRot + g_physicsDtUnclamped / 75
             if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1 then
@@ -155,4 +155,13 @@ function SteerableExtensions:drawUIInfo(superFunc)
             Utils.renderTextAtWorldPosition(x, y, z, self.controllerName, getCorrectTextSize(0.02), 0)
         end
     end
+end
+
+function SteerableExtensions:isSpectated()
+    if g_spectatorMode ~= nil then
+        if g_spectatorMode.spectating and self.controllerName == g_spectatorMode.spectatedPlayer then
+            return true
+        end
+    end
+    return false
 end
