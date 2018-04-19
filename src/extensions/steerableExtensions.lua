@@ -17,6 +17,23 @@ function SteerableExtensions:postLoad(savegame)
     end
 end
 
+function SteerableExtensions:addToolCameras(cameras)
+    for _, v in pairs(cameras) do
+        self.camerasLerp[v.cameraNode] = {}
+        self.camerasLerp[v.cameraNode].lastQuaternion = {0, 0, 0, 0}
+        self.camerasLerp[v.cameraNode].targetQuaternion = {0, 0, 0, 0}
+        self.camerasLerp[v.cameraNode].lastTranslation = {0, 0, 0}
+        self.camerasLerp[v.cameraNode].targetTranslation = {0, 0, 0}
+        self.camerasLerp[v.cameraNode].interpolationAlphaRot = 0
+    end
+end
+
+function SteerableExtensions:removeToolCameras(cameras)
+    for _, v in pairs(cameras) do
+        self.camerasLerp[v.cameraNode] = nil
+    end
+end
+
 function SteerableExtensions:setActiveCameraIndex(index)
     if not g_spectatorMode.spectating then
         local cameraType = CameraChangeEvent.CAMERA_TYPE_VEHICLE
@@ -39,7 +56,7 @@ function SteerableExtensions:writeUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetTranslation[2])
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetTranslation[3])
         end
-    elseif self.isEntered then
+    else
         for _, v in pairs(self.cameras) do
             local x, y, z, w = getQuaternion(v.rotateNode)
             streamWriteFloat32(streamId, x)
