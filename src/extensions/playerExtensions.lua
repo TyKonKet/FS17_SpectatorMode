@@ -47,7 +47,7 @@ function PlayerExtensions:writeUpdateStream(streamId, connection, dirtyMask)
         streamWriteFloat32(streamId, w)
         streamWriteFloat32(streamId, self.camY)
         streamWriteUInt8(streamId, getFovy(self.cameraNode))
-    elseif self.isOwner and self.isEntered then
+    elseif self.isOwner and connection:getIsServer() then
         streamWriteFloat32(streamId, self.camY)
         streamWriteUInt8(streamId, getFovy(self.cameraNode))
     end
