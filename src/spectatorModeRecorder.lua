@@ -53,6 +53,8 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Player.drawUIInfo = PlayerExtensions.drawUIInfo
     -- extending steerable functions
     Steerable.postLoad = Utils.appendedFunction(Steerable.postLoad, SteerableExtensions.postLoad)
+    Steerable.addToolCameras = Utils.appendedFunction(Steerable.addToolCameras, SteerableExtensions.addToolCameras)
+    Steerable.removeToolCameras = Utils.appendedFunction(Steerable.removeToolCameras, SteerableExtensions.removeToolCameras)
     Steerable.setActiveCameraIndex = Utils.appendedFunction(Steerable.setActiveCameraIndex, SteerableExtensions.setActiveCameraIndex)
     Steerable.writeUpdateStream = Utils.appendedFunction(Steerable.writeUpdateStream, SteerableExtensions.writeUpdateStream)
     Steerable.readUpdateStream = Utils.appendedFunction(Steerable.readUpdateStream, SteerableExtensions.readUpdateStream)
@@ -120,9 +122,9 @@ function SpectatorModeRecorder:deleteMap()
     if not self.isMultiplayer then
         return
     end
-    --if self.spectatorMode ~= nil then
-    --    self.spectatorMode:deleteMap();
-    --end
+    if self.spectatorMode ~= nil then
+        self.spectatorMode:deleteMap();
+    end
     g_spectatorMode = nil
 end
 

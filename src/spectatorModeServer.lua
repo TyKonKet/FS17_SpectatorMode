@@ -44,6 +44,11 @@ function SpectatorModeServer:addSubscriber(sName, connection, aName)
     self.clients[aName].subscribers[sName].connection = connection
     self.clients[aName].subscribers[sName].acatorName = aName
     self.clients[aName].subscribers[sName].spectatorName = sName
+    if self.clients[aName].subscribersCount == 0 then
+        self:print("\t\tSpectatedEvent:new(true)")
+        g_currentMission:findUserByNickname(aName).connection:sendEvent(SpectatedEvent:new(true))
+    end
+    self.clients[aName].subscribersCount = self.clients[aName].subscribersCount + 1
     --send event to new subscriber
     self:print("\t\tCameraChangeEvent:new(aName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s, toServer:false)", aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType)
     connection:sendEvent(CameraChangeEvent:new(aName, self.clients[aName].cameraId, self.clients[aName].cameraIndex, self.clients[aName].cameraType, false))
@@ -56,6 +61,11 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
     if self.clients[aName] ~= nil and self.clients[aName].subscribers ~= nil and self.clients[aName].subscribers[sName] ~= nil then
         self.clients[aName].subscribers[sName] = nil
     end
+    if self.clients[aName].subscribersCount == 1 then
+        self:print("\t\tSpectatedEvent:new(false)")
+        g_currentMission:findUserByNickname(aName).connection:sendEvent(SpectatedEvent:new(false))
+    end
+    self.clients[aName].subscribersCount = self.clients[aName].subscribersCount - 1
 end
 
 function SpectatorModeServer:cameraChange(aName, cameraId, cameraIndex, cameraType)
@@ -90,6 +100,9 @@ function SpectatorModeServer:ensureAName(aName)
     end
     if self.clients[aName].subscribers == nil then
         self.clients[aName].subscribers = {}
+    end
+    if self.clients[aName].subscribersCount == nil then
+        self.clients[aName].subscribersCount = 0
     end
     if self.clients[aName].mmState == nil then
         self.clients[aName].mmState = 0

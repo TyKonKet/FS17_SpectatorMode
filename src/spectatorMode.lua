@@ -6,6 +6,8 @@
 SpectatorMode = {}
 SpectatorMode_mt = Class(SpectatorMode)
 
+SpectatorMode.modDirectory = g_currentModDirectory
+
 function SpectatorMode:new(isServer, isClient, customMt)
     if SpectatorMode_mt == nil then
         SpectatorMode_mt = Class(SpectatorMode)
@@ -18,10 +20,19 @@ function SpectatorMode:new(isServer, isClient, customMt)
     setmetatable(self, mt)
     self.name = "SpectatorMode"
     self.spectating = false
+    self.spectated = false
     self.spectatedPlayer = nil
     self.spectatedVehicle = nil
     self.delayedCameraChangedDCB = DelayedCallBack:new(SpectatorMode.delayedCameraChanged, self)
     self.delayedCameraChangedDCB.skipOneFrame = true
+
+    -- hud
+    local uiScale = g_gameSettings:getValue("uiScale")
+    self.spectatedOverlayWidth, self.spectatedOverlayHeight = getNormalizedScreenValues(24 * uiScale, 24 * uiScale)
+    local _, margin = getNormalizedScreenValues(0, 1 * uiScale)
+    --self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("hud/spectated.dds", SpectatorMode.modDirectory), 1 - self.spectatedOverlayWidth - g_safeFrameOffsetX, 1 - self.spectatedOverlayHeight - g_safeFrameOffsetY, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
+    self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("hud/spectated.dds", SpectatorMode.modDirectory), 0 + margin, 1 - self.spectatedOverlayHeight - margin, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
+    --self.spectatedOverlay:setColor(0.8069, 0.0097, 0.0097, 1)
 
     self.lastPlayer = {}
     self.lastPlayer.mmState = 0
@@ -43,6 +54,10 @@ end
 function SpectatorMode:loadMap()
     self:print("loadMap()")
     self.guis.spectateGui:setSelectionCallback(self, self.startSpectate)
+end
+
+function SpectatorMode:deleteMap()
+    self.spectatedOverlay:delete()
 end
 
 function SpectatorMode:update(dt)
@@ -69,10 +84,14 @@ end
 function SpectatorMode:draw()
     if self.spectatedVehicle ~= nil then
         if self.spectatedVehicle.isDrivable then
-        g_currentMission:drawVehicleHud(self.spectatedVehicle)
-        --TODO: Not Working
-        g_currentMission:drawHudIcon()
-        g_currentMission:drawVehicleSchemaOverlay(self.spectatedVehicle)
+            g_currentMission:drawVehicleHud(self.spectatedVehicle)
+            --TODO: Not Working
+            g_currentMission:drawHudIcon()
+            g_currentMission:drawVehicleSchemaOverlay(self.spectatedVehicle)
+        end
+    end
+    if self.spectated then
+        self.spectatedOverlay:render()
     end
 end
 
@@ -138,8 +157,8 @@ end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(string.format("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
-    if cameraType ~= CameraChangeEvent.CAMERA_TYPE_PLAYER then
-        self.delayedCameraChangedDCB:call(75, actorName, cameraId, cameraIndex, cameraType)
+    if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
+        self.delayedCameraChangedDCB:call(50, actorName, cameraId, cameraIndex, cameraType)
     else
         self:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
     end

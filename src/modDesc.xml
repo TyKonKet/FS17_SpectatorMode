@@ -25,6 +25,7 @@
         <sourceFile filename="events/cameraChangeEvent.lua" />
         <sourceFile filename="events/minimapChangeEvent.lua" />
         <sourceFile filename="events/spectateRejectedEvent.lua" />
+        <sourceFile filename="events/spectatedEvent.lua" />
         <sourceFile filename="spectatorModeRecorder.lua" />
         <sourceFile filename="spectatorMode.lua" />
         <sourceFile filename="spectatorModeServer.lua" />
