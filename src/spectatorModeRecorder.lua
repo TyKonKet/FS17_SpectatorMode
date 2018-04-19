@@ -6,7 +6,7 @@
 SpectatorModeRecorder = {}
 SpectatorModeRecorder.dir = g_currentModDirectory
 SpectatorModeRecorder.name = "SpectatorModeRecorder"
-SpectatorModeRecorder.debug = false
+SpectatorModeRecorder.debug = true
 
 function SpectatorModeRecorder:print(text, ...)
     if self.debug then

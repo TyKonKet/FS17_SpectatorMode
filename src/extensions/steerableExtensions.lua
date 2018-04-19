@@ -3,7 +3,6 @@
 --
 -- @author TyKonKet
 -- @date 20/01/2017
--- TODO: rewrite this, improve smoothing following Vehicle.lua
 SteerableExtensions = {}
 
 function SteerableExtensions:postLoad(savegame)
@@ -40,7 +39,7 @@ function SteerableExtensions:writeUpdateStream(streamId, connection, dirtyMask)
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetTranslation[2])
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetTranslation[3])
         end
-    else
+    elseif self.isEntered then
         for _, v in pairs(self.cameras) do
             local x, y, z, w = getQuaternion(v.rotateNode)
             streamWriteFloat32(streamId, x)
@@ -74,13 +73,12 @@ function SteerableExtensions:readUpdateStream(streamId, timestamp, connection)
 end
 
 function SteerableExtensions:update(dt)
-    if self.isControlled and not self.isEntered then
+    if not self.isEntered then
         for _, v in pairs(self.cameras) do
-            self.camerasLerp[v.cameraNode].interpolationAlphaRot = self.camerasLerp[v.cameraNode].interpolationAlphaRot + g_physicsDtUnclamped / 75
-            if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1 then
-                self.camerasLerp[v.cameraNode].interpolationAlphaRot = 1
+            self.camerasLerp[v.cameraNode].interpolationAlphaRot = self.camerasLerp[v.cameraNode].interpolationAlphaRot + g_physicsDtUnclamped / self.interpolationDuration
+            if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1.2 then
+                self.camerasLerp[v.cameraNode].interpolationAlphaRot = 1.2
             end
-
             local rx, ry, rz, rw =
                 Utils.nlerpQuaternionShortestPath(
                 self.camerasLerp[v.cameraNode].lastQuaternion[1],
@@ -109,7 +107,6 @@ function SteerableExtensions:update(dt)
             if tx == tx and ty == ty and tz == tz then
                 setTranslation(v.cameraPositionNode, tx, ty, tz)
             end
-
             if v.rotateNode ~= v.cameraPositionNode then
                 local wtx, wty, wtz = getWorldTranslation(v.cameraPositionNode)
                 local dx = wtx

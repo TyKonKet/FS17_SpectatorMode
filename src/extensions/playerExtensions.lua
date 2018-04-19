@@ -8,13 +8,13 @@ PlayerExtensions = {}
 
 function PlayerExtensions:writeStream(streamId, connection)
     if not connection:getIsServer() and connection ~= self.creatorConnection then
-        local x, y, z, w = getQuaternion(self.cameraNode)
-        streamWriteFloat32(streamId, x)
-        streamWriteFloat32(streamId, y)
-        streamWriteFloat32(streamId, z)
-        streamWriteFloat32(streamId, w)
-        streamWriteFloat32(streamId, self.camY)
-        streamWriteUInt8(streamId, getFovy(self.cameraNode))
+        --local x, y, z, w = getQuaternion(self.cameraNode)
+        --streamWriteFloat32(streamId, x)
+        --streamWriteFloat32(streamId, y)
+        --streamWriteFloat32(streamId, z)
+        --streamWriteFloat32(streamId, w)
+        --streamWriteFloat32(streamId, self.camY)
+        --streamWriteUInt8(streamId, getFovy(self.cameraNode))
         local isDedicatedServer = g_dedicatedServerInfo and g_currentMission.player.controllerName == self.controllerName
         streamWriteBool(streamId, isDedicatedServer == true)
     end
@@ -22,18 +22,18 @@ end
 
 function PlayerExtensions:readStream(streamId, connection)
     if not self.isOwner and connection:getIsServer() then
-        self.lastQuaternion = {
-            getQuaternion(self.cameraNode)
-        }
-        self.targetQuaternion = {
-            streamReadFloat32(streamId),
-            streamReadFloat32(streamId),
-            streamReadFloat32(streamId),
-            streamReadFloat32(streamId)
-        }
-        self.interpolationAlphaRot = 0
-        self.camY = streamReadFloat32(streamId)
-        setFovy(self.cameraNode, streamReadUInt8(streamId))
+        --self.lastQuaternion = {
+        --    getQuaternion(self.cameraNode)
+        --}
+        --self.targetQuaternion = {
+        --    streamReadFloat32(streamId),
+        --    streamReadFloat32(streamId),
+        --    streamReadFloat32(streamId),
+        --    streamReadFloat32(streamId)
+        --}
+        --self.interpolationAlphaRot = 0
+        --self.camY = streamReadFloat32(streamId)
+        --setFovy(self.cameraNode, streamReadUInt8(streamId))
         self.isDedicatedServer = streamReadBool(streamId)
     end
 end
@@ -47,7 +47,7 @@ function PlayerExtensions:writeUpdateStream(streamId, connection, dirtyMask)
         streamWriteFloat32(streamId, w)
         streamWriteFloat32(streamId, self.camY)
         streamWriteUInt8(streamId, getFovy(self.cameraNode))
-    elseif self.isOwner and connection:getIsServer() then
+    elseif self.isOwner and self.isEntered then
         streamWriteFloat32(streamId, self.camY)
         streamWriteUInt8(streamId, getFovy(self.cameraNode))
     end
@@ -75,10 +75,10 @@ function PlayerExtensions:readUpdateStream(streamId, timestamp, connection)
 end
 
 function PlayerExtensions:update(dt)
-    if not self.isServer and self.isControlled and not self.isEntered then
+    if not self.isServer and not self.isEntered then
         self.interpolationAlphaRot = self.interpolationAlphaRot + g_physicsDtUnclamped / 75
-        if self.interpolationAlphaRot > 1 then
-            self.interpolationAlphaRot = 1
+        if self.interpolationAlphaRot > 1.2 then
+            self.interpolationAlphaRot = 1.2
         end
         local x, y, z, w = Utils.nlerpQuaternionShortestPath(self.lastQuaternion[1], self.lastQuaternion[2], self.lastQuaternion[3], self.lastQuaternion[4], self.targetQuaternion[1], self.targetQuaternion[2], self.targetQuaternion[3], self.targetQuaternion[4], self.interpolationAlphaRot)
         setQuaternion(self.cameraNode, x, y, z, w)
