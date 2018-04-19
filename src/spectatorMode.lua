@@ -68,6 +68,7 @@ end
 
 function SpectatorMode:draw()
     if self.spectatedVehicle ~= nil then
+        if self.spectatedVehicle.isDrivable then
         g_currentMission:drawVehicleHud(self.spectatedVehicle)
         --TODO: Not Working
         g_currentMission:drawHudIcon()
