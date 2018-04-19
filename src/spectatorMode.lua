@@ -137,7 +137,11 @@ end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(string.format("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
-    self.delayedCameraChangedDCB:call(1, actorName, cameraId, cameraIndex, cameraType)
+    if cameraType ~= CameraChangeEvent.CAMERA_TYPE_PLAYER then
+        self.delayedCameraChangedDCB:call(75, actorName, cameraId, cameraIndex, cameraType)
+    else
+        self:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
+    end
 end
 
 function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
