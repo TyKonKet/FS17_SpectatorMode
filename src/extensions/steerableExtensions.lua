@@ -13,7 +13,7 @@ function SteerableExtensions:postLoad(savegame)
         self.camerasLerp[v.cameraNode].targetQuaternion = {0, 0, 0, 0}
         self.camerasLerp[v.cameraNode].lastTranslation = {0, 0, 0}
         self.camerasLerp[v.cameraNode].targetTranslation = {0, 0, 0}
-        self.camerasLerp[v.cameraNode].interpolationAlphaRot = 0
+        self.camerasLerp[v.cameraNode].interpolationAlpha = 0
     end
 end
 
@@ -24,7 +24,7 @@ function SteerableExtensions:addToolCameras(cameras)
         self.camerasLerp[v.cameraNode].targetQuaternion = {0, 0, 0, 0}
         self.camerasLerp[v.cameraNode].lastTranslation = {0, 0, 0}
         self.camerasLerp[v.cameraNode].targetTranslation = {0, 0, 0}
-        self.camerasLerp[v.cameraNode].interpolationAlphaRot = 0
+        self.camerasLerp[v.cameraNode].interpolationAlpha = 0
     end
 end
 
@@ -46,7 +46,7 @@ function SteerableExtensions:setActiveCameraIndex(index)
 end
 
 function SteerableExtensions:writeUpdateStream(streamId, connection, dirtyMask)
-    if self.isServer then
+    if self.isServer and not self.isEntered  then
         for _, v in pairs(self.cameras) do
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetQuaternion[1])
             streamWriteFloat32(streamId, self.camerasLerp[v.cameraNode].targetQuaternion[2])
@@ -85,16 +85,16 @@ function SteerableExtensions:readUpdateStream(streamId, timestamp, connection)
         self.camerasLerp[v.cameraNode].targetQuaternion = {x, y, z, w}
         self.camerasLerp[v.cameraNode].lastTranslation = {getTranslation(v.cameraPositionNode)}
         self.camerasLerp[v.cameraNode].targetTranslation = {tx, ty, tz}
-        self.camerasLerp[v.cameraNode].interpolationAlphaRot = 0
+        self.camerasLerp[v.cameraNode].interpolationAlpha = 0
     end
 end
 
 function SteerableExtensions:update(dt)
     if not self.isEntered then
         for _, v in pairs(self.cameras) do
-            self.camerasLerp[v.cameraNode].interpolationAlphaRot = self.camerasLerp[v.cameraNode].interpolationAlphaRot + g_physicsDtUnclamped / self.interpolationDuration
-            if self.camerasLerp[v.cameraNode].interpolationAlphaRot > 1.2 then
-                self.camerasLerp[v.cameraNode].interpolationAlphaRot = 1.2
+            self.camerasLerp[v.cameraNode].interpolationAlpha = self.camerasLerp[v.cameraNode].interpolationAlpha + g_physicsDtUnclamped / self.interpolationDuration
+            if self.camerasLerp[v.cameraNode].interpolationAlpha > 1.2 then
+                self.camerasLerp[v.cameraNode].interpolationAlpha = 1.2
             end
             local rx, ry, rz, rw =
                 Utils.nlerpQuaternionShortestPath(
@@ -106,7 +106,7 @@ function SteerableExtensions:update(dt)
                 self.camerasLerp[v.cameraNode].targetQuaternion[2],
                 self.camerasLerp[v.cameraNode].targetQuaternion[3],
                 self.camerasLerp[v.cameraNode].targetQuaternion[4],
-                self.camerasLerp[v.cameraNode].interpolationAlphaRot
+                self.camerasLerp[v.cameraNode].interpolationAlpha
             )
             if rx == rx and ry == ry and rz == rz and rw == rw then
                 setQuaternion(v.rotateNode, rx, ry, rz, rw)
@@ -119,7 +119,7 @@ function SteerableExtensions:update(dt)
                 self.camerasLerp[v.cameraNode].targetTranslation[1],
                 self.camerasLerp[v.cameraNode].targetTranslation[2],
                 self.camerasLerp[v.cameraNode].targetTranslation[3],
-                self.camerasLerp[v.cameraNode].interpolationAlphaRot
+                self.camerasLerp[v.cameraNode].interpolationAlpha
             )
             if tx == tx and ty == ty and tz == tz then
                 setTranslation(v.cameraPositionNode, tx, ty, tz)
