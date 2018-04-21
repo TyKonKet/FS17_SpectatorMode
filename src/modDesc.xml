@@ -33,65 +33,65 @@
         <sourceFile filename="utils/delayedCallBack.lua" />
     </extraSourceFiles>
     <inputBindings>
-        <input name="TOGGLE_SPECTATOR_MODE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
-        <input name="SWITCH_SPECTATOR_MODE" category="ONFOOT" key1="KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
-        <input name="SWITCH_SPECTATOR_MODE_BACK" category="ONFOOT" key1="KEY_lshift KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_TOGGLE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
+        <input name="SM_SWITCH_ACTOR_NEXT" category="ONFOOT" key1="KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_PREVIOUS" category="ONFOOT" key1="KEY_lshift KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
     </inputBindings>
     <l10n>   
-        <text name="ERROR_SPCTATE_DEDICATED_SERVER">
+        <text name="SM_ERROR_SPCTATE_DEDICATED_SERVER">
             <en>You can't spectate the dedicated server's player</en>
         </text>
-        <text name="ERROR_SPCTATE_YOURSELF">
+        <text name="SM_ERROR_SPCTATE_YOURSELF">
             <en>You can't spectate yourself</en>
         </text>
-        <text name="input_TOGGLE_SPECTATOR_MODE">
+        <text name="input_SM_TOGGLE">
             <de>Starten/Stoppen Sie den Zuschauermodus</de>
             <en>Start/Stop spectating</en>
             <fr>Mode spectateur : Activé / Désactivé</fr>
             <it>Avvia/Interrompi modalità spettatore</it>
             <nl>Start/Stop Kijkers Modus</nl>
         </text>
-        <text name="input_SWITCH_SPECTATOR_MODE">
+        <text name="input_SM_SWITCH_ACTOR_NEXT">
             <en>Next player</en>
         </text>
-        <text name="input_SWITCH_SPECTATOR_MODE_BACK">
+        <text name="input_SM_SWITCH_ACTOR_PREVIOUS">
             <en>Previous player</en>
         </text>
-        <text name="SWITCH_SPECTATOR_MODE">
+        <text name="SM_SWITCH_ACTOR_NEXT">
             <en>Spectate %s</en>
         </text>
-        <text name="SWITCH_SPECTATOR_MODE_BACK">
+        <text name="SM_SWITCH_ACTOR_PREVIOUS">
             <en>Spectate %s</en>
         </text>
-        <text name="START_SPECTATOR_MODE">
+        <text name="SM_START">
             <de>Starten Zuschauermodus</de>
             <en>Start spectating</en>
             <fr>Activer mode spectateur</fr>
             <it>Avvia modalità spettatore</it>
             <nl>Start Kijkers Modus</nl>
         </text>
-        <text name="STOP_SPECTATOR_MODE">
+        <text name="SM_STOP">
             <de>Stoppen Zuschauermodus</de>
             <en>Stop spectating</en>
             <fr>Désactiver mode spectateur</fr>
             <it>Interrompi la Spectator Mode</it>
             <nl>Stop Kijkers Modus</nl>
         </text>
-        <text name="SPECTATOR_MODE_NAME">
+        <text name="SM_NAME">
             <de>Spectator Mode</de>
             <en>Spectator Mode</en>
             <fr>Spectator Mode</fr>
             <it>Spectator Mode</it>
             <nl>Spectator Mode</nl>
         </text>
-        <text name="SPECTATOR_MODE_GUI_DIALOG_TEXT">
+        <text name="SM_GUI_DIALOG_TEXT">
             <de>Wählen der Spieler zu sehen</de>
             <en>Select the player you want spectate</en>
             <fr>Choix du joueur à suivre</fr>
             <it>Scegli il giocatore che vuoi guardare</it>
             <nl>Selecteer een speler die je wilt volgen</nl>
         </text>
-        <text name="SPECTATOR_MODE_GUI_DIALOG_MESSAGE">
+        <text name="SM_GUI_DIALOG_MESSAGE">
             <de>Es gibt keine Spieler die du sehen kannst</de>
             <en>There aren't players you can spectate</en>
             <fr>Il n'y a pas de joueur à suivre</fr>

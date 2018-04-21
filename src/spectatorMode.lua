@@ -66,10 +66,10 @@ function SpectatorMode:update(dt)
     end
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
-            g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE)
-            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SWITCH_SPECTATOR_MODE"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE)
-            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SWITCH_SPECTATOR_MODE_BACK"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE_BACK)
-            if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+            g_currentMission:addHelpButtonText(g_i18n:getText("SM_STOP"), InputBinding.SM_TOGGLE)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_NEXT"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_PREVIOUS"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE_BACK)
+            if InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then
                 self:stopSpectate()
             end
             if InputBinding.hasEvent(InputBinding.SWITCH_SPECTATOR_MODE, true) then
@@ -81,8 +81,8 @@ function SpectatorMode:update(dt)
                 self:startSpectate(self:getPreviousPlayerIndex())
             end
         else
-            g_currentMission:addHelpButtonText(g_i18n:getText("START_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE)
-            if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
+            g_currentMission:addHelpButtonText(g_i18n:getText("SM_START"), InputBinding.SM_TOGGLE)
+            if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then
                 self:showGui()
             end
         end
@@ -153,9 +153,9 @@ function SpectatorMode:spectateRejected(reason)
     self:print(("spectateRejected(reason:%s)"):format(reason))
     self:stopSpectate()
     if reason == SpectateRejectedEvent.REASON_DEDICATED_SERVER then
-        g_currentMission:showBlinkingWarning(g18n:getText("ERROR_SPCTATE_DEDICATED_SERVER"), 3000)
+        g_currentMission:showBlinkingWarning(g18n:getText("SM_ERROR_SPCTATE_DEDICATED_SERVER"), 3000)
     elseif reason == SpectateRejectedEvent.REASON_YOURSELF then
-        g_currentMission:showBlinkingWarning(g18n:getText("ERROR_SPCTATE_YOURSELF"), 3000)
+        g_currentMission:showBlinkingWarning(g18n:getText("SM_ERROR_SPCTATE_YOURSELF"), 3000)
     end
 end
 

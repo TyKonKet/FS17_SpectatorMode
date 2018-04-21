@@ -4,9 +4,9 @@
    <GuiElement type="bitmap" profile="siloDialogBg" id="dialogElement">
       <GuiElement type="bitmap" profile="siloDialogMainBg" id="dialogBgElement">
          <GuiElement type="bitmap" profile="colorDialogHeader">
-            <GuiElement type="text" profile="headerText" text="$l10n_SPECTATOR_MODE_NAME" id="dialogTitleElement" />
+            <GuiElement type="text" profile="headerText" text="$l10n_SM_NAME" id="dialogTitleElement" />
          </GuiElement>
-         <GuiElement type="text" profile="siloDialogText" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_TEXT:" id="dialogTextElement" />
+         <GuiElement type="text" profile="siloDialogText" text="$l10n_SM_GUI_DIALOG_TEXT:" id="dialogTextElement" />
          <GuiElement type="multiTextOption" profile="multiTextOptionSilo" position="25px 80px" onClick="onClickSpectableUsers" id="spectableUsersElement" focusId="3" focusChangeTop="1" focusChangeBottom="1">
             <GuiElement type="button" profile="multiTextOptionLeft" />
             <GuiElement type="button" profile="multiTextOptionRight" />
@@ -14,7 +14,7 @@
             <GuiElement type="bitmap" profile="multiTextOptionBg" size="334px 36px" />
          </GuiElement>
          <GuiElement type="bitmap" profile="siloDialogMessageBg" id="messageBackground">
-            <GuiElement type="text" profile="siloDialogMessage" text="$l10n_SPECTATOR_MODE_GUI_DIALOG_MESSAGE" />
+            <GuiElement type="text" profile="siloDialogMessage" text="$l10n_SM_GUI_DIALOG_MESSAGE" />
          </GuiElement>
          <GuiElement type="flowLayout" profile="buttonBox" id="buttonsPC">
             <GuiElement type="button" profile="buttonBack" size="228px 40px" text="$l10n_button_back" onClick="onClickBack" id="noButton" focusId="2" focusChangeRight="1" focusChangeTop="3" />
