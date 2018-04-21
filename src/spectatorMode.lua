@@ -31,7 +31,11 @@ function SpectatorMode:new(isServer, isClient, customMt)
     local uiScale = g_gameSettings:getValue("uiScale")
     self.spectatedOverlayWidth, self.spectatedOverlayHeight = getNormalizedScreenValues(24 * uiScale, 24 * uiScale)
     local _, margin = getNormalizedScreenValues(0, 1 * uiScale)
-    self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("hud/spectated.dds", SpectatorMode.modDirectory), 0 + margin, 1 - self.spectatedOverlayHeight - margin, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
+    self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("huds/spectated.dds", SpectatorMode.modDirectory), 0 + margin, 1 - self.spectatedOverlayHeight - margin, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
+
+    self.spectateFadeEffectOffsetX, self.spectateFadeEffectOffsetY = getNormalizedScreenValues(3 * uiScale, -3 * uiScale)
+    _, self.spectateFadeEffectSize = getNormalizedScreenValues(0, 24 * uiScale)
+    self.spectateFadeEffect = FadeEffect:new({position = {x = 0.5, y = g_safeFrameOffsetY}, size = self.spectateFadeEffectSize, shadow = true, shadowPosition = {x = self.spectateFadeEffectOffsetX, y = self.spectateFadeEffectOffsetY}, statesTime = {0.75, 1.5, 0.75}})
 
     self.lastPlayer = {}
     self.lastPlayer.mmState = 0
@@ -59,6 +63,7 @@ function SpectatorMode:deleteMap()
 end
 
 function SpectatorMode:update(dt)
+    self.spectateFadeEffect:update(dt)
     self.delayedCameraChangedDCB:update(dt)
     if self.debug and self.lastCamera ~= getCamera() then
         self:print("updateCameraChanged(from:%s to:%s)", self.lastCamera, getCamera())
@@ -96,6 +101,7 @@ function SpectatorMode:update(dt)
 end
 
 function SpectatorMode:draw()
+    self.spectateFadeEffect:draw()
     if self.spectatedVehicle ~= nil then
         if self.spectatedVehicle.isDrivable then
             g_currentMission:drawVehicleHud(self.spectatedVehicle)
@@ -153,6 +159,7 @@ function SpectatorMode:startSpectate(playerIndex)
     self:print("Event.send(SpectateEvent:new(start:true, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, self.spectatedPlayer)
     Event.sendToServer(SpectateEvent:new(true, g_currentMission.player.controllerName, self.spectatedPlayer))
     self.lastPlayer.mmState = g_currentMission.ingameMap.state
+    self.spectateFadeEffect:play(self.spectatedPlayer)
 end
 
 function SpectatorMode:spectateRejected(reason)

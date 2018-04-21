@@ -37,7 +37,7 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     self.spectatorMode.dir = self.dir
     self.spectatorMode.guis = {}
     self.spectatorMode.guis["spectateGui"] = SpectateGui:new()
-    g_gui:loadGui(self.dir .. "gui/spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui)
+    g_gui:loadGui(self.dir .. "guis/spectateGui.xml", "SpectateGui", self.spectatorMode.guis.spectateGui)
     -- FocusManager restore
     FocusManager:setGui("MPLoadingScreen")
     self.fixedUpdateDt = 0

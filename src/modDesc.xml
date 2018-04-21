@@ -20,7 +20,7 @@
         <sourceFile filename="extensions/steerableExtensions.lua" />
         <sourceFile filename="extensions/playerExtensions.lua" />
         <sourceFile filename="extensions/extensions.lua" />
-        <sourceFile filename="gui/spectateGui.lua" />
+        <sourceFile filename="guis/spectateGui.lua" />
         <sourceFile filename="events/spectateEvent.lua" />
         <sourceFile filename="events/cameraChangeEvent.lua" />
         <sourceFile filename="events/minimapChangeEvent.lua" />
@@ -31,6 +31,7 @@
         <sourceFile filename="spectatorModeServer.lua" />
         <sourceFile filename="utils/i18nUtils.lua" />
         <sourceFile filename="utils/delayedCallBack.lua" />
+        <sourceFile filename="utils/fadeEffect.lua" />
     </extraSourceFiles>
     <inputBindings>
         <input name="SM_TOGGLE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
@@ -53,12 +54,6 @@
         <input name="SM_SWITCH_ACTOR_15" category="ONFOOT" key1="KEY_g" key2="" device="0" button="" mouse="" visible="true"/>
     </inputBindings>
     <l10n>   
-        <text name="SM_ERROR_SPCTATE_DEDICATED_SERVER">
-            <en>You can't spectate the dedicated server's player</en>
-        </text>
-        <text name="SM_ERROR_SPCTATE_YOURSELF">
-            <en>You can't spectate yourself</en>
-        </text>
         <text name="input_SM_TOGGLE">
             <de>Starten/Stoppen Sie den Zuschauermodus</de>
             <en>Start/Stop spectating</en>
@@ -72,49 +67,49 @@
         <text name="input_SM_SWITCH_ACTOR_PREVIOUS">
             <en>Previous player</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_1">
+        <text name="input_SM_SWITCH_ACTOR_1">
             <en>Spectate player 1</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_2">
+        <text name="input_SM_SWITCH_ACTOR_2">
             <en>Spectate player 2</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_3">
+        <text name="input_SM_SWITCH_ACTOR_3">
             <en>Spectate player 3</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_4">
+        <text name="input_SM_SWITCH_ACTOR_4">
             <en>Spectate player 4</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_5">
+        <text name="input_SM_SWITCH_ACTOR_5">
             <en>Spectate player 5</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_6">
+        <text name="input_SM_SWITCH_ACTOR_6">
             <en>Spectate player 6</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_7">
+        <text name="input_SM_SWITCH_ACTOR_7">
             <en>Spectate player 7</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_8">
+        <text name="input_SM_SWITCH_ACTOR_8">
             <en>Spectate player 8</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_9">
+        <text name="input_SM_SWITCH_ACTOR_9">
             <en>Spectate player 9</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_10">
+        <text name="input_SM_SWITCH_ACTOR_10">
             <en>Spectate player 10</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_11">
+        <text name="input_SM_SWITCH_ACTOR_11">
             <en>Spectate player 11</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_12">
+        <text name="input_SM_SWITCH_ACTOR_12">
             <en>Spectate player 12</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_13">
+        <text name="input_SM_SWITCH_ACTOR_13">
             <en>Spectate player 13</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_14">
+        <text name="input_SM_SWITCH_ACTOR_14">
             <en>Spectate player 14</en>
         </text>
-        <text name="SM_SWITCH_ACTOR_15">
+        <text name="input_SM_SWITCH_ACTOR_15">
             <en>Spectate player 15</en>
         </text>
         <text name="SM_SWITCH_ACTOR_NEXT">
@@ -157,6 +152,12 @@
             <fr>Il n'y a pas de joueur à suivre</fr>
             <it>Non ci sono giocatori da poter guardare</it>
             <nl>Er zijn geen spelers om te volgen</nl>
+        </text>
+        <text name="SM_ERROR_SPCTATE_DEDICATED_SERVER">
+            <en>You can't spectate the dedicated server's player</en>
+        </text>
+        <text name="SM_ERROR_SPCTATE_YOURSELF">
+            <en>You can't spectate yourself</en>
         </text>
     </l10n>
 </modDesc>
