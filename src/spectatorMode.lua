@@ -53,7 +53,6 @@ end
 
 function SpectatorMode:loadMap()
     self:print("loadMap()")
-    self.guis.spectateGui:setSelectionCallback(self, self.startSpectate)
 end
 
 function SpectatorMode:deleteMap()

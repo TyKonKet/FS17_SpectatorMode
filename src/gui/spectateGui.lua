@@ -1,3 +1,8 @@
+--
+-- SpectatorMode
+--
+-- @author TyKonKet
+-- @date 23/12/2016
 SpectateGui = {}
 local SpectateGui_mt = Class(SpectateGui, ScreenElement)
 
@@ -8,7 +13,6 @@ function SpectateGui:new(target, custom_mt)
 
 	local self = ScreenElement:new(target, custom_mt)
 	self.returnScreenName = ""
-	self.selectedUser = nil
 	self.selectedState = 1
 	self.areButtonsDisabled = false
 	return self
@@ -24,30 +28,11 @@ function SpectateGui:onClickActivate()
 	if self.areButtonsDisabled then
 		return
 	end
-	if self.onSelectCallback ~= nil then
-		if self.target ~= nil then
-			self.onSelectCallback(self.target, self.selectedUser)
-		else
-			self.onSelectCallback(self.selectedUser)
-		end
-	end
+	g_spectatorMode:startSpectate(self.selectedState)
 	self.onClickBack(self)
 end
 
-function SpectateGui:setSelectionCallback(target, onSelectCallback)
-	self.onSelectCallback = onSelectCallback
-	self.target = target
-end
-
 function SpectateGui:onClickSpectableUsers(state)
-	local i = 1
-	for k, v in pairs(self.users) do
-		if i == state then
-			self.selectedUser = v
-			break
-		end
-		i = i + 1
-	end
 	self.selectedState = state
 end
 
