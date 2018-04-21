@@ -20,7 +20,11 @@ end
 
 function SpectateGui:onOpen()
 	SpectateGui:superClass().onOpen(self)
-	FocusManager:setFocus(self.spectateButton)
+	if self.areButtonsDisabled then
+		FocusManager:setFocus(self.noButton)
+	else
+		FocusManager:setFocus(self.spectateButton)
+	end
 end
 
 function SpectateGui:onClickActivate()
