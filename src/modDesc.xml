@@ -34,6 +34,8 @@
     </extraSourceFiles>
     <inputBindings>
         <input name="TOGGLE_SPECTATOR_MODE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
+        <input name="SWITCH_SPECTATOR_MODE" category="ONFOOT" key1="KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SWITCH_SPECTATOR_MODE_BACK" category="ONFOOT" key1="KEY_lshift KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
     </inputBindings>
     <l10n>   
         <text name="ERROR_SPCTATE_DEDICATED_SERVER">
@@ -48,6 +50,18 @@
             <fr>Mode spectateur : Activé / Désactivé</fr>
             <it>Avvia/Interrompi modalità spettatore</it>
             <nl>Start/Stop Kijkers Modus</nl>
+        </text>
+        <text name="input_SWITCH_SPECTATOR_MODE">
+            <en>Next player</en>
+        </text>
+        <text name="input_SWITCH_SPECTATOR_MODE_BACK">
+            <en>Previous player</en>
+        </text>
+        <text name="SWITCH_SPECTATOR_MODE">
+            <en>Spectate %s</en>
+        </text>
+        <text name="SWITCH_SPECTATOR_MODE_BACK">
+            <en>Spectate %s</en>
         </text>
         <text name="START_SPECTATOR_MODE">
             <de>Starten Zuschauermodus</de>

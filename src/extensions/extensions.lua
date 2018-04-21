@@ -25,3 +25,12 @@ function FSBaseMission:findUserByNickname(nickname)
     end
     return nil
 end
+
+function FSBaseMission:getPlayerByName(name)
+    for _, v in pairs(g_currentMission.players) do
+        if v.controllerName == name then
+            return v
+        end
+    end
+    return nil
+end

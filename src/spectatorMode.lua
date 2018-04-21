@@ -22,6 +22,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.spectating = false
     self.spectated = false
     self.spectatedPlayer = nil
+    self.spectatedPlayerIndex = 1
     self.spectatedVehicle = nil
     self.delayedCameraChangedDCB = DelayedCallBack:new(SpectatorMode.delayedCameraChanged, self)
     self.delayedCameraChangedDCB.skipOneFrame = true
@@ -30,9 +31,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     local uiScale = g_gameSettings:getValue("uiScale")
     self.spectatedOverlayWidth, self.spectatedOverlayHeight = getNormalizedScreenValues(24 * uiScale, 24 * uiScale)
     local _, margin = getNormalizedScreenValues(0, 1 * uiScale)
-    --self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("hud/spectated.dds", SpectatorMode.modDirectory), 1 - self.spectatedOverlayWidth - g_safeFrameOffsetX, 1 - self.spectatedOverlayHeight - g_safeFrameOffsetY, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
     self.spectatedOverlay = Overlay:new("spectatedOverlay", Utils.getFilename("hud/spectated.dds", SpectatorMode.modDirectory), 0 + margin, 1 - self.spectatedOverlayHeight - margin, self.spectatedOverlayWidth, self.spectatedOverlayHeight)
-    --self.spectatedOverlay:setColor(0.8069, 0.0097, 0.0097, 1)
 
     self.lastPlayer = {}
     self.lastPlayer.mmState = 0
@@ -68,8 +67,18 @@ function SpectatorMode:update(dt)
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
             g_currentMission:addHelpButtonText(g_i18n:getText("STOP_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SWITCH_SPECTATOR_MODE"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SWITCH_SPECTATOR_MODE_BACK"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE_BACK)
             if InputBinding.hasEvent(InputBinding.TOGGLE_SPECTATOR_MODE, true) then
                 self:stopSpectate()
+            end
+            if InputBinding.hasEvent(InputBinding.SWITCH_SPECTATOR_MODE, true) then
+                self:stopSpectate()
+                self:startSpectate(self:getNextPlayerIndex())
+            end
+            if InputBinding.hasEvent(InputBinding.SWITCH_SPECTATOR_MODE_BACK, true) then
+                self:stopSpectate()
+                self:startSpectate(self:getPreviousPlayerIndex())
             end
         else
             g_currentMission:addHelpButtonText(g_i18n:getText("START_SPECTATOR_MODE"), InputBinding.TOGGLE_SPECTATOR_MODE)
@@ -95,27 +104,48 @@ function SpectatorMode:draw()
 end
 
 function SpectatorMode:showGui()
+    self.guis.spectateGui:setSpectableUsers(self:getSpectableUsers())
+    g_gui:showGui("SpectateGui")
+end
+
+function SpectatorMode:getSpectableUsers()
     local spectableUsers = {}
     for k, p in pairs(g_currentMission.players) do
         if not p.isDedicatedServer and g_currentMission.player.controllerName ~= p.controllerName then
             table.insert(spectableUsers, p.controllerName)
         end
     end
-    self.guis.spectateGui:setSpectableUsers(spectableUsers)
-    g_gui:showGui("SpectateGui")
+    return spectableUsers
 end
 
-function SpectatorMode:startSpectate(playerName)
+function SpectatorMode:getNextPlayerIndex()
+    if self.spectatedPlayerIndex == #self:getSpectableUsers() then
+        return 1
+    else
+        return self.spectatedPlayerIndex + 1
+    end
+end
+
+function SpectatorMode:getPreviousPlayerIndex()
+    if self.spectatedPlayerIndex == 1 then
+        return #self:getSpectableUsers()
+    else
+        return self.spectatedPlayerIndex - 1
+    end
+end
+
+function SpectatorMode:startSpectate(playerIndex)
     g_currentMission.player.pickedUpObjectOverlay:setIsVisible(false)
     g_currentMission.isPlayerFrozen = true
     self.spectating = true
-    self.spectatedPlayer = playerName
-    self.spectatedPlayerObject = self:getPlayerByName(self.spectatedPlayer)
+    self.spectatedPlayer = self:getSpectableUsers()[playerIndex]
+    self.spectatedPlayerIndex = playerIndex
+    self.spectatedPlayerObject = g_currentMission:getPlayerByName(self.spectatedPlayer)
     self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
     self.spectatedPlayerObject:setVisibility(false)
     g_currentMission.hasSpecialCamera = true
-    self:print("Event.send(SpectateEvent:new(start:true, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, playerName)
-    Event.sendToServer(SpectateEvent:new(true, g_currentMission.player.controllerName, playerName))
+    self:print("Event.send(SpectateEvent:new(start:true, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, self.spectatedPlayer)
+    Event.sendToServer(SpectateEvent:new(true, g_currentMission.player.controllerName, self.spectatedPlayer))
     self.lastPlayer.mmState = g_currentMission.ingameMap.state
 end
 
@@ -145,15 +175,6 @@ function SpectatorMode:stopSpectate()
     self.spectating = false
 end
 
-function SpectatorMode:getPlayerByName(name)
-    for _, v in pairs(g_currentMission.players) do
-        if v.controllerName == name then
-            return v
-        end
-    end
-    return nil
-end
-
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(string.format("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
@@ -173,7 +194,6 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
-                --self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
                 v.vehicleCharacter:setCharacterVisibility(true)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
@@ -183,7 +203,6 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
-                --self:print(string.format("setCamera(v.cameras[cameraIndex].cameraNode:%s))", v.cameras[cameraIndex].cameraNode))
                 v.vehicleCharacter:setCharacterVisibility(false)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
