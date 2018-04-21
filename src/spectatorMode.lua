@@ -80,6 +80,12 @@ function SpectatorMode:update(dt)
                 self:stopSpectate()
                 self:startSpectate(self:getPreviousPlayerIndex())
             end
+            for i = 1, #self:getSpectableUsers() do
+                if InputBinding.hasEvent(InputBinding[string.format("SM_SWITCH_ACTOR_%s", i)], true) then
+                    self:stopSpectate()
+                    self:startSpectate(self:getSpectableUsers()[i])
+                end
+            end
         else
             g_currentMission:addHelpButtonText(g_i18n:getText("SM_START"), InputBinding.SM_TOGGLE)
             if g_gui.currentGui == nil and InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then

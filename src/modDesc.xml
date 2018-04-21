@@ -36,6 +36,21 @@
         <input name="SM_TOGGLE" category="ONFOOT" key1="KEY_insert" key2="" device="0" button="" mouse="" visible="true" />
         <input name="SM_SWITCH_ACTOR_NEXT" category="ONFOOT" key1="KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
         <input name="SM_SWITCH_ACTOR_PREVIOUS" category="ONFOOT" key1="KEY_lshift KEY_tab" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_1" category="ONFOOT" key1="KEY_q" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_2" category="ONFOOT" key1="KEY_w" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_3" category="ONFOOT" key1="KEY_e" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_4" category="ONFOOT" key1="KEY_r" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_5" category="ONFOOT" key1="KEY_t" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_6" category="ONFOOT" key1="KEY_y" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_7" category="ONFOOT" key1="KEY_u" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_8" category="ONFOOT" key1="KEY_i" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_9" category="ONFOOT" key1="KEY_o" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_10" category="ONFOOT" key1="KEY_p" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_11" category="ONFOOT" key1="KEY_a" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_12" category="ONFOOT" key1="KEY_s" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_13" category="ONFOOT" key1="KEY_d" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_14" category="ONFOOT" key1="KEY_f" key2="" device="0" button="" mouse="" visible="true"/>
+        <input name="SM_SWITCH_ACTOR_15" category="ONFOOT" key1="KEY_g" key2="" device="0" button="" mouse="" visible="true"/>
     </inputBindings>
     <l10n>   
         <text name="SM_ERROR_SPCTATE_DEDICATED_SERVER">
@@ -56,6 +71,51 @@
         </text>
         <text name="input_SM_SWITCH_ACTOR_PREVIOUS">
             <en>Previous player</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_1">
+            <en>Spectate player 1</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_2">
+            <en>Spectate player 2</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_3">
+            <en>Spectate player 3</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_4">
+            <en>Spectate player 4</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_5">
+            <en>Spectate player 5</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_6">
+            <en>Spectate player 6</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_7">
+            <en>Spectate player 7</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_8">
+            <en>Spectate player 8</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_9">
+            <en>Spectate player 9</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_10">
+            <en>Spectate player 10</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_11">
+            <en>Spectate player 11</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_12">
+            <en>Spectate player 12</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_13">
+            <en>Spectate player 13</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_14">
+            <en>Spectate player 14</en>
+        </text>
+        <text name="SM_SWITCH_ACTOR_15">
+            <en>Spectate player 15</en>
         </text>
         <text name="SM_SWITCH_ACTOR_NEXT">
             <en>Spectate %s</en>
