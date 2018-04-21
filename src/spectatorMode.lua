@@ -178,7 +178,7 @@ end
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
     self:print(string.format("cameraChanged(actorName:%s, cameraId:%s, cameraIndex:%s, cameraType:%s)", actorName, cameraId, cameraIndex, cameraType))
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
-        self.delayedCameraChangedDCB:call(50, actorName, cameraId, cameraIndex, cameraType)
+        self.delayedCameraChangedDCB:call(20, actorName, cameraId, cameraIndex, cameraType)
     else
         self:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
     end
@@ -190,6 +190,8 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         setCamera(self.spectatedPlayerObject.cameraNode)
         self:setVehicleActiveCamera(nil)
         self.spectatedVehicle = nil
+        self.spectatedPlayerObject.skipNextInterpolationAlpha = true
+        self.spectatedPlayerObject.interpolationAlpha = 1
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE then
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
@@ -197,6 +199,8 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
                 v.vehicleCharacter:setCharacterVisibility(true)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
+                v.camerasLerp[v.cameras[cameraIndex].cameraNode].skipNextInterpolationAlpha = true
+                v.camerasLerp[v.cameras[cameraIndex].cameraNode].interpolationAlpha = 1
             end
         end
     elseif cameraType == CameraChangeEvent.CAMERA_TYPE_VEHICLE_INDOOR then
@@ -206,6 +210,8 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
                 v.vehicleCharacter:setCharacterVisibility(false)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
+                v.camerasLerp[v.cameras[cameraIndex].cameraNode].skipNextInterpolationAlpha = true
+                v.camerasLerp[v.cameras[cameraIndex].cameraNode].interpolationAlpha = 1
             end
         end
     end

@@ -31,7 +31,7 @@ function PlayerExtensions:readStream(streamId, connection)
         --    streamReadFloat32(streamId),
         --    streamReadFloat32(streamId)
         --}
-        --self.interpolationAlphaRot = 0
+        --self.interpolationAlpha = 0
         --self.camY = streamReadFloat32(streamId)
         --setFovy(self.cameraNode, streamReadUInt8(streamId))
         self.isDedicatedServer = streamReadBool(streamId)
@@ -64,7 +64,11 @@ function PlayerExtensions:readUpdateStream(streamId, timestamp, connection)
             streamReadFloat32(streamId),
             streamReadFloat32(streamId)
         }
-        self.interpolationAlphaRot = 0
+        self.interpolationAlpha = 0
+        if self.skipNextInterpolationAlpha then
+            self.interpolationAlpha = 1
+            self.skipNextInterpolationAlpha = false
+        end
         local cx, _, cz = getTranslation(self.cameraNode)
         setTranslation(self.cameraNode, cx, streamReadFloat32(streamId), cz)
         setFovy(self.cameraNode, streamReadUInt8(streamId))
@@ -76,11 +80,11 @@ end
 
 function PlayerExtensions:update(dt)
     if not self.isServer and not self.isEntered then
-        self.interpolationAlphaRot = self.interpolationAlphaRot + g_physicsDtUnclamped / 75
-        if self.interpolationAlphaRot > 1.2 then
-            self.interpolationAlphaRot = 1.2
+        self.interpolationAlpha = self.interpolationAlpha + g_physicsDtUnclamped / 75
+        if self.interpolationAlpha > 1 then
+            self.interpolationAlpha = 1
         end
-        local x, y, z, w = Utils.nlerpQuaternionShortestPath(self.lastQuaternion[1], self.lastQuaternion[2], self.lastQuaternion[3], self.lastQuaternion[4], self.targetQuaternion[1], self.targetQuaternion[2], self.targetQuaternion[3], self.targetQuaternion[4], self.interpolationAlphaRot)
+        local x, y, z, w = Utils.nlerpQuaternionShortestPath(self.lastQuaternion[1], self.lastQuaternion[2], self.lastQuaternion[3], self.lastQuaternion[4], self.targetQuaternion[1], self.targetQuaternion[2], self.targetQuaternion[3], self.targetQuaternion[4], self.interpolationAlpha)
         setQuaternion(self.cameraNode, x, y, z, w)
     end
 end
