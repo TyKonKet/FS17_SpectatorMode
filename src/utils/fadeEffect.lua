@@ -5,10 +5,11 @@
 -- @date 17/02/2017
 FadeEffect = {}
 FadeEffect.STATES = {}
-FadeEffect.STATES.FADEIN = 1
-FadeEffect.STATES.STAY = 2
-FadeEffect.STATES.FADEOUT = 3
-FadeEffect.STATES.IDLE = 4
+FadeEffect.STATES.PREIDLE = 1
+FadeEffect.STATES.FADEIN = 2
+FadeEffect.STATES.STAY = 3
+FadeEffect.STATES.FADEOUT = 4
+FadeEffect.STATES.IDLE = 5
 FadeEffect.ALIGNS = {}
 FadeEffect.ALIGNS.LEFT = 0
 FadeEffect.ALIGNS.TOP = 0
@@ -46,8 +47,8 @@ function FadeEffect:new(settings)
             y = 0
         },
         initialAlpha = 0,
-        statesTime = {1, 1, 1},
-        statesAlpha = {1, 1, 0},
+        statesTime = {0.75, 1, 2.5, 1.5},
+        statesAlpha = {0, 1, 1, 0},
         loop = false
     }
     self.settings = defaultSettings
@@ -88,7 +89,7 @@ function FadeEffect:play(text)
     end
     self.alpha = self.settings.initialAlpha
     self.initialAlpha = self.settings.initialAlpha
-    self.state = FadeEffect.STATES.FADEIN
+    self.state = FadeEffect.STATES.PREIDLE
     self.tmpStateTime = 0
 end
 

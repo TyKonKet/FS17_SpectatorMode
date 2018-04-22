@@ -8,6 +8,8 @@ SpectatorMode_mt = Class(SpectatorMode)
 
 SpectatorMode.modDirectory = g_currentModDirectory
 
+-- TODO: handle FSBaseMission:handleUserChange to prevent server and client crases on spectated user disconnect, should exists a mathond to subscribe this event
+
 function SpectatorMode:new(isServer, isClient, customMt)
     if SpectatorMode_mt == nil then
         SpectatorMode_mt = Class(SpectatorMode)
@@ -26,6 +28,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
     self.spectatedVehicle = nil
     self.delayedCameraChangedDCB = DelayedCallBack:new(SpectatorMode.delayedCameraChanged, self)
     self.delayedCameraChangedDCB.skipOneFrame = true
+    self.delayedStopSpectateDCB = DelayedCallBack:new(SpectatorMode.delayedStopSpectate, self)
 
     -- hud
     local uiScale = g_gameSettings:getValue("uiScale")
@@ -35,7 +38,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
 
     self.spectateFadeEffectOffsetX, self.spectateFadeEffectOffsetY = getNormalizedScreenValues(3 * uiScale, -3 * uiScale)
     _, self.spectateFadeEffectSize = getNormalizedScreenValues(0, 24 * uiScale)
-    self.spectateFadeEffect = FadeEffect:new({position = {x = 0.5, y = g_safeFrameOffsetY}, size = self.spectateFadeEffectSize, shadow = true, shadowPosition = {x = self.spectateFadeEffectOffsetX, y = self.spectateFadeEffectOffsetY}, statesTime = {0.75, 1.5, 0.75}})
+    self.spectateFadeEffect = FadeEffect:new({position = {x = 0.5, y = g_safeFrameOffsetY}, size = self.spectateFadeEffectSize, shadow = true, shadowPosition = {x = self.spectateFadeEffectOffsetX, y = self.spectateFadeEffectOffsetY}})
 
     self.lastPlayer = {}
     self.lastPlayer.mmState = 0
@@ -65,6 +68,7 @@ end
 function SpectatorMode:update(dt)
     self.spectateFadeEffect:update(dt)
     self.delayedCameraChangedDCB:update(dt)
+    self.delayedStopSpectateDCB:update(dt)
     if self.debug and self.lastCamera ~= getCamera() then
         self:print("updateCameraChanged(from:%s to:%s)", self.lastCamera, getCamera())
         self.lastCamera = getCamera()
@@ -72,16 +76,16 @@ function SpectatorMode:update(dt)
     if g_currentMission.controlledVehicle == nil then
         if self.spectating then
             g_currentMission:addHelpButtonText(g_i18n:getText("SM_STOP"), InputBinding.SM_TOGGLE)
-            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_NEXT"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE)
-            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_PREVIOUS"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SWITCH_SPECTATOR_MODE_BACK)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_NEXT"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SM_SWITCH_ACTOR_NEXT)
+            g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_PREVIOUS"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SM_SWITCH_ACTOR_PREVIOUS)
             if InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then
                 self:stopSpectate()
             end
-            if InputBinding.hasEvent(InputBinding.SWITCH_SPECTATOR_MODE, true) then
+            if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_NEXT, true) then
                 self:stopSpectate()
                 self:startSpectate(self:getNextPlayerIndex())
             end
-            if InputBinding.hasEvent(InputBinding.SWITCH_SPECTATOR_MODE_BACK, true) then
+            if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_PREVIOUS, true) then
                 self:stopSpectate()
                 self:startSpectate(self:getPreviousPlayerIndex())
             end
@@ -105,7 +109,7 @@ function SpectatorMode:draw()
     if self.spectatedVehicle ~= nil then
         if self.spectatedVehicle.isDrivable then
             g_currentMission:drawVehicleHud(self.spectatedVehicle)
-            --TODO: Not Working
+            -- TODO: Not Working
             g_currentMission:drawHudIcon()
             g_currentMission:drawVehicleSchemaOverlay(self.spectatedVehicle)
         end
@@ -176,16 +180,23 @@ function SpectatorMode:stopSpectate()
     g_currentMission.ingameMap:toggleSize(self.lastPlayer.mmState, true)
     g_currentMission.hasSpecialCamera = false
     self:setVehicleActiveCamera(nil)
-    self.spectatedVehicle = nil
     self:print("Event.send(SpectateEvent:new(start:false, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, self.spectatedPlayer)
     Event.sendToServer(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer))
-    self.spectatedPlayerObject:setVisibility(true)
-    self.spectatedPlayerObject:setWoodWorkVisibility(false, false)
+    self.delayedStopSpectateDCB:call(100, self.spectatedPlayerObject, self.spectatedVehicle)
     self.spectatedPlayerObject = nil
     self.spectatedPlayer = nil
+    self.spectatedVehicle = nil
     g_currentMission.player.pickedUpObjectOverlay:setIsVisible(true)
     g_currentMission.isPlayerFrozen = false
     self.spectating = false
+end
+
+function SpectatorMode:delayedStopSpectate(spectatedPlayerObject, spectatedVehicle)
+    spectatedPlayerObject:setVisibility(true)
+    spectatedPlayerObject:setWoodWorkVisibility(false, false)
+    if spectatedVehicle ~= nil then
+        spectatedVehicle.vehicleCharacter:setCharacterVisibility(true)
+    end
 end
 
 function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraType)
@@ -193,6 +204,7 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         self.delayedCameraChangedDCB:call(20, actorName, cameraId, cameraIndex, cameraType)
     else
+        -- TODO: fix issue with first vehicle camera change
         self:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
     end
 end
@@ -220,6 +232,7 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
+                -- TODO: do that also on helper call
                 v.vehicleCharacter:setCharacterVisibility(false)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
