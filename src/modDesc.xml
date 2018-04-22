@@ -62,61 +62,137 @@
             <nl>Start/Stop Kijkers Modus</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_NEXT">
+            <de>Folgend spieler</de>
             <en>Next player</en>
+            <fr>Joueur suivant</fr>
+            <it>Prossimo giocatore</it>
+            <nl>Volgende speler</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_PREVIOUS">
+            <de>Früher spieler</de>
             <en>Previous player</en>
+            <fr>Joueur précédent</fr>
+            <it>Giocatore precedente</it>
+            <nl>Vorige speler</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_1">
+            <de>Aussehen spieler 1</de>
             <en>Spectate player 1</en>
+            <fr>Observe joueur 1</fr>
+            <it>Osserva giocatore 1</it>
+            <nl>Kijk speler 1</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_2">
+            <de>Aussehen spieler 2</de>
             <en>Spectate player 2</en>
+            <fr>Observe joueur 2</fr>
+            <it>Osserva giocatore 2</it>
+            <nl>Kijk speler 2</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_3">
+            <de>Aussehen spieler 3</de>
             <en>Spectate player 3</en>
+            <fr>Observe joueur 3</fr>
+            <it>Osserva giocatore 3</it>
+            <nl>Kijk speler 3</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_4">
+            <de>Aussehen spieler 4</de>
             <en>Spectate player 4</en>
+            <fr>Observe joueur 4</fr>
+            <it>Osserva giocatore 4</it>
+            <nl>Kijk speler 4</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_5">
+            <de>Aussehen spieler 5</de>
             <en>Spectate player 5</en>
+            <fr>Observe joueur 5</fr>
+            <it>Osserva giocatore 5</it>
+            <nl>Kijk speler 5</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_6">
+            <de>Aussehen spieler 6</de>
             <en>Spectate player 6</en>
+            <fr>Observe joueur 6</fr>
+            <it>Osserva giocatore 6</it>
+            <nl>Kijk speler 6</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_7">
+            <de>Aussehen spieler 7</de>
             <en>Spectate player 7</en>
+            <fr>Observe joueur 7</fr>
+            <it>Osserva giocatore 7</it>
+            <nl>Kijk speler 7</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_8">
+            <de>Aussehen spieler 8</de>
             <en>Spectate player 8</en>
+            <fr>Observe joueur 8</fr>
+            <it>Osserva giocatore 8</it>
+            <nl>Kijk speler 8</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_9">
+            <de>Aussehen spieler 9</de>
             <en>Spectate player 9</en>
+            <fr>Observe joueur 9</fr>
+            <it>Osserva giocatore 9</it>
+            <nl>Kijk speler 9</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_10">
+            <de>Aussehen spieler 10</de>
             <en>Spectate player 10</en>
+            <fr>Observe joueur 10</fr>
+            <it>Osserva giocatore 10</it>
+            <nl>Kijk speler 10</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_11">
+            <de>Aussehen spieler 11</de>
             <en>Spectate player 11</en>
+            <fr>Observe joueur 11</fr>
+            <it>Osserva giocatore 11</it>
+            <nl>Kijk speler 11</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_12">
+            <de>Aussehen spieler 12</de>
             <en>Spectate player 12</en>
+            <fr>Observe joueur 12</fr>
+            <it>Osserva giocatore 12</it>
+            <nl>Kijk speler 12</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_13">
+            <de>Aussehen spieler 13</de>
             <en>Spectate player 13</en>
+            <fr>Observe joueur 13</fr>
+            <it>Osserva giocatore 13</it>
+            <nl>Kijk speler 13</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_14">
+            <de>Aussehen spieler 14</de>
             <en>Spectate player 14</en>
+            <fr>Observe joueur 14</fr>
+            <it>Osserva giocatore 14</it>
+            <nl>Kijk speler 14</nl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_15">
+            <de>Aussehen spieler 15</de>
             <en>Spectate player 15</en>
+            <fr>Observe joueur 15</fr>
+            <it>Osserva giocatore 15</it>
+            <nl>Kijk speler 15</nl>
         </text>
         <text name="SM_SWITCH_ACTOR_NEXT">
+            <de>Aussehen %s</de>
             <en>Spectate %s</en>
+            <fr>Observe %s</fr>
+            <it>Osserva %s</it>
+            <nl>Kijk %s</nl>
         </text>
         <text name="SM_SWITCH_ACTOR_PREVIOUS">
+            <de>Aussehen %s</de>
             <en>Spectate %s</en>
+            <fr>Observe %s</fr>
+            <it>Osserva %s</it>
+            <nl>Kijk %s</nl>
         </text>
         <text name="SM_START">
             <de>Starten Zuschauermodus</de>
