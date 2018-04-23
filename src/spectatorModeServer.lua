@@ -62,8 +62,11 @@ function SpectatorModeServer:removeSubscriber(sName, aName)
         self.clients[aName].subscribers[sName] = nil
     end
     if self.clients[aName].subscribersCount == 1 then
-        self:print("\t\tSpectatedEvent:new(false)")
-        g_currentMission:findUserByNickname(aName).connection:sendEvent(SpectatedEvent:new(false))
+        local user = g_currentMission:findUserByNickname(aName)
+        if user ~= nil and user.connection ~= nil then
+            self:print("\t\tSpectatedEvent:new(false)")
+            user.connection:sendEvent(SpectatedEvent:new(false))
+        end
     end
     self.clients[aName].subscribersCount = self.clients[aName].subscribersCount - 1
 end

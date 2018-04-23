@@ -8,8 +8,6 @@ SpectatorMode_mt = Class(SpectatorMode)
 
 SpectatorMode.modDirectory = g_currentModDirectory
 
--- TODO: handle FSBaseMission:handleUserChange to prevent server and client crases on spectated user disconnect, should exists a mathond to subscribe this event
-
 function SpectatorMode:new(isServer, isClient, customMt)
     if SpectatorMode_mt == nil then
         SpectatorMode_mt = Class(SpectatorMode)
@@ -180,13 +178,15 @@ function SpectatorMode:spectateRejected(reason)
     end
 end
 
-function SpectatorMode:stopSpectate()
+function SpectatorMode:stopSpectate(disconnect)
     g_currentMission.ingameMap:toggleSize(self.lastPlayer.mmState, true)
     g_currentMission.hasSpecialCamera = false
     self:setVehicleActiveCamera(nil)
     self:print("Event.send(SpectateEvent:new(start:false, spectatorName:%s, actorName:%s))", g_currentMission.player.controllerName, self.spectatedPlayer)
     Event.sendToServer(SpectateEvent:new(false, g_currentMission.player.controllerName, self.spectatedPlayer))
-    self.delayedStopSpectateDCB:call(100, self.spectatedPlayerObject, self.spectatedVehicle)
+    if not disconnect then
+        self.delayedStopSpectateDCB:call(100, self.spectatedPlayerObject, self.spectatedVehicle)
+    end
     self.spectatedPlayerObject = nil
     self.spectatedPlayer = nil
     self.spectatedVehicle = nil
@@ -199,8 +199,8 @@ end
 
 function SpectatorMode:delayedStopSpectate(spectatedPlayerObject, spectatedVehicle)
     if spectatedPlayerObject ~= self.spectatedPlayerObject then
-    spectatedPlayerObject:setVisibility(true)
-    spectatedPlayerObject:setWoodWorkVisibility(false, false)
+        spectatedPlayerObject:setVisibility(true)
+        spectatedPlayerObject:setWoodWorkVisibility(false, false)
     end
     if spectatedVehicle ~= nil and spectatedVehicle ~= self.spectatedVehicle then
         spectatedVehicle.vehicleCharacter:setCharacterVisibility(true)
@@ -309,6 +309,24 @@ function SpectatorMode:requestToEnterVehicle(superFunc, vehicle)
     if not g_spectatorMode.spectating then
         if superFunc ~= nil then
             superFunc(self, vehicle)
+        end
+    end
+end
+
+function SpectatorMode:onUserEvent()
+    -- check left user
+    for _, oldUser in pairs(self.usersOld) do
+        local found = false
+        for _, user in pairs(self.users) do
+            if oldUser.userId == user.userId then
+                found = true
+                break
+            end
+        end
+        if not found and oldUser.userId ~= self:getServerUserId() and oldUser.userId ~= self.playerUserId then
+            if g_spectatorMode.spectating and oldUser.nickname == g_spectatorMode.spectatedPlayer then
+                g_spectatorMode:stopSpectate(true)
+            end
         end
     end
 end

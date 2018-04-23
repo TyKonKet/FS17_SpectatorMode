@@ -73,7 +73,7 @@ function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScre
     end
     g_currentMission.loadMapFinished = Utils.appendedFunction(g_currentMission.loadMapFinished, self.loadMapFinished)
     g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad)
-    g_currentMission.handleUserChange = Utils.prependedFunction(g_currentMission.handleUserChange, self.spectatorMode.handleUserChange)
+    g_currentMission.onUserEvent = Utils.prependedFunction(g_currentMission.onUserEvent, self.spectatorMode.onUserEvent)
     g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame)
     g_currentMission.requestToEnterVehicle = Utils.overwrittenFunction(g_currentMission.requestToEnterVehicle, self.spectatorMode.requestToEnterVehicle)
     g_currentMission.ingameMap.toggleSize = Utils.overwrittenFunction(g_currentMission.ingameMap.toggleSize, self.spectatorMode.toggleSize)
