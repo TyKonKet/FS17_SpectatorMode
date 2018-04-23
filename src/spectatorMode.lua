@@ -212,7 +212,6 @@ function SpectatorMode:cameraChanged(actorName, cameraId, cameraIndex, cameraTyp
     if cameraType == CameraChangeEvent.CAMERA_TYPE_PLAYER then
         self.delayedCameraChangedDCB:call(20, actorName, cameraId, cameraIndex, cameraType)
     else
-        -- TODO: fix issue with first vehicle camera change
         self:delayedCameraChanged(actorName, cameraId, cameraIndex, cameraType)
     end
 end

@@ -101,8 +101,8 @@ function SteerableExtensions:update(dt)
     if not self.isEntered then
         for _, v in pairs(self.cameras) do
             self.camerasLerp[v.cameraNode].interpolationAlpha = self.camerasLerp[v.cameraNode].interpolationAlpha + g_physicsDtUnclamped / self.interpolationDuration
-            if self.camerasLerp[v.cameraNode].interpolationAlpha > 1 then
-                self.camerasLerp[v.cameraNode].interpolationAlpha = 1
+            if self.camerasLerp[v.cameraNode].interpolationAlpha > 1.2 then
+                self.camerasLerp[v.cameraNode].interpolationAlpha = 1.2
             end
             local rx, ry, rz, rw =
                 Utils.nlerpQuaternionShortestPath(
@@ -119,18 +119,22 @@ function SteerableExtensions:update(dt)
             if rx == rx and ry == ry and rz == rz and rw == rw then
                 setQuaternion(v.rotateNode, rx, ry, rz, rw)
             end
-            local tx, ty, tz =
-                Utils.vector3Lerp(
-                self.camerasLerp[v.cameraNode].lastTranslation[1],
-                self.camerasLerp[v.cameraNode].lastTranslation[2],
-                self.camerasLerp[v.cameraNode].lastTranslation[3],
-                self.camerasLerp[v.cameraNode].targetTranslation[1],
-                self.camerasLerp[v.cameraNode].targetTranslation[2],
-                self.camerasLerp[v.cameraNode].targetTranslation[3],
-                self.camerasLerp[v.cameraNode].interpolationAlpha
-            )
-            if tx == tx and ty == ty and tz == tz then
-                setTranslation(v.cameraPositionNode, tx, ty, tz)
+            if v.isInside then
+                setTranslation(v.cameraPositionNode, self.camerasLerp[v.cameraNode].targetTranslation[1], self.camerasLerp[v.cameraNode].targetTranslation[2], self.camerasLerp[v.cameraNode].targetTranslation[3])
+            else
+                local tx, ty, tz =
+                    Utils.vector3Lerp(
+                    self.camerasLerp[v.cameraNode].lastTranslation[1],
+                    self.camerasLerp[v.cameraNode].lastTranslation[2],
+                    self.camerasLerp[v.cameraNode].lastTranslation[3],
+                    self.camerasLerp[v.cameraNode].targetTranslation[1],
+                    self.camerasLerp[v.cameraNode].targetTranslation[2],
+                    self.camerasLerp[v.cameraNode].targetTranslation[3],
+                    self.camerasLerp[v.cameraNode].interpolationAlpha
+                )
+                if tx == tx and ty == ty and tz == tz then
+                    setTranslation(v.cameraPositionNode, tx, ty, tz)
+                end
             end
             if v.rotateNode ~= v.cameraPositionNode then
                 local wtx, wty, wtz = getWorldTranslation(v.cameraPositionNode)
@@ -189,13 +193,13 @@ function VehicleExtensions:isSpectated()
 end
 
 function AIVehicleExtensions:onStartAiVehicle()
-    if self:isSpectated() then
+    if self:isSpectated() and self.activeCamera.isInside then
         self.vehicleCharacter:setCharacterVisibility(false)
     end
 end
 
 function AIVehicleExtensions:onStopAiVehicle()
-    if self:isSpectated() then
+    if self:isSpectated() and self.activeCamera.isInside then
         self.vehicleCharacter:setCharacterVisibility(false)
     end
 end

@@ -81,8 +81,8 @@ end
 function PlayerExtensions:update(dt)
     if not self.isServer and not self.isEntered then
         self.interpolationAlpha = self.interpolationAlpha + g_physicsDtUnclamped / 75
-        if self.interpolationAlpha > 1 then
-            self.interpolationAlpha = 1
+        if self.interpolationAlpha > 1.2 then
+            self.interpolationAlpha = 1.2
         end
         local x, y, z, w = Utils.nlerpQuaternionShortestPath(self.lastQuaternion[1], self.lastQuaternion[2], self.lastQuaternion[3], self.lastQuaternion[4], self.targetQuaternion[1], self.targetQuaternion[2], self.targetQuaternion[3], self.targetQuaternion[4], self.interpolationAlpha)
         setQuaternion(self.cameraNode, x, y, z, w)
