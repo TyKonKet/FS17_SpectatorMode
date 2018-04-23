@@ -18,7 +18,6 @@ end
 
 function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadingScreen)
     self = SpectatorModeRecorder
-    self:print("initialize()")
     self.isMultiplayer = missionDynamicInfo.missionDynamicInfo.isMultiplayer
     if not self.isMultiplayer then
         return
@@ -32,7 +31,6 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     if g_server ~= nil then
         self.spectatorMode.server = SpectatorModeServer:new(g_server ~= nil, g_client ~= nil)
         self.spectatorMode.server.debug = self.debug
-        self:print("SpectatorModeServer:new(g_server:%s, g_client:%s)", g_server ~= nil, g_client ~= nil)
     end
     self.spectatorMode.dir = self.dir
     self.spectatorMode.guis = {}
@@ -70,7 +68,6 @@ g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadF
 
 function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScreen)
     self = SpectatorModeRecorder
-    self:print("load()")
     if not self.isMultiplayer then
         return
     end
@@ -85,7 +82,6 @@ end
 g_mpLoadingScreen.loadFunction = Utils.appendedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.load)
 
 function SpectatorModeRecorder:loadMap(name)
-    self:print(("loadMap(name:%s)"):format(name))
     if not self.isMultiplayer then
         return
     end
@@ -97,12 +93,10 @@ end
 
 function SpectatorModeRecorder:loadMapFinished()
     self = SpectatorModeRecorder
-    self:print("loadMapFinished()")
 end
 
 function SpectatorModeRecorder:afterLoad()
     self = SpectatorModeRecorder
-    self:print("afterLoad()")
     if not self.isMultiplayer then
         return
     end
@@ -112,16 +106,13 @@ function SpectatorModeRecorder:afterLoad()
 end
 
 function SpectatorModeRecorder:loadSavegame()
-    self:print("loadSavegame()")
 end
 
 function SpectatorModeRecorder:saveSavegame()
     self = SpectatorModeRecorder
-    self:print("saveSavegame()")
 end
 
 function SpectatorModeRecorder:deleteMap()
-    self:print("deleteMap()")
     if not self.isMultiplayer then
         return
     end
