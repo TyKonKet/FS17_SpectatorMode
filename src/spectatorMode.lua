@@ -153,6 +153,9 @@ end
 function SpectatorMode:startSpectate(playerIndex)
     g_currentMission.player.pickedUpObjectOverlay:setIsVisible(false)
     g_currentMission.isPlayerFrozen = true
+    -- disable ability to toggle player light
+    self.lastPlayer.lightNode = g_currentMission.player.lightNode
+    g_currentMission.player.lightNode = nil
     self.spectating = true
     self.spectatedPlayer = self:getSpectableUsers()[playerIndex]
     self.spectatedPlayerIndex = playerIndex
@@ -188,6 +191,8 @@ function SpectatorMode:stopSpectate()
     self.spectatedVehicle = nil
     g_currentMission.player.pickedUpObjectOverlay:setIsVisible(true)
     g_currentMission.isPlayerFrozen = false
+    -- enable ability to toggle player light
+    g_currentMission.player.lightNode = self.lastPlayer.lightNode
     self.spectating = false
 end
 
