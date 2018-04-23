@@ -42,6 +42,7 @@ function SpectatorMode:new(isServer, isClient, customMt)
 
     self.lastPlayer = {}
     self.lastPlayer.mmState = 0
+    self.lastPlayer.lightNode = 0
     return self
 end
 
@@ -92,7 +93,7 @@ function SpectatorMode:update(dt)
             for i = 1, #self:getSpectableUsers() do
                 if InputBinding.hasEvent(InputBinding[string.format("SM_SWITCH_ACTOR_%s", i)], true) then
                     self:stopSpectate()
-                    self:startSpectate(self:getSpectableUsers()[i])
+                    self:startSpectate(i)
                 end
             end
         else
@@ -197,9 +198,11 @@ function SpectatorMode:stopSpectate()
 end
 
 function SpectatorMode:delayedStopSpectate(spectatedPlayerObject, spectatedVehicle)
+    if spectatedPlayerObject ~= self.spectatedPlayerObject then
     spectatedPlayerObject:setVisibility(true)
     spectatedPlayerObject:setWoodWorkVisibility(false, false)
-    if spectatedVehicle ~= nil then
+    end
+    if spectatedVehicle ~= nil and spectatedVehicle ~= self.spectatedVehicle then
         spectatedVehicle.vehicleCharacter:setCharacterVisibility(true)
     end
 end
@@ -237,7 +240,6 @@ function SpectatorMode:delayedCameraChanged(actorName, cameraId, cameraIndex, ca
         for _, v in pairs(g_currentMission.controlledVehicles) do
             if v.controllerName == actorName then
                 setCamera(v.cameras[cameraIndex].cameraNode)
-                -- TODO: do that also on helper call
                 v.vehicleCharacter:setCharacterVisibility(false)
                 self.spectatedVehicle = v
                 self:setVehicleActiveCamera(cameraIndex)
