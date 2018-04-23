@@ -47,7 +47,7 @@ function FadeEffect:new(settings)
             y = 0
         },
         initialAlpha = 0,
-        statesTime = {0.75, 1, 2.5, 1.5},
+        statesTime = {0.3, 1, 2.5, 1.5},
         statesAlpha = {0, 1, 1, 0},
         loop = false
     }
