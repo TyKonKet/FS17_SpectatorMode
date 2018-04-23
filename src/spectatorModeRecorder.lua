@@ -60,9 +60,11 @@ function SpectatorModeRecorder:initialize(missionInfo, missionDynamicInfo, loadi
     Steerable.readUpdateStream = Utils.appendedFunction(Steerable.readUpdateStream, SteerableExtensions.readUpdateStream)
     Steerable.update = Utils.appendedFunction(Steerable.update, SteerableExtensions.update)
     Steerable.drawUIInfo = SteerableExtensions.drawUIInfo
-
     -- extending vehicle
-    Vehicle.isSpectated = SteerableExtensions.isSpectated
+    Vehicle.isSpectated = VehicleExtensions.isSpectated
+    -- extending ai vehicle
+    AIVehicle.onStartAiVehicle = Utils.appendedFunction(AIVehicle.onStartAiVehicle, AIVehicleExtensions.onStartAiVehicle)
+    AIVehicle.onStopAiVehicle = Utils.appendedFunction(AIVehicle.onStopAiVehicle, AIVehicleExtensions.onStopAiVehicle)
 end
 g_mpLoadingScreen.loadFunction = Utils.prependedFunction(g_mpLoadingScreen.loadFunction, SpectatorModeRecorder.initialize)
 
@@ -74,6 +76,7 @@ function SpectatorModeRecorder:load(missionInfo, missionDynamicInfo, loadingScre
     end
     g_currentMission.loadMapFinished = Utils.appendedFunction(g_currentMission.loadMapFinished, self.loadMapFinished)
     g_currentMission.onStartMission = Utils.appendedFunction(g_currentMission.onStartMission, self.afterLoad)
+    g_currentMission.handleUserChange = Utils.prependedFunction(g_currentMission.handleUserChange, self.spectatorMode.handleUserChange)
     g_currentMission.missionInfo.saveToXML = Utils.appendedFunction(g_currentMission.missionInfo.saveToXML, self.saveSavegame)
     g_currentMission.requestToEnterVehicle = Utils.overwrittenFunction(g_currentMission.requestToEnterVehicle, self.spectatorMode.requestToEnterVehicle)
     g_currentMission.ingameMap.toggleSize = Utils.overwrittenFunction(g_currentMission.ingameMap.toggleSize, self.spectatorMode.toggleSize)
@@ -123,7 +126,7 @@ function SpectatorModeRecorder:deleteMap()
         return
     end
     if self.spectatorMode ~= nil then
-        self.spectatorMode:deleteMap();
+        self.spectatorMode:deleteMap()
     end
     g_spectatorMode = nil
 end

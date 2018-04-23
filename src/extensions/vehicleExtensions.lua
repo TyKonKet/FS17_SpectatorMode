@@ -3,7 +3,9 @@
 --
 -- @author TyKonKet
 -- @date 20/01/2017
+VehicleExtensions = {}
 SteerableExtensions = {}
+AIVehicleExtensions = {}
 
 function SteerableExtensions:postLoad(savegame)
     self.camerasLerp = {}
@@ -177,11 +179,23 @@ function SteerableExtensions:drawUIInfo(superFunc)
     end
 end
 
-function SteerableExtensions:isSpectated()
+function VehicleExtensions:isSpectated()
     if g_spectatorMode ~= nil then
         if g_spectatorMode.spectating and self.controllerName == g_spectatorMode.spectatedPlayer then
             return true
         end
     end
     return false
+end
+
+function AIVehicleExtensions:onStartAiVehicle()
+    if self:isSpectated() then
+        self.vehicleCharacter:setCharacterVisibility(false)
+    end
+end
+
+function AIVehicleExtensions:onStopAiVehicle()
+    if self:isSpectated() then
+        self.vehicleCharacter:setCharacterVisibility(false)
+    end
 end
