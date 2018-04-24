@@ -3,9 +3,7 @@
     <author>{package_author}</author>
     <version>{package_version}</version>
     <title>
-        <de>Spectator Mode</de>
         <en>Spectator Mode</en>
-        <fr>Spectator Mode</fr>
     </title>
     <description>
         <de><![CDATA[Mit diesem Mod kannst du andere Spieler sehen, es eignet sich für Video und Stream-Erstellung, aber auch für Spieler, die im Multiplayer eine Pause machen wollen, indem sie sich die Arbeit von Teamkollegen ansehen]]></de>
