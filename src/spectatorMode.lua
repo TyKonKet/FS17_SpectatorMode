@@ -77,21 +77,23 @@ function SpectatorMode:update(dt)
             g_currentMission:addHelpButtonText(g_i18n:getText("SM_STOP"), InputBinding.SM_TOGGLE)
             g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_NEXT"), self:getSpectableUsers()[self:getNextPlayerIndex()]), InputBinding.SM_SWITCH_ACTOR_NEXT)
             g_currentMission:addHelpButtonText(string.format(g_i18n:getText("SM_SWITCH_ACTOR_PREVIOUS"), self:getSpectableUsers()[self:getPreviousPlayerIndex()]), InputBinding.SM_SWITCH_ACTOR_PREVIOUS)
-            if InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then
-                self:stopSpectate()
-            end
-            if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_NEXT, true) then
-                self:stopSpectate()
-                self:startSpectate(self:getNextPlayerIndex())
-            end
-            if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_PREVIOUS, true) then
-                self:stopSpectate()
-                self:startSpectate(self:getPreviousPlayerIndex())
-            end
-            for i = 1, #self:getSpectableUsers() do
-                if InputBinding.hasEvent(InputBinding[string.format("SM_SWITCH_ACTOR_%s", i)], true) then
+            if g_gui.currentGui == nil then
+                if InputBinding.hasEvent(InputBinding.SM_TOGGLE, true) then
                     self:stopSpectate()
-                    self:startSpectate(i)
+                end
+                if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_NEXT, true) then
+                    self:stopSpectate()
+                    self:startSpectate(self:getNextPlayerIndex())
+                end
+                if InputBinding.hasEvent(InputBinding.SM_SWITCH_ACTOR_PREVIOUS, true) then
+                    self:stopSpectate()
+                    self:startSpectate(self:getPreviousPlayerIndex())
+                end
+                for i = 1, #self:getSpectableUsers() do
+                    if InputBinding.hasEvent(InputBinding[string.format("SM_SWITCH_ACTOR_%s", i)], true) then
+                        self:stopSpectate()
+                        self:startSpectate(i)
+                    end
                 end
             end
         else
