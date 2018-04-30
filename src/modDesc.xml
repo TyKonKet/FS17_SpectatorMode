@@ -11,6 +11,7 @@
         <fr><![CDATA[Ce mode vous permet de suivre d'autres joureurs.]]></fr>
         <it><![CDATA[Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni]]></it>
         <nl><![CDATA[Toeschouwer Modus: Met deze mod kun je een andere speler volgen en bekijken]]></nl>
+		<pl><![CDATA[Dzięki temu modowi możesz podglądać innych graczy, przydaje się to do tworzenia filmów i streamingu, ale także dla graczy, którzy chcą zrobić sobie przerwę w grze wieloosobowej, przyglądając się pracy innym]]></pl>
     </description>
     <iconFilename>icon.dds</iconFilename>
     <multiplayer supported="true"/>
@@ -58,6 +59,7 @@
             <fr>Mode spectateur : Activé / Désactivé</fr>
             <it>Avvia/Interrompi modalità spettatore</it>
             <nl>Start/Stop Kijkers Modus</nl>
+			<pl>Rozpocznij/Zakończ podglądanie</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_NEXT">
             <de>Folgend spieler</de>
@@ -65,6 +67,7 @@
             <fr>Joueur suivant</fr>
             <it>Prossimo giocatore</it>
             <nl>Volgende speler</nl>
+			<pl>Następny gracz</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_PREVIOUS">
             <de>Früher spieler</de>
@@ -72,6 +75,7 @@
             <fr>Joueur précédent</fr>
             <it>Giocatore precedente</it>
             <nl>Vorige speler</nl>
+			<pl>Poprzedni gracz</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_1">
             <de>Aussehen spieler 1</de>
@@ -79,6 +83,7 @@
             <fr>Observe joueur 1</fr>
             <it>Osserva giocatore 1</it>
             <nl>Kijk speler 1</nl>
+			<pl>Podglądaj gracza 1</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_2">
             <de>Aussehen spieler 2</de>
@@ -86,6 +91,7 @@
             <fr>Observe joueur 2</fr>
             <it>Osserva giocatore 2</it>
             <nl>Kijk speler 2</nl>
+			<pl>Podglądaj gracza 2</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_3">
             <de>Aussehen spieler 3</de>
@@ -93,6 +99,7 @@
             <fr>Observe joueur 3</fr>
             <it>Osserva giocatore 3</it>
             <nl>Kijk speler 3</nl>
+			<pl>Podglądaj gracza 3</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_4">
             <de>Aussehen spieler 4</de>
@@ -100,6 +107,7 @@
             <fr>Observe joueur 4</fr>
             <it>Osserva giocatore 4</it>
             <nl>Kijk speler 4</nl>
+			<pl>Podglądaj gracza 4</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_5">
             <de>Aussehen spieler 5</de>
@@ -107,6 +115,7 @@
             <fr>Observe joueur 5</fr>
             <it>Osserva giocatore 5</it>
             <nl>Kijk speler 5</nl>
+			<pl>Podglądaj gracza 5</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_6">
             <de>Aussehen spieler 6</de>
@@ -114,6 +123,7 @@
             <fr>Observe joueur 6</fr>
             <it>Osserva giocatore 6</it>
             <nl>Kijk speler 6</nl>
+			<pl>Podglądaj gracza 6</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_7">
             <de>Aussehen spieler 7</de>
@@ -121,6 +131,7 @@
             <fr>Observe joueur 7</fr>
             <it>Osserva giocatore 7</it>
             <nl>Kijk speler 7</nl>
+			<pl>Podglądaj gracza 7</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_8">
             <de>Aussehen spieler 8</de>
@@ -128,6 +139,7 @@
             <fr>Observe joueur 8</fr>
             <it>Osserva giocatore 8</it>
             <nl>Kijk speler 8</nl>
+			<pl>Podglądaj gracza 8</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_9">
             <de>Aussehen spieler 9</de>
@@ -135,6 +147,7 @@
             <fr>Observe joueur 9</fr>
             <it>Osserva giocatore 9</it>
             <nl>Kijk speler 9</nl>
+			<pl>Podglądaj gracza 9</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_10">
             <de>Aussehen spieler 10</de>
@@ -142,6 +155,7 @@
             <fr>Observe joueur 10</fr>
             <it>Osserva giocatore 10</it>
             <nl>Kijk speler 10</nl>
+			<pl>Podglądaj gracza 10</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_11">
             <de>Aussehen spieler 11</de>
@@ -149,6 +163,7 @@
             <fr>Observe joueur 11</fr>
             <it>Osserva giocatore 11</it>
             <nl>Kijk speler 11</nl>
+			<pl>Podglądaj gracza 11</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_12">
             <de>Aussehen spieler 12</de>
@@ -156,6 +171,7 @@
             <fr>Observe joueur 12</fr>
             <it>Osserva giocatore 12</it>
             <nl>Kijk speler 12</nl>
+			<pl>Podglądaj gracza 12</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_13">
             <de>Aussehen spieler 13</de>
@@ -163,6 +179,7 @@
             <fr>Observe joueur 13</fr>
             <it>Osserva giocatore 13</it>
             <nl>Kijk speler 13</nl>
+			<pl>Podglądaj gracza 13</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_14">
             <de>Aussehen spieler 14</de>
@@ -170,6 +187,7 @@
             <fr>Observe joueur 14</fr>
             <it>Osserva giocatore 14</it>
             <nl>Kijk speler 14</nl>
+			<pl>Podglądaj gracza 14</pl>
         </text>
         <text name="input_SM_SWITCH_ACTOR_15">
             <de>Aussehen spieler 15</de>
@@ -177,6 +195,7 @@
             <fr>Observe joueur 15</fr>
             <it>Osserva giocatore 15</it>
             <nl>Kijk speler 15</nl>
+			<pl>Podglądaj gracza 15</pl>
         </text>
         <text name="SM_SWITCH_ACTOR_NEXT">
             <de>Aussehen %s</de>
@@ -184,6 +203,7 @@
             <fr>Observe %s</fr>
             <it>Osserva %s</it>
             <nl>Kijk %s</nl>
+			<pl>Podglądaj %s</pl>
         </text>
         <text name="SM_SWITCH_ACTOR_PREVIOUS">
             <de>Aussehen %s</de>
@@ -191,6 +211,7 @@
             <fr>Observe %s</fr>
             <it>Osserva %s</it>
             <nl>Kijk %s</nl>
+			<pl>Podglądaj %s</pl>
         </text>
         <text name="SM_START">
             <de>Starten Zuschauermodus</de>
@@ -198,6 +219,7 @@
             <fr>Activer mode spectateur</fr>
             <it>Avvia modalità spettatore</it>
             <nl>Start Kijkers Modus</nl>
+			<pl>Rozpocznij podglądanie</pl>
         </text>
         <text name="SM_STOP">
             <de>Stoppen Zuschauermodus</de>
@@ -205,6 +227,7 @@
             <fr>Désactiver mode spectateur</fr>
             <it>Interrompi la Spectator Mode</it>
             <nl>Stop Kijkers Modus</nl>
+			<pl>Zakończ podglądanie</pl>
         </text>
         <text name="SM_NAME">
             <de>Spectator Mode</de>
@@ -212,6 +235,7 @@
             <fr>Spectator Mode</fr>
             <it>Spectator Mode</it>
             <nl>Spectator Mode</nl>
+            <pl>Spectator Mode</pl>
         </text>
         <text name="SM_GUI_DIALOG_TEXT">
             <de>Wählen der Spieler zu sehen</de>
@@ -219,6 +243,7 @@
             <fr>Choix du joueur à suivre</fr>
             <it>Scegli il giocatore che vuoi guardare</it>
             <nl>Selecteer een speler die je wilt volgen</nl>
+			<pl>Wybierz gracza, którego chcesz podglądać</pl>
         </text>
         <text name="SM_GUI_DIALOG_MESSAGE">
             <de>Es gibt keine Spieler die du sehen kannst</de>
@@ -226,12 +251,15 @@
             <fr>Il n'y a pas de joueur à suivre</fr>
             <it>Non ci sono giocatori da poter guardare</it>
             <nl>Er zijn geen spelers om te volgen</nl>
+			<pl>Nie ma graczy, których możesz podglądać</pl>
         </text>
         <text name="SM_ERROR_SPCTATE_DEDICATED_SERVER">
             <en>You can't spectate the dedicated server's player</en>
+			<pl>Nie możesz podglądać graczy na serwerze dedykowanym!!</pl>
         </text>
         <text name="SM_ERROR_SPCTATE_YOURSELF">
             <en>You can't spectate yourself</en>
+			<pl>Nie możesz podglądać samego siebie!!</pl>
         </text>
     </l10n>
 </modDesc>
