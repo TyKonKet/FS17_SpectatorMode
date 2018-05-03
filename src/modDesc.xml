@@ -7,7 +7,7 @@
     </title>
     <description>
         <de><![CDATA[Mit diesem Mod kannst du andere Spieler sehen, es eignet sich für Video und Stream-Erstellung, aber auch für Spieler, die im Multiplayer eine Pause machen wollen, indem sie sich die Arbeit von Teamkollegen ansehen]]></de>
-        <en><![CDATA[With this mod you can spectate other players, it's suitable for video and stream making but also for players who want take a break on multiplayer by taking a look at teammates work]]></en>
+        <en><![CDATA[This mod lets you spectate other players. It is suitable not only for video making and streaming but also for players who want to take a break from Multiplayer and watch teammates work ]]></en>
         <fr><![CDATA[Ce mode vous permet de suivre d'autres joureurs.]]></fr>
         <it><![CDATA[Con questa mod puoi guardare gli altri giocatori, è adatta per fare video e streaming, ma anche per i giocatori che vogliono prendersi una pausa in multiplayer dando un'occhiata ai compagni]]></it>
         <nl><![CDATA[Toeschouwer Modus: Met deze mod kun je een andere speler volgen en bekijken]]></nl>
@@ -239,7 +239,7 @@
         </text>
         <text name="SM_GUI_DIALOG_TEXT">
             <de>Wählen der Spieler zu sehen</de>
-            <en>Select the player you want spectate</en>
+            <en>Select the player you want to spectate</en>
             <fr>Choix du joueur à suivre</fr>
             <it>Scegli il giocatore che vuoi guardare</it>
             <nl>Selecteer een speler die je wilt volgen</nl>
@@ -247,7 +247,7 @@
         </text>
         <text name="SM_GUI_DIALOG_MESSAGE">
             <de>Es gibt keine Spieler die du sehen kannst</de>
-            <en>There aren't players you can spectate</en>
+            <en>There aren't any players you can spectate</en>
             <fr>Il n'y a pas de joueur à suivre</fr>
             <it>Non ci sono giocatori da poter guardare</it>
             <nl>Er zijn geen spelers om te volgen</nl>
